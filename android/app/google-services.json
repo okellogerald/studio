@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "940526604783",
+    "project_id": "siilastudio",
+    "storage_bucket": "siilastudio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940526604783:android:cdda433abd28b43e17261a",
+        "android_client_info": {
+          "package_name": "com.example.siila_studio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940526604783-kfnelemt3avjrb7naioq8ml99t03g5fb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6YmG3HiFS-DU7fg0sg8D6_yQnJi_b5YQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940526604783-kfnelemt3avjrb7naioq8ml99t03g5fb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

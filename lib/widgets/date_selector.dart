@@ -1,0 +1,55 @@
+import '../source.dart';
+
+class DateSelector extends StatefulWidget {
+  const DateSelector({
+    Key? key,
+    required this.title,
+    required this.onDateSelected,
+    required this.date,
+  }) : super(key: key);
+
+  final String title;
+  final void Function(DateTime) onDateSelected;
+  final DateTime date;
+
+  @override
+  State<DateSelector> createState() => _DateSelectorState();
+}
+
+class _DateSelectorState extends State<DateSelector> {
+  @override
+  Widget build(BuildContext context) {
+    final formattedDate = DateFormatter.convertToDMY(widget.date);
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.dw),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText(widget.title, opacity: .7),
+          SizedBox(height: 8.dh),
+          AppTextButton(
+            isFilled: false,
+            onPressed: _showDatePicker,
+            child: Container(
+              color: AppColors.surface,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 8.dh, horizontal: 10.dw),
+              child: AppText(formattedDate, weight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _showDatePicker() async {
+    final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: widget.date,
+        firstDate: DateTime(1975),
+        lastDate: DateTime.now());
+
+    if (selectedDate != null) widget.onDateSelected(selectedDate);
+  }
+}
