@@ -29,10 +29,9 @@ class _DateSelectorState extends State<DateSelector> {
           AppText(widget.title, opacity: .7),
           SizedBox(height: 8.dh),
           AppTextButton(
-            isFilled: false,
+            backgroundColor: AppColors.surface,
             onPressed: _showDatePicker,
             child: Container(
-              color: AppColors.surface,
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 8.dh, horizontal: 10.dw),
               child: AppText(formattedDate, weight: FontWeight.bold),

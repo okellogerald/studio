@@ -23,9 +23,9 @@ class _$UserTearOff {
       required String email,
       required String name,
       required String gender,
-      required String courseId,
+      required int courseId,
       required String level,
-      required String gradeId}) {
+      required int gradeId}) {
     return _User(
       dateOfBirth: dateOfBirth,
       email: email,
@@ -47,9 +47,9 @@ mixin _$User {
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
-  String get courseId => throw _privateConstructorUsedError;
+  int get courseId => throw _privateConstructorUsedError;
   String get level => throw _privateConstructorUsedError;
-  String get gradeId => throw _privateConstructorUsedError;
+  int get gradeId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
@@ -64,9 +64,9 @@ abstract class $UserCopyWith<$Res> {
       String email,
       String name,
       String gender,
-      String courseId,
+      int courseId,
       String level,
-      String gradeId});
+      int gradeId});
 }
 
 /// @nodoc
@@ -107,7 +107,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
       courseId: courseId == freezed
           ? _value.courseId
           : courseId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
@@ -115,7 +115,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
       gradeId: gradeId == freezed
           ? _value.gradeId
           : gradeId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
     ));
   }
 }
@@ -130,9 +130,9 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String email,
       String name,
       String gender,
-      String courseId,
+      int courseId,
       String level,
-      String gradeId});
+      int gradeId});
 }
 
 /// @nodoc
@@ -174,7 +174,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
       courseId: courseId == freezed
           ? _value.courseId
           : courseId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
@@ -182,7 +182,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
       gradeId: gradeId == freezed
           ? _value.gradeId
           : gradeId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
     ));
   }
 }
@@ -209,11 +209,11 @@ class _$_User extends _User {
   @override
   final String gender;
   @override
-  final String courseId;
+  final int courseId;
   @override
   final String level;
   @override
-  final String gradeId;
+  final int gradeId;
 
   @override
   bool operator ==(dynamic other) {
@@ -253,9 +253,9 @@ abstract class _User extends User {
       required String email,
       required String name,
       required String gender,
-      required String courseId,
+      required int courseId,
       required String level,
-      required String gradeId}) = _$_User;
+      required int gradeId}) = _$_User;
   const _User._() : super._();
 
   @override
@@ -267,11 +267,11 @@ abstract class _User extends User {
   @override
   String get gender;
   @override
-  String get courseId;
+  int get courseId;
   @override
   String get level;
   @override
-  String get gradeId;
+  int get gradeId;
   @override
   @JsonKey(ignore: true)
   _$UserCopyWith<_User> get copyWith => throw _privateConstructorUsedError;

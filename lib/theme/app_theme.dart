@@ -14,14 +14,14 @@ class AppTheme {
         appBarTheme: const AppBarTheme(
             backgroundColor: AppColors.background,
             elevation: 0,
-            iconTheme: IconThemeData(color: AppColors.onBackground),
+            iconTheme: IconThemeData(color: AppColors.primary),
             titleTextStyle: TextStyle(
-                color: AppColors.onBackground,
+                color: AppColors.primary,
                 fontSize: 24,
                 fontFamily: Constants.kFontFam,
                 fontWeight: FontWeight.bold)),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
-            color: AppColors.primary, circularTrackColor: AppColors.onPrimary),
+            color: AppColors.onPrimary, circularTrackColor: AppColors.primary),
         dialogTheme: const DialogTheme(
           backgroundColor: AppColors.onSecondary,
           elevation: 5,

@@ -27,10 +27,9 @@ class _OptionSelectorState extends State<OptionSelector> {
           AppText(widget.title, opacity: .7),
           SizedBox(height: 8.dh),
           AppTextButton(
-            isFilled: false,
+            backgroundColor: AppColors.surface,
             onPressed: _showOptionsDialog,
             child: Container(
-              color: AppColors.surface,
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 8.dh, horizontal: 10.dw),
               child: AppText(widget.value?.toUpperCase() ?? 'Tap to select',
@@ -81,7 +80,6 @@ class _OptionSelectorState extends State<OptionSelector> {
           widget.onValueSelected(option);
         },
         borderRadius: 0,
-        isFilled: false,
         child: Container(
           height: 40.dh,
           alignment: Alignment.center,

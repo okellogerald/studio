@@ -1,3 +1,5 @@
+import 'package:silla_studio/pages/levels_page.dart';
+
 import '../source.dart';
 
 class CoursesPage extends StatefulWidget {
@@ -44,12 +46,83 @@ class _CoursesPageState extends State<CoursesPage> {
     return Scaffold(
       appBar: const PageAppBar(
           title: 'Choose Courses', subtitle: 'What would you like to learn ?'),
-      body: _buildCourses(),
+      body: _buildCourses(supp),
     );
   }
 
-  _buildCourses() {
-    return Container();
+  _buildCourses(OnBoardingSupplements supp) {
+    return ListView(
+        padding: EdgeInsets.only(bottom: 20.dh),
+        children: supp.courseTypes.map((e) {
+          final courseList =
+              supp.courseList.where((course) => course.type == e).toList();
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.dw),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 40.dh),
+                  child: AppText(e.toUpperCase(), size: 20.dw),
+                ),
+                SizedBox(height: 10.dh),
+                _buildClassesGrid(courseList)
+              ],
+            ),
+          );
+        }).toList());
+  }
+
+  _buildClassesGrid(List<Course> courseList) {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisSpacing: 10.dw,
+      mainAxisSpacing: 10.dh,
+      children: courseList
+          .map((course) => AppTextButton(
+                onPressed:
+                    course.isPublished ? () => _onCoursePressed(course) : () {},
+                borderRadius: 0,
+                backgroundColor:
+                    course.isPublished ? AppColors.primary : AppColors.surface,
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 10.dw),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AppText(
+                        course.title,
+                        size: 20.dw,
+                        alignment: TextAlign.center,
+                        opacity: .85,
+                      ),
+                      !course.isPublished
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 8.dh),
+                              child: AppText('COMING SOON',
+                                  opacity: .7, size: 14.dw))
+                          : Container()
+                    ],
+                  ),
+                ),
+              ))
+          .toList(),
+    );
+  }
+
+  void _onCoursePressed(Course course) {
+    bloc.updateAttributes(
+        courseId: course.id, gradeId: course.gradeList.first.id);
+
+    if (course.levelList.isEmpty) {
+      SignUpPage.navigateTo(context);
+    } else {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => LevelsPage(course.levelList)));
+    }
   }
 
   Widget _buildFailed(OnBoardingSupplements supp, String message) {

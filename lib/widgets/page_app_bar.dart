@@ -15,7 +15,7 @@ class PageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(double.infinity, 130.dh);
+  Size get preferredSize => Size(double.infinity, 135.dh);
 }
 
 class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
@@ -36,14 +36,8 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
           AppText(title, style: Theme.of(context).appBarTheme.titleTextStyle!),
           subtitle != null
               ? Padding(
-                  padding: EdgeInsets.only(top: 5.dh),
-                  child: AppText(subtitle!,
-                      style: Theme.of(context)
-                          .appBarTheme
-                          .titleTextStyle!
-                          .copyWith(
-                              fontSize: 16.dw,
-                              color: AppColors.onBackground.withOpacity(.7))),
+                  padding: EdgeInsets.only(top: 10.dh),
+                  child: AppText(subtitle!, opacity: .7),
                 )
               : SizedBox(height: 10.dh),
         ],
@@ -52,5 +46,5 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(60.dh);
+  Size get preferredSize => Size.fromHeight(65.dh);
 }

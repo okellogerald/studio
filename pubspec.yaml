@@ -39,25 +39,18 @@ flutter:
     - assets/
 
   fonts:
-    - family: GorditaFont
+    - family: Andala
       fonts:
-        - asset: assets/fonts/GorditaFont/Bold.otf
-          weight: 600
-        - asset: assets/fonts/GorditaFont/Medium.otf
-          weight: 500
-        - asset: assets/fonts/GorditaFont/Regular.otf
-          weight: 400
-
+        - asset: assets/fonts/Andala/Regular.ttf
     - family: ArminSoft
       fonts:
-        - asset: assets/fonts/ArminSoft/regular.ttf
-          weight: 400
         - asset: assets/fonts/ArminSoft/medium.ttf
-          weight: 500
-        - asset: assets/fonts/ArminSoft/bold.ttf
-          weight: 600
     - family: Antipasto
       fonts:
         - asset: assets/fonts/Antipasto/Medium.ttf
-
-          
+    - family: Stratos
+      fonts:
+        - asset: assets/fonts/Stratos/Medium.ttf
+    - family: GorditaFont
+      fonts:
+        - asset: assets/fonts/GorditaFont/Medium.otf         

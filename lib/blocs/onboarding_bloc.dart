@@ -34,8 +34,8 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
       String? password,
       String? confirmationPassword,
       String? name,
-      String? courseId,
-      String? gradeId,
+      int? courseId,
+      int? gradeId,
       String? level,
       String? gender,
       DateTime? dateOfBirth}) {

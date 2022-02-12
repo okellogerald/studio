@@ -11,11 +11,11 @@ class AppTextButton extends StatefulWidget {
       this.alignment,
       this.child,
       this.withIcon = false,
-      this.isFilled = true,
       this.textStyle,
       this.iconColor = AppColors.onBackground,
       this.textColor,
       this.borderRadius,
+      this.backgroundColor,
       required this.onPressed,
       Key? key})
       : super(key: key);
@@ -23,14 +23,13 @@ class AppTextButton extends StatefulWidget {
   final IconData? icon;
   final double? width, borderRadius, height;
   final VoidCallback onPressed;
-  final EdgeInsetsGeometry? padding;
-  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding, margin;
   final String? text;
-  final bool withIcon, isFilled;
+  final bool withIcon;
   final Widget? child;
   final Alignment? alignment;
   final TextStyle? textStyle;
-  final Color? iconColor, textColor;
+  final Color? iconColor, textColor, backgroundColor;
 
   @override
   _AppTextButtonState createState() => _AppTextButtonState();
@@ -49,7 +48,7 @@ class _AppTextButtonState extends State<AppTextButton>
         vsync: this);
     animation = ColorTween(
             end: Colors.grey.withOpacity(.25),
-            begin: widget.isFilled ? AppColors.primary : Colors.transparent)
+            begin: widget.backgroundColor ?? Colors.transparent)
         .animate(controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -105,9 +104,12 @@ class _AppTextButtonState extends State<AppTextButton>
   }
 
   _text() {
-    return AppText(widget.text ?? 'Click Me',
-        weight: FontWeight.bold,
-        color: widget.textColor ?? AppColors.onPrimary);
+    return AppText(
+      widget.text ?? 'Click Me',
+      weight: FontWeight.bold,
+      color: widget.textColor ?? AppColors.primary,
+      alignment: TextAlign.center,
+    );
   }
 
   @override
