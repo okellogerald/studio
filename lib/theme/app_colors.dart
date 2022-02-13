@@ -2,8 +2,8 @@ import '../source.dart';
 
 class AppColors {
   static const primary = Color(0xff0093ED);
-  static const primaryVariant = Color(0xff3282B8);
-  static const secondary = Color(0xff171616);
+  static const primaryVariant = Color(0xffCAF0F8);
+  static const secondary = Color(0xff1B2E3C);
   static const secondaryVariant = Color(0xff212121);
   static const onPrimary = Colors.white;
   static const onSecondary = Colors.white;

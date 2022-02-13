@@ -1,21 +1,21 @@
 import '../source.dart';
 
-part 'user.freezed.dart';
+part 'user_data.freezed.dart';
 
 @freezed
-class User with _$User {
-  const User._();
+class UserData with _$UserData {
+  const UserData._();
 
-  const factory User(
+  const factory UserData(
       {required DateTime dateOfBirth,
       required String email,
       required String name,
       required String gender,
       required int courseId,
       required String level,
-      required int gradeId}) = _User;
+      required int gradeId}) = _UserData;
 
-  factory User.empty() => User(
+  factory UserData.empty() => UserData(
         name: '',
         email: '',
         gender: 'Male',
@@ -27,8 +27,12 @@ class User with _$User {
 
   String get getFormattedDateOfBirth => DateFormatter.convertToDMY(dateOfBirth);
 
+  Map<String, dynamic> toJson() {
+    return {'name': name, 'gender': gender};
+  }
+
   @override
   String toString() {
-    return 'User(email: $email, name: $name, gender: $gender, level: $level, dateOfBirth: $dateOfBirth, courseId: $courseId, gradeId: $gradeId)';
+    return 'UserData(email: $email, name: $name, gender: $gender, level: $level, dateOfBirth: $dateOfBirth, courseId: $courseId, gradeId: $gradeId)';
   }
 }

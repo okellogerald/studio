@@ -1,5 +1,4 @@
 import 'package:silla_studio/pages/levels_page.dart';
-
 import '../source.dart';
 
 class CoursesPage extends StatefulWidget {
@@ -66,50 +65,55 @@ class _CoursesPageState extends State<CoursesPage> {
                   child: AppText(e.toUpperCase(), size: 20.dw),
                 ),
                 SizedBox(height: 10.dh),
-                _buildClassesGrid(courseList)
+                _buildClassesGrid(courseList, supp)
               ],
             ),
           );
         }).toList());
   }
 
-  _buildClassesGrid(List<Course> courseList) {
+  _buildClassesGrid(List<Course> courseList, OnBoardingSupplements supp) {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 10.dw,
       mainAxisSpacing: 10.dh,
-      children: courseList
-          .map((course) => AppTextButton(
-                onPressed:
-                    course.isPublished ? () => _onCoursePressed(course) : () {},
-                borderRadius: 0,
-                backgroundColor:
-                    course.isPublished ? AppColors.primary : AppColors.surface,
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 10.dw),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AppText(
-                        course.title,
-                        size: 20.dw,
-                        alignment: TextAlign.center,
-                        opacity: .85,
-                      ),
-                      !course.isPublished
-                          ? Padding(
-                              padding: EdgeInsets.only(top: 8.dh),
-                              child: AppText('COMING SOON',
-                                  opacity: .7, size: 14.dw))
-                          : Container()
-                    ],
-                  ),
-                ),
-              ))
-          .toList(),
+      children: courseList.map((course) {
+        final isSelected = supp.user.courseId == course.id;
+
+        return AppTextButton(
+            onPressed:
+                course.isPublished ? () => _onCoursePressed(course) : () {},
+            borderRadius: 0,
+            backgroundColor: course.isPublished
+                ? AppColors.primaryVariant
+                : AppColors.surface,
+            child: Container(
+                width: double.infinity,
+                color: isSelected ? AppColors.primary : Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 10.dw),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppText(
+                      course.title,
+                      size: 20.dw,
+                      alignment: TextAlign.center,
+                      opacity: .85,
+                      color: isSelected
+                          ? AppColors.onPrimary
+                          : AppColors.onBackground,
+                    ),
+                    !course.isPublished
+                        ? Padding(
+                            padding: EdgeInsets.only(top: 8.dh),
+                            child: AppText('COMING SOON',
+                                opacity: .7, size: 14.dw))
+                        : Container()
+                  ],
+                )));
+      }).toList(),
     );
   }
 

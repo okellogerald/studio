@@ -26,4 +26,12 @@ class InputValidation {
     errorsList.removeWhere((e) => e == null);
     return errorsList.isNotEmpty;
   }
+
+  static String? validateEmail(String email) {
+    if (email.trim().isEmpty) return 'Email cannot be empty';
+
+    final regex = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    return regex.hasMatch(email) ? null : 'This is an invalid email address.';
+  }
 }

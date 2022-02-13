@@ -10,7 +10,7 @@ void main() async {
 
   final directory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(directory.path);
-  await Hive.openBox(Constants.userBox);
+  await Hive.openBox(Constants.userDataBox);
 
   final myApp = Provider(
     create: (_) => OnBoardingPagesBloc(UserService()),

@@ -60,13 +60,76 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     emit(OnBoardingPagesState.content(supp));
   }
 
-  _validate() {
+  void saveWelcomeDetails() async {
+    _validateWelcomeDetails();
+
+    var supp = state.supplements;
+    final hasErrors = InputValidation.checkErrors(supp.errors);
+    if (hasErrors) return;
+
+    emit(OnBoardingPagesState.success(supp));
+  }
+
+  void signUp() async {
+    _validateSignUpDetails();
+
+    var supp = state.supplements;
+    final hasErrors = InputValidation.checkErrors(supp.errors);
+    if (hasErrors) return;
+
+    emit(OnBoardingPagesState.laoding(supp, message: 'creating account ...'));
+
+    try {
+      await service.signUp(user: supp.user, password: supp.password);
+      emit(OnBoardingPagesState.success(supp));
+    } on ApiError catch (e) {
+      emit(OnBoardingPagesState.failed(supp, e.message));
+    }
+  }
+
+  void logIn() async {
+    var supp = state.supplements;
+    emit(OnBoardingPagesState.laoding(supp, message: 'logging you in ...'));
+
+    try {
+      await service.logIn(email: supp.user.email, password: supp.password);
+      emit(OnBoardingPagesState.success(supp));
+    } on ApiError catch (e) {
+      emit(OnBoardingPagesState.failed(supp, e.message));
+    }
+  }
+
+  void sendPasswordResetEmail() async {
+    var supp = state.supplements;
+    emit(OnBoardingPagesState.laoding(supp));
+
+    final error = InputValidation.validateEmail(supp.user.email);
+    if (error != null) {
+      emit(OnBoardingPagesState.failed(supp,
+          'Make sure the email you provided is valid, then press Reset again.'));
+      return;
+    }
+
+    emit(OnBoardingPagesState.laoding(supp,
+        message: 'sending email with OTP Code ...'));
+
+    try {
+      await service.sendEmailForVerification(supp.user.email);
+      //condition for reseting vs logging-in
+      supp = supp.copyWith(password: '');
+      emit(OnBoardingPagesState.success(supp));
+    } on ApiError catch (e) {
+      emit(OnBoardingPagesState.failed(supp, e.message));
+    }
+  }
+
+  _validateSignUpDetails() {
     var supp = state.supplements;
     emit(OnBoardingPagesState.laoding(supp));
 
     final errors = <String, String?>{};
 
-    errors['email'] = InputValidation.validateText(supp.user.email, 'Email');
+    errors['email'] = InputValidation.validateEmail(supp.user.email);
     errors['password'] =
         InputValidation.validateText(supp.password, 'Password');
     errors['confirm_password'] = InputValidation.validateText(
@@ -89,30 +152,5 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     errors['name'] = InputValidation.validateText(supp.user.name, 'Name');
     supp = supp.copyWith(errors: errors);
     emit(OnBoardingPagesState.content(supp));
-  }
-
-  void saveWelcomeDetails() async {
-    _validateWelcomeDetails();
-
-    var supp = state.supplements;
-    final hasErrors = InputValidation.checkErrors(supp.errors);
-    if (hasErrors) return;
-
-    emit(OnBoardingPagesState.success(supp));
-  }
-
-  void signUp() async {
-    _validate();
-
-    var supp = state.supplements;
-    final hasErrors = InputValidation.checkErrors(supp.errors);
-    if (hasErrors) return;
-
-    try {
-      //   await service.signup(email: supp.user.email, password: supp.password);
-      emit(OnBoardingPagesState.success(supp));
-    } on ApiError catch (e) {
-      emit(OnBoardingPagesState.failed(supp, e.message));
-    }
   }
 }

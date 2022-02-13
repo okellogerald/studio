@@ -27,15 +27,14 @@ class _LevelsPageState extends State<LevelsPage> {
   }
 
   _buildBody() {
-    return BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-        listener: (_, state) {},
+    return BlocBuilder<OnBoardingPagesBloc, OnBoardingPagesState>(
         builder: (_, state) {
-          return state.when(
-              laoding: _buildLoading,
-              content: _buildContent,
-              success: _buildContent,
-              failed: (s, _) => _buildContent(s));
-        });
+      return state.when(
+          laoding: _buildLoading,
+          content: _buildContent,
+          success: _buildContent,
+          failed: (s, _) => _buildContent(s));
+    });
   }
 
   Widget _buildLoading(OnBoardingSupplements supp, String? message) {
@@ -44,19 +43,27 @@ class _LevelsPageState extends State<LevelsPage> {
 
   Widget _buildContent(OnBoardingSupplements supp) {
     return Column(
-        children: widget.levels
-            .map((e) => AppTextButton(
-                text: e,
-                backgroundColor: AppColors.surface,
-                textColor: AppColors.onBackground2,
-                onPressed: () {
-                  bloc.updateAttributes(level: e);
-                  SignUpPage.navigateTo(context);
-                },
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(top: 20.dh, left: 15.dw, right: 15.dw),
-                padding:
-                    EdgeInsets.symmetric(horizontal: 10.dw, vertical: 15.dw)))
-            .toList());
+        children: widget.levels.map((e) {
+      final isSelected = e == supp.user.level;
+
+      return AppTextButton(
+        backgroundColor: AppColors.surface,
+        onPressed: () {
+          bloc.updateAttributes(level: e);
+          SignUpPage.navigateTo(context);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              color: isSelected ? AppColors.primary : Colors.transparent,
+              borderRadius: BorderRadius.all(Radius.circular(5.dw))),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: 10.dw, vertical: 15.dw),
+          child: AppText(e,
+              alignment: TextAlign.center,
+              color: isSelected ? AppColors.onPrimary : AppColors.onBackground),
+        ),
+        margin: EdgeInsets.only(top: 20.dh, left: 15.dw, right: 15.dw),
+      );
+    }).toList());
   }
 }

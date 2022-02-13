@@ -1,6 +1,6 @@
 export 'onboarding_supplements.dart';
 export 'verification_status.dart';
-export 'user.dart';
+export 'user_data.dart';
 export 'grade.dart';
 export 'course.dart';
 

@@ -1,18 +1,18 @@
 import '../source.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class LogInPage extends StatefulWidget {
+  const LogInPage({Key? key}) : super(key: key);
 
   static navigateTo(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => const SignUpPage()));
+        context, MaterialPageRoute(builder: (_) => const LogInPage()));
   }
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<LogInPage> createState() => _LogInPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _LogInPageState extends State<LogInPage> {
   late final OnBoardingPagesBloc bloc;
 
   @override
@@ -26,9 +26,14 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
         bloc: bloc,
         listener: (_, state) {
-          final isSuccess =
+          final isSuccessful =
               state.maybeWhen(success: (_) => true, orElse: () => false);
-          if (isSuccess) _navigateToHomepage();
+
+          final password = state.supplements.password;
+          final isSignedIn = isSuccessful && password.isNotEmpty;
+          final isReseting = isSuccessful && password.isEmpty;
+          if (isSignedIn) _navigateToHomepage();
+          if (isReseting) PasswordResetPage.navigateTo(context);
 
           final error = state.maybeWhen(
               failed: (_, message) => message, orElse: () => null);
@@ -63,9 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildContent(OnBoardingSupplements supp) {
     return Scaffold(
-      appBar: const PageAppBar(
-          title: 'One Last Thing!',
-          subtitle: 'Let\'s create an account for you.'),
+      appBar: const PageAppBar(title: 'Welcome back to Siila!'),
       body: Padding(
         padding: EdgeInsets.only(top: 40.dh),
         child: Column(
@@ -87,18 +90,27 @@ class _SignUpPageState extends State<SignUpPage> {
               label: 'Password',
               isPassword: true,
             ),
-            AppTextField(
-              error: supp.errors['confirm_password'],
-              text: supp.confirmationPassword,
-              onChanged: (_) => bloc.updateAttributes(confirmationPassword: _),
-              hintText: '',
-              keyboardType: TextInputType.emailAddress,
-              label: 'Confirm Passowrd',
-              isPassword: true,
-            ),
+            _buildForgotPassword(),
             _buildGetStartedButton()
           ],
         ),
+      ),
+    );
+  }
+
+  _buildForgotPassword() {
+    return Padding(
+      padding: EdgeInsets.only(top: 10.dh, left: 15.dw),
+      child: Row(
+        children: [
+          const AppText('Forgot Password ?'),
+          AppTextButton(
+            onPressed: bloc.sendPasswordResetEmail,
+            text: 'Reset',
+            textColor: AppColors.primary,
+            margin: EdgeInsets.only(left: 10.dw),
+          )
+        ],
       ),
     );
   }
@@ -110,8 +122,8 @@ class _SignUpPageState extends State<SignUpPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           AppTextButton(
-            onPressed: bloc.signUp,
-            text: 'Get Started',
+            onPressed: bloc.logIn,
+            text: 'LOG IN',
             textColor: AppColors.onPrimary,
             backgroundColor: AppColors.primary,
             height: 50.dh,

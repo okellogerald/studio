@@ -5,6 +5,6 @@ class Constants {
   static const kFontFam = 'GorditaFont';
   static const kFontFam5 = 'Stratos';
 
-  static const userBox = 'user_box';
+  static const userDataBox = 'user_data_box';
   static const settingsBox = 'settings_box';
 }

@@ -31,7 +31,9 @@ class _OptionSelectorState extends State<OptionSelector> {
             onPressed: _showOptionsDialog,
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 8.dh, horizontal: 10.dw),
+              height: 40.dh,
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.symmetric(horizontal: 10.dw),
               child: AppText(widget.value?.toUpperCase() ?? 'Tap to select',
                   weight: FontWeight.bold),
             ),

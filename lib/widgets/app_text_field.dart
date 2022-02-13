@@ -54,7 +54,7 @@ class _AppTextFieldState extends State<AppTextField> {
     final border = hasError ? _errorBorder : _inputBorder;
 
     return Padding(
-      padding: EdgeInsets.only(left: 19.dw, right: 19.dw, bottom: 20.dh),
+      padding: EdgeInsets.only(left: 15.dw, right: 15.dw, bottom: 20.dh),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -97,7 +97,8 @@ class _AppTextFieldState extends State<AppTextField> {
                           border: border,
                           focusedBorder: border,
                           enabledBorder: border,
-                          contentPadding: EdgeInsets.only(left: 8.dw, top: 10.dh)));
+                          contentPadding:
+                              EdgeInsets.only(left: 8.dw, top: 15.dh)));
                 }),
           ),
           _buildError(),
@@ -138,11 +139,12 @@ class _AppTextFieldState extends State<AppTextField> {
             : emptyContainer;
   }
 
-  final _inputBorder = const UnderlineInputBorder(
-      borderSide: BorderSide(width: 0.0, color: Colors.transparent),
-      borderRadius: BorderRadius.zero);
+  final _inputBorder = OutlineInputBorder(
+    borderSide: const BorderSide(width: 0.0, color: Colors.transparent),
+    borderRadius: BorderRadius.all(Radius.circular(5.dw)),
+  );
 
-  final _errorBorder = const OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(width: 1.2, color: AppColors.error));
+  final _errorBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(5.dw)),
+      borderSide: const BorderSide(width: 1.2, color: AppColors.error));
 }

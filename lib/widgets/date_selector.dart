@@ -33,7 +33,9 @@ class _DateSelectorState extends State<DateSelector> {
             onPressed: _showDatePicker,
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 8.dh, horizontal: 10.dw),
+              height: 40.dh,
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.symmetric( horizontal: 10.dw),
               child: AppText(formattedDate, weight: FontWeight.bold),
             ),
           ),

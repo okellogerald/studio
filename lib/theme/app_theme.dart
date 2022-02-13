@@ -11,17 +11,21 @@ class AppTheme {
           selectionColor: AppColors.primary,
           selectionHandleColor: AppColors.primary,
         ),
+        snackBarTheme: const SnackBarThemeData(
+            backgroundColor: AppColors.error,
+            contentTextStyle: TextStyle(
+                color: AppColors.onError, fontFamily: Constants.kFontFam)),
         appBarTheme: const AppBarTheme(
             backgroundColor: AppColors.background,
             elevation: 0,
-            iconTheme: IconThemeData(color: AppColors.primary),
+            iconTheme: IconThemeData(color: AppColors.secondary),
             titleTextStyle: TextStyle(
-                color: AppColors.primary,
+                color: AppColors.secondary,
                 fontSize: 24,
                 fontFamily: Constants.kFontFam,
                 fontWeight: FontWeight.bold)),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
-            color: AppColors.onPrimary, circularTrackColor: AppColors.primary),
+            color: AppColors.background, circularTrackColor: AppColors.primary),
         dialogTheme: const DialogTheme(
           backgroundColor: AppColors.onSecondary,
           elevation: 5,

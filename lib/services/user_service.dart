@@ -1,30 +1,61 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:hive/hive.dart';
 import '../source.dart';
 
 class UserService {
+  final _box = Hive.box(Constants.userDataBox);
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  get user => _auth.currentUser;
+  User? get getCurrentUser => _auth.currentUser;
 
-  Future signUp({required String email, required String password}) async {
+  Future<void> signUp(
+      {required UserData user, required String password}) async {
     try {
       final credential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      //credential.user.uid;
+          email: user.email, password: password);
+      final token = await credential.user!.getIdToken(true);
+      log('Token is $token');
+      await OnBoardingApi.createUser(user, password, token);
+      await _box.put('user_data', json.encode(user.toJson()));
     } catch (e) {
-      throw ApiError.unknown();
+      _handleErrors(e);
     }
   }
 
-  Future signIn({required String email, required String password}) async {
+  Future<void> logIn({required String email, required String password}) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final credential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      final token = await credential.user!.getIdToken(true);
+      log('Token is $token');
+      final result = await OnBoardingApi.logInUser(token);
+      await _box.put(
+          'user_data', json.encode({'name: ${result['data']['name']}'}));
     } catch (e) {
-      throw ApiError.unknown();
+      _handleErrors(e);
     }
   }
 
-  Future signOut() async => await _auth.signOut();
+  Future<void> sendEmailForVerification(String email) async => _auth
+      .sendPasswordResetEmail(email: email)
+      .catchError((e) => _handleErrors(e));
+
+  Map<int, String> updateOTP(Map<int, String> current, int id, int otp) {
+    current[id] = otp.toString();
+    return current;
+  }
+
+  Future signOut() async {
+    await _auth.signOut().catchError((e) => _handleErrors(e));
+  }
+
+  _handleErrors(e) {
+    if (e is ApiError) throw e;
+    if (e is FirebaseAuthException) throw ApiError.firebaseAuth(e.message);
+    if (e is SocketException) throw ApiError.internet();
+    if (e is TimeoutException) throw ApiError.timeout();
+    throw ApiError.unknown();
+  }
 }

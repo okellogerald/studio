@@ -8,16 +8,18 @@ class OnBoardingSupplements with _$OnBoardingSupplements {
     required String password,
     required String confirmationPassword,
     required Map<String, String?> errors,
-    required User user,
+    required UserData user,
     required List<Course> courseList,
     required List<String> courseTypes,
+    required Map<int, String> otp,
   }) = _OnBoardingSupplements;
 
   factory OnBoardingSupplements.empty() => OnBoardingSupplements(
       password: '',
-      user: User.empty(),
+      user: UserData.empty(),
       errors: {},
       confirmationPassword: '',
       courseTypes: <String>[],
+      otp: {},
       courseList: <Course>[]);
 }

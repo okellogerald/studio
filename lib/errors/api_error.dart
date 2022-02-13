@@ -5,6 +5,19 @@ class ApiError extends Error {
 
   factory ApiError.unknown() =>
       ApiError._(message: 'An unknown error happened. Please try again later.');
-}
 
-enum ExceptionType { network, invalid, unknown }
+  factory ApiError.timeout() =>
+      ApiError._(message: 'Connection timed out. Please try again later');
+
+  factory ApiError.internet() =>
+      ApiError._(message: 'You seem to have no internet connection.');
+
+  factory ApiError.invalid() =>
+      ApiError._(message: 'Either password or email is invalid.');
+
+  factory ApiError.server() =>
+      ApiError._(message: 'Server seems to be having an error');
+
+  factory ApiError.firebaseAuth(String? message) =>
+      ApiError._(message: message ?? 'An error happened during authentication');
+}
