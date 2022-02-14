@@ -43,7 +43,6 @@ class OnBoardingApi {
         headers: headers, body: json.encode(body));
 
     final result = json.decode(response.body);
-    log(result.toString());
     _handleStatusCodes(result['code']);
   }
 

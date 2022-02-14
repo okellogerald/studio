@@ -7,8 +7,10 @@ import '../source.dart';
 
 class UserService {
   final _box = Hive.box(Constants.userDataBox);
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   User? get getCurrentUser => _auth.currentUser;
+
+  final FirebaseAuth _auth;
+  UserService(this._auth);
 
   Future<void> signUp(
       {required UserData user, required String password}) async {
