@@ -1,5 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import '../source.dart';
 
 class CoursesService {
@@ -16,15 +18,26 @@ class CoursesService {
     return _token;
   }
 
+  Future<Map<String, dynamic>> getHomeContent() async {
+    return await CoursesApi.getUserCourseOverview(token)
+        .catchError((e) => _handleError(e));
+  }
+
   _handleIdChanges(User? user) async {
     if (user == null) {
       log('user is signed out');
     } else {
+      log('assigning another token');
       token = await user.getIdToken();
     }
   }
 
-  Future<void> getHomeContent() async {
-    await CoursesApi.getHomeContent(token);
+  _handleError(e) {
+    if (e is ApiError) throw e;
+    if (e is FirebaseAuthException) throw ApiError.firebaseAuth(e.message);
+    if (e is SocketException) throw ApiError.internet();
+    if (e is TimeoutException) throw ApiError.timeout();
+    log(e.toString());
+    throw ApiError.unknown();
   }
 }

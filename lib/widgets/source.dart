@@ -9,3 +9,4 @@ export 'app_loading_indicator.dart';
 export 'app_text_field.dart';
 export 'date_selector.dart';
 export 'verification_textfield.dart';
+export 'value_indicator.dart';

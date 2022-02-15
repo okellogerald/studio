@@ -22,7 +22,7 @@ class OnBoardingApi {
     return courseList;
   }
 
-  static Future createUser(
+  static Future<Map<String, dynamic>> createUser(
       UserData userData, String password, String token) async {
     const url = root + 'signup/';
     final headers = {
@@ -43,7 +43,9 @@ class OnBoardingApi {
         headers: headers, body: json.encode(body));
 
     final result = json.decode(response.body);
+    log(result.toString());
     _handleStatusCodes(result['code']);
+    return result;
   }
 
   static Future<Map<String, dynamic>> logInUser(String token) async {
@@ -57,6 +59,7 @@ class OnBoardingApi {
     final response = await http.post(Uri.parse(url), headers: headers);
 
     final result = json.decode(response.body);
+    log(result.toString());
     _handleStatusCodes(result['code']);
     return result;
   }

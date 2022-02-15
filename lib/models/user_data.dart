@@ -27,8 +27,13 @@ class UserData with _$UserData {
 
   String get getFormattedDateOfBirth => DateFormatter.convertToDMY(dateOfBirth);
 
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'gender': gender};
+  static Map toJson(Map json) {
+    return {
+      'name': json['name'],
+      'email': json['email'],
+      'course': json['course']['title'],
+      'grade': json['grade']['title']
+    };
   }
 
   @override

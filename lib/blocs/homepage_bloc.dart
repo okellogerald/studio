@@ -1,12 +1,22 @@
 import '../source.dart';
 
 class HomepageBloc extends Cubit<HomepageState> {
-  HomepageBloc(this.service) : super(HomepageState.initial());
+  HomepageBloc(this.coursesService, this.userService) : super(HomepageState.initial());
 
-  final CoursesService service;
+  final CoursesService coursesService;
+  final UserService userService;
 
   Future<void> init() async {
-    await service.init();
-    await service.getHomeContent();
+    var supp = state.supplements;
+    emit(HomepageState.loading(supp));
+    await coursesService.init();
+    final values = await coursesService.getHomeContent();
+    final userData = userService.getUserData;
+    supp = supp.copyWith(
+        lessonlist: values['lessons'],
+        topicList: values['topics'],
+        userData: userData,
+        generalInfo: values['generalInfo']);
+    emit(HomepageState.content(supp));
   }
 }

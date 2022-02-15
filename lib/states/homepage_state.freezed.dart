@@ -18,15 +18,23 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$HomepageStateTearOff {
   const _$HomepageStateTearOff();
 
-  _Loading loading(HomepageSupplements supplements) {
+  _Loading loading(HomepageSupplements supplements, {String? message}) {
     return _Loading(
       supplements,
+      message: message,
     );
   }
 
   _Content content(HomepageSupplements supplements) {
     return _Content(
       supplements,
+    );
+  }
+
+  _Failed failed(HomepageSupplements supplements, String messaage) {
+    return _Failed(
+      supplements,
+      messaage,
     );
   }
 }
@@ -40,20 +48,25 @@ mixin _$HomepageState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(HomepageSupplements supplements) loading,
+    required TResult Function(HomepageSupplements supplements, String? message)
+        loading,
     required TResult Function(HomepageSupplements supplements) content,
+    required TResult Function(HomepageSupplements supplements, String messaage)
+        failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements)? loading,
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
     TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements)? loading,
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
     TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -61,18 +74,21 @@ mixin _$HomepageState {
   TResult map<TResult extends Object?>({
     required TResult Function(_Loading value) loading,
     required TResult Function(_Content value) content,
+    required TResult Function(_Failed value) failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -126,7 +142,7 @@ abstract class _$LoadingCopyWith<$Res> implements $HomepageStateCopyWith<$Res> {
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
       __$LoadingCopyWithImpl<$Res>;
   @override
-  $Res call({HomepageSupplements supplements});
+  $Res call({HomepageSupplements supplements, String? message});
 
   @override
   $HomepageSupplementsCopyWith<$Res> get supplements;
@@ -144,12 +160,17 @@ class __$LoadingCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? supplements = freezed,
+    Object? message = freezed,
   }) {
     return _then(_Loading(
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
               as HomepageSupplements,
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -157,14 +178,16 @@ class __$LoadingCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loading implements _Loading {
-  const _$_Loading(this.supplements);
+  const _$_Loading(this.supplements, {this.message});
 
   @override
   final HomepageSupplements supplements;
+  @override
+  final String? message;
 
   @override
   String toString() {
-    return 'HomepageState.loading(supplements: $supplements)';
+    return 'HomepageState.loading(supplements: $supplements, message: $message)';
   }
 
   @override
@@ -173,12 +196,15 @@ class _$_Loading implements _Loading {
         (other.runtimeType == runtimeType &&
             other is _Loading &&
             const DeepCollectionEquality()
-                .equals(other.supplements, supplements));
+                .equals(other.supplements, supplements) &&
+            const DeepCollectionEquality().equals(other.message, message));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(supplements));
+      runtimeType,
+      const DeepCollectionEquality().hash(supplements),
+      const DeepCollectionEquality().hash(message));
 
   @JsonKey(ignore: true)
   @override
@@ -188,30 +214,35 @@ class _$_Loading implements _Loading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(HomepageSupplements supplements) loading,
+    required TResult Function(HomepageSupplements supplements, String? message)
+        loading,
     required TResult Function(HomepageSupplements supplements) content,
+    required TResult Function(HomepageSupplements supplements, String messaage)
+        failed,
   }) {
-    return loading(supplements);
+    return loading(supplements, message);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements)? loading,
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
     TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
   }) {
-    return loading?.call(supplements);
+    return loading?.call(supplements, message);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements)? loading,
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
     TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
-      return loading(supplements);
+      return loading(supplements, message);
     }
     return orElse();
   }
@@ -221,6 +252,7 @@ class _$_Loading implements _Loading {
   TResult map<TResult extends Object?>({
     required TResult Function(_Loading value) loading,
     required TResult Function(_Content value) content,
+    required TResult Function(_Failed value) failed,
   }) {
     return loading(this);
   }
@@ -230,6 +262,7 @@ class _$_Loading implements _Loading {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
   }) {
     return loading?.call(this);
   }
@@ -239,6 +272,7 @@ class _$_Loading implements _Loading {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -249,10 +283,12 @@ class _$_Loading implements _Loading {
 }
 
 abstract class _Loading implements HomepageState {
-  const factory _Loading(HomepageSupplements supplements) = _$_Loading;
+  const factory _Loading(HomepageSupplements supplements, {String? message}) =
+      _$_Loading;
 
   @override
   HomepageSupplements get supplements;
+  String? get message;
   @override
   @JsonKey(ignore: true)
   _$LoadingCopyWith<_Loading> get copyWith =>
@@ -326,8 +362,11 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(HomepageSupplements supplements) loading,
+    required TResult Function(HomepageSupplements supplements, String? message)
+        loading,
     required TResult Function(HomepageSupplements supplements) content,
+    required TResult Function(HomepageSupplements supplements, String messaage)
+        failed,
   }) {
     return content(supplements);
   }
@@ -335,8 +374,9 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements)? loading,
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
     TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
   }) {
     return content?.call(supplements);
   }
@@ -344,8 +384,9 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements)? loading,
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
     TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
     required TResult orElse(),
   }) {
     if (content != null) {
@@ -359,6 +400,7 @@ class _$_Content implements _Content {
   TResult map<TResult extends Object?>({
     required TResult Function(_Loading value) loading,
     required TResult Function(_Content value) content,
+    required TResult Function(_Failed value) failed,
   }) {
     return content(this);
   }
@@ -368,6 +410,7 @@ class _$_Content implements _Content {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
   }) {
     return content?.call(this);
   }
@@ -377,6 +420,7 @@ class _$_Content implements _Content {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
     required TResult orElse(),
   }) {
     if (content != null) {
@@ -395,4 +439,161 @@ abstract class _Content implements HomepageState {
   @JsonKey(ignore: true)
   _$ContentCopyWith<_Content> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$FailedCopyWith<$Res> implements $HomepageStateCopyWith<$Res> {
+  factory _$FailedCopyWith(_Failed value, $Res Function(_Failed) then) =
+      __$FailedCopyWithImpl<$Res>;
+  @override
+  $Res call({HomepageSupplements supplements, String messaage});
+
+  @override
+  $HomepageSupplementsCopyWith<$Res> get supplements;
+}
+
+/// @nodoc
+class __$FailedCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
+    implements _$FailedCopyWith<$Res> {
+  __$FailedCopyWithImpl(_Failed _value, $Res Function(_Failed) _then)
+      : super(_value, (v) => _then(v as _Failed));
+
+  @override
+  _Failed get _value => super._value as _Failed;
+
+  @override
+  $Res call({
+    Object? supplements = freezed,
+    Object? messaage = freezed,
+  }) {
+    return _then(_Failed(
+      supplements == freezed
+          ? _value.supplements
+          : supplements // ignore: cast_nullable_to_non_nullable
+              as HomepageSupplements,
+      messaage == freezed
+          ? _value.messaage
+          : messaage // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_Failed implements _Failed {
+  const _$_Failed(this.supplements, this.messaage);
+
+  @override
+  final HomepageSupplements supplements;
+  @override
+  final String messaage;
+
+  @override
+  String toString() {
+    return 'HomepageState.failed(supplements: $supplements, messaage: $messaage)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _Failed &&
+            const DeepCollectionEquality()
+                .equals(other.supplements, supplements) &&
+            const DeepCollectionEquality().equals(other.messaage, messaage));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(supplements),
+      const DeepCollectionEquality().hash(messaage));
+
+  @JsonKey(ignore: true)
+  @override
+  _$FailedCopyWith<_Failed> get copyWith =>
+      __$FailedCopyWithImpl<_Failed>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(HomepageSupplements supplements, String? message)
+        loading,
+    required TResult Function(HomepageSupplements supplements) content,
+    required TResult Function(HomepageSupplements supplements, String messaage)
+        failed,
+  }) {
+    return failed(supplements, messaage);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
+  }) {
+    return failed?.call(supplements, messaage);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements)? content,
+    TResult Function(HomepageSupplements supplements, String messaage)? failed,
+    required TResult orElse(),
+  }) {
+    if (failed != null) {
+      return failed(supplements, messaage);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Content value) content,
+    required TResult Function(_Failed value) failed,
+  }) {
+    return failed(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
+  }) {
+    return failed?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Content value)? content,
+    TResult Function(_Failed value)? failed,
+    required TResult orElse(),
+  }) {
+    if (failed != null) {
+      return failed(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Failed implements HomepageState {
+  const factory _Failed(HomepageSupplements supplements, String messaage) =
+      _$_Failed;
+
+  @override
+  HomepageSupplements get supplements;
+  String get messaage;
+  @override
+  @JsonKey(ignore: true)
+  _$FailedCopyWith<_Failed> get copyWith => throw _privateConstructorUsedError;
 }

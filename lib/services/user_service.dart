@@ -7,10 +7,10 @@ import '../source.dart';
 
 class UserService {
   final _box = Hive.box(Constants.userDataBox);
-  User? get getCurrentUser => _auth.currentUser;
-
   final FirebaseAuth _auth;
   UserService(this._auth);
+
+  Map get getUserData => json.decode(_box.get('user_data'));
 
   Future<void> signUp(
       {required UserData user, required String password}) async {
@@ -19,8 +19,9 @@ class UserService {
           email: user.email, password: password);
       final token = await credential.user!.getIdToken(true);
       log('Token is $token');
-      await OnBoardingApi.createUser(user, password, token);
-      await _box.put('user_data', json.encode(user.toJson()));
+      final result = await OnBoardingApi.createUser(user, password, token);
+      final userData = UserData.toJson(result['data']);
+      await _box.put('user_data', json.encode(userData));
     } catch (e) {
       _handleErrors(e);
     }
@@ -33,8 +34,8 @@ class UserService {
       final token = await credential.user!.getIdToken(true);
       log('Token is $token');
       final result = await OnBoardingApi.logInUser(token);
-      await _box.put(
-          'user_data', json.encode({'name: ${result['data']['name']}'}));
+      final userData = UserData.toJson(result['data']);
+      await _box.put('user_data', json.encode(userData));
     } catch (e) {
       _handleErrors(e);
     }
@@ -58,6 +59,7 @@ class UserService {
     if (e is FirebaseAuthException) throw ApiError.firebaseAuth(e.message);
     if (e is SocketException) throw ApiError.internet();
     if (e is TimeoutException) throw ApiError.timeout();
+    log(e.toString());
     throw ApiError.unknown();
   }
 }
