@@ -64,6 +64,30 @@ class CoursesApi {
     return values;
   }
 
+  static Future<Lesson> getLesson(String id, String token) async {
+    final url = root + 'lesson/$id';
+    final header = {"Authorization": 'Bearer $token'};
+    final response = await http.get(Uri.parse(url), headers: header);
+    final result = json.decode(response.body);
+
+    _handleStatusCodes(result['code']);
+
+    // log(result.toString());
+    return Lesson.fromJson(result['data']);
+  }
+
+  static Future<Map<String, dynamic>> getProfile(String token) async {
+    const url = root + 'profile';
+    final header = {"Authorization": 'Bearer $token'};
+    final response = await http.get(Uri.parse(url), headers: header);
+    final result = json.decode(response.body);
+
+    _handleStatusCodes(result['code']);
+
+    // log(result.toString());
+    return result['data'];
+  }
+
   static void _handleStatusCodes(int statusCode) {
     if (statusCode != 200) throw ApiError.server();
   }

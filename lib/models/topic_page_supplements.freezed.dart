@@ -130,9 +130,10 @@ class __$TopicPageSupplementsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_TopicPageSupplements implements _TopicPageSupplements {
+class _$_TopicPageSupplements extends _TopicPageSupplements {
   const _$_TopicPageSupplements(
-      {required this.filterType, required this.lessons, required this.topics});
+      {required this.filterType, required this.lessons, required this.topics})
+      : super._();
 
   @override
   final FilterType filterType;
@@ -171,11 +172,12 @@ class _$_TopicPageSupplements implements _TopicPageSupplements {
           this, _$identity);
 }
 
-abstract class _TopicPageSupplements implements TopicPageSupplements {
+abstract class _TopicPageSupplements extends TopicPageSupplements {
   const factory _TopicPageSupplements(
       {required FilterType filterType,
       required List<Lesson> lessons,
       required List<Topic> topics}) = _$_TopicPageSupplements;
+  const _TopicPageSupplements._() : super._();
 
   @override
   FilterType get filterType;

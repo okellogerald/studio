@@ -30,8 +30,10 @@ class _LogInPageState extends State<LogInPage> {
               state.maybeWhen(success: (_) => true, orElse: () => false);
 
           final password = state.supplements.password;
-          final isSignedIn = isSuccessful && password.isNotEmpty;
-          final isReseting = isSuccessful && password.isEmpty;
+          final email = state.supplements.user.email;
+          final isSignedIn = isSuccessful && password.isEmpty && email.isEmpty;
+          final isReseting =
+              isSuccessful && password.isEmpty && email.isNotEmpty;
           if (isSignedIn) _navigateToHomepage();
           if (isReseting) PasswordResetPage.navigateTo(context);
 

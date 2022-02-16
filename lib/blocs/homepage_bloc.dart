@@ -10,14 +10,19 @@ class HomepageBloc extends Cubit<HomepageState> {
   Future<void> init() async {
     var supp = state.supplements;
     emit(HomepageState.loading(supp));
-    await coursesService.init();
-    final values = await coursesService.getHomeContent();
-    final userData = userService.getUserData;
-    supp = supp.copyWith(
-        lesson: values['lessons'],
-        topicList: values['topics'],
-        userData: userData,
-        generalInfo: values['generalInfo']);
-    emit(HomepageState.content(supp));
+
+    try {
+      await coursesService.init();
+      final values = await coursesService.getHomeContent();
+      final userData = userService.getUserData;
+      supp = supp.copyWith(
+          lesson: values['lessons'],
+          topicList: values['topics'],
+          userData: userData,
+          generalInfo: values['generalInfo']);
+      emit(HomepageState.content(supp));
+    } on ApiError catch (_) {
+      emit(HomepageState.failed(supp, _.message));
+    }
   }
 }

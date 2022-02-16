@@ -18,7 +18,7 @@ class UserService {
       final credential = await _auth.createUserWithEmailAndPassword(
           email: user.email, password: password);
       final token = await credential.user!.getIdToken(true);
-      log('Token is $token');
+      // log('Token is $token');
       final result = await OnBoardingApi.createUser(user, password, token);
       final userData = UserData.toJson(result['data']);
       await _box.put('user_data', json.encode(userData));
@@ -32,7 +32,7 @@ class UserService {
       final credential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       final token = await credential.user!.getIdToken(true);
-      log('Token is $token');
+      //  log('Token is $token');
       final result = await OnBoardingApi.logInUser(token);
       final userData = UserData.toJson(result['data']);
       await _box.put('user_data', json.encode(userData));
@@ -50,7 +50,7 @@ class UserService {
     return current;
   }
 
-  Future signOut() async {
+  Future logOutUser() async {
     await _auth.signOut().catchError((e) => _handleErrors(e));
   }
 

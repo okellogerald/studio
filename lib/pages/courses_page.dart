@@ -131,23 +131,8 @@ class _CoursesPageState extends State<CoursesPage> {
 
   Widget _buildFailed(OnBoardingSupplements supp, String message) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.dw),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AppText('Failed to load courses', size: 22.dw),
-            SizedBox(height: 20.dh),
-            AppText(message),
-            AppTextButton(
-              onPressed: bloc.initCoursesPageState,
-              text: 'Try Again',
-              height: 40.dh,
-              margin: EdgeInsets.only(top: 20.dh),
-            )
-          ],
-        ),
-      ),
-    );
+        body: FailedStateWidget(message,
+            tryAgainCallback: bloc.initCoursesPageState,
+            title: 'Failed to load courses'));
   }
 }

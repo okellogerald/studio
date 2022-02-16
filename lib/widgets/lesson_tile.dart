@@ -5,16 +5,17 @@ class LessonTile extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.image,
-      required this.topicId,
+      required this.onPressed,
       required this.subtitle})
       : super(key: key);
 
-  final String title, image, subtitle, topicId;
+  final String title, image, subtitle;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return AppTextButton(
-      onPressed: () => _navigateToTopicPage(context),
+      onPressed: onPressed,
       backgroundColor: AppColors.surface,
       child: Container(
         height: 100.dh,
@@ -43,13 +44,5 @@ class LessonTile extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _navigateToTopicPage(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) =>
-                TopicPage(title: title, subtitle: subtitle, topicId: topicId)));
   }
 }

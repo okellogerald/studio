@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'topic_page_state.dart';
+part of 'lesson_page_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,23 +15,23 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$TopicPageStateTearOff {
-  const _$TopicPageStateTearOff();
+class _$LessonPageStateTearOff {
+  const _$LessonPageStateTearOff();
 
-  _Loading loading(TopicPageSupplements supplements, {String? message}) {
+  _Loading loading(LessonPageSupplements supplements, {String? message}) {
     return _Loading(
       supplements,
       message: message,
     );
   }
 
-  _Content content(TopicPageSupplements supplements) {
+  _Content content(LessonPageSupplements supplements) {
     return _Content(
       supplements,
     );
   }
 
-  _Failed failed(TopicPageSupplements supplements, String message) {
+  _Failed failed(LessonPageSupplements supplements, String? message) {
     return _Failed(
       supplements,
       message,
@@ -40,35 +40,39 @@ class _$TopicPageStateTearOff {
 }
 
 /// @nodoc
-const $TopicPageState = _$TopicPageStateTearOff();
+const $LessonPageState = _$LessonPageStateTearOff();
 
 /// @nodoc
-mixin _$TopicPageState {
-  TopicPageSupplements get supplements => throw _privateConstructorUsedError;
+mixin _$LessonPageState {
+  LessonPageSupplements get supplements => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(TopicPageSupplements supplements, String? message)
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         loading,
-    required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(LessonPageSupplements supplements) content,
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -96,28 +100,28 @@ mixin _$TopicPageState {
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $TopicPageStateCopyWith<TopicPageState> get copyWith =>
+  $LessonPageStateCopyWith<LessonPageState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TopicPageStateCopyWith<$Res> {
-  factory $TopicPageStateCopyWith(
-          TopicPageState value, $Res Function(TopicPageState) then) =
-      _$TopicPageStateCopyWithImpl<$Res>;
-  $Res call({TopicPageSupplements supplements});
+abstract class $LessonPageStateCopyWith<$Res> {
+  factory $LessonPageStateCopyWith(
+          LessonPageState value, $Res Function(LessonPageState) then) =
+      _$LessonPageStateCopyWithImpl<$Res>;
+  $Res call({LessonPageSupplements supplements});
 
-  $TopicPageSupplementsCopyWith<$Res> get supplements;
+  $LessonPageSupplementsCopyWith<$Res> get supplements;
 }
 
 /// @nodoc
-class _$TopicPageStateCopyWithImpl<$Res>
-    implements $TopicPageStateCopyWith<$Res> {
-  _$TopicPageStateCopyWithImpl(this._value, this._then);
+class _$LessonPageStateCopyWithImpl<$Res>
+    implements $LessonPageStateCopyWith<$Res> {
+  _$LessonPageStateCopyWithImpl(this._value, this._then);
 
-  final TopicPageState _value;
+  final LessonPageState _value;
   // ignore: unused_field
-  final $Res Function(TopicPageState) _then;
+  final $Res Function(LessonPageState) _then;
 
   @override
   $Res call({
@@ -127,13 +131,13 @@ class _$TopicPageStateCopyWithImpl<$Res>
       supplements: supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
-              as TopicPageSupplements,
+              as LessonPageSupplements,
     ));
   }
 
   @override
-  $TopicPageSupplementsCopyWith<$Res> get supplements {
-    return $TopicPageSupplementsCopyWith<$Res>(_value.supplements, (value) {
+  $LessonPageSupplementsCopyWith<$Res> get supplements {
+    return $LessonPageSupplementsCopyWith<$Res>(_value.supplements, (value) {
       return _then(_value.copyWith(supplements: value));
     });
   }
@@ -141,18 +145,18 @@ class _$TopicPageStateCopyWithImpl<$Res>
 
 /// @nodoc
 abstract class _$LoadingCopyWith<$Res>
-    implements $TopicPageStateCopyWith<$Res> {
+    implements $LessonPageStateCopyWith<$Res> {
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
       __$LoadingCopyWithImpl<$Res>;
   @override
-  $Res call({TopicPageSupplements supplements, String? message});
+  $Res call({LessonPageSupplements supplements, String? message});
 
   @override
-  $TopicPageSupplementsCopyWith<$Res> get supplements;
+  $LessonPageSupplementsCopyWith<$Res> get supplements;
 }
 
 /// @nodoc
-class __$LoadingCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
+class __$LoadingCopyWithImpl<$Res> extends _$LessonPageStateCopyWithImpl<$Res>
     implements _$LoadingCopyWith<$Res> {
   __$LoadingCopyWithImpl(_Loading _value, $Res Function(_Loading) _then)
       : super(_value, (v) => _then(v as _Loading));
@@ -169,7 +173,7 @@ class __$LoadingCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
-              as TopicPageSupplements,
+              as LessonPageSupplements,
       message: message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -184,13 +188,13 @@ class _$_Loading implements _Loading {
   const _$_Loading(this.supplements, {this.message});
 
   @override
-  final TopicPageSupplements supplements;
+  final LessonPageSupplements supplements;
   @override
   final String? message;
 
   @override
   String toString() {
-    return 'TopicPageState.loading(supplements: $supplements, message: $message)';
+    return 'LessonPageState.loading(supplements: $supplements, message: $message)';
   }
 
   @override
@@ -217,10 +221,12 @@ class _$_Loading implements _Loading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(TopicPageSupplements supplements, String? message)
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         loading,
-    required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(LessonPageSupplements supplements) content,
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         failed,
   }) {
     return loading(supplements, message);
@@ -229,10 +235,11 @@ class _$_Loading implements _Loading {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
   }) {
     return loading?.call(supplements, message);
   }
@@ -240,10 +247,11 @@ class _$_Loading implements _Loading {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -287,12 +295,12 @@ class _$_Loading implements _Loading {
   }
 }
 
-abstract class _Loading implements TopicPageState {
-  const factory _Loading(TopicPageSupplements supplements, {String? message}) =
+abstract class _Loading implements LessonPageState {
+  const factory _Loading(LessonPageSupplements supplements, {String? message}) =
       _$_Loading;
 
   @override
-  TopicPageSupplements get supplements;
+  LessonPageSupplements get supplements;
   String? get message;
   @override
   @JsonKey(ignore: true)
@@ -302,18 +310,18 @@ abstract class _Loading implements TopicPageState {
 
 /// @nodoc
 abstract class _$ContentCopyWith<$Res>
-    implements $TopicPageStateCopyWith<$Res> {
+    implements $LessonPageStateCopyWith<$Res> {
   factory _$ContentCopyWith(_Content value, $Res Function(_Content) then) =
       __$ContentCopyWithImpl<$Res>;
   @override
-  $Res call({TopicPageSupplements supplements});
+  $Res call({LessonPageSupplements supplements});
 
   @override
-  $TopicPageSupplementsCopyWith<$Res> get supplements;
+  $LessonPageSupplementsCopyWith<$Res> get supplements;
 }
 
 /// @nodoc
-class __$ContentCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
+class __$ContentCopyWithImpl<$Res> extends _$LessonPageStateCopyWithImpl<$Res>
     implements _$ContentCopyWith<$Res> {
   __$ContentCopyWithImpl(_Content _value, $Res Function(_Content) _then)
       : super(_value, (v) => _then(v as _Content));
@@ -329,7 +337,7 @@ class __$ContentCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
-              as TopicPageSupplements,
+              as LessonPageSupplements,
     ));
   }
 }
@@ -340,11 +348,11 @@ class _$_Content implements _Content {
   const _$_Content(this.supplements);
 
   @override
-  final TopicPageSupplements supplements;
+  final LessonPageSupplements supplements;
 
   @override
   String toString() {
-    return 'TopicPageState.content(supplements: $supplements)';
+    return 'LessonPageState.content(supplements: $supplements)';
   }
 
   @override
@@ -368,10 +376,12 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(TopicPageSupplements supplements, String? message)
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         loading,
-    required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(LessonPageSupplements supplements) content,
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         failed,
   }) {
     return content(supplements);
@@ -380,10 +390,11 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
   }) {
     return content?.call(supplements);
   }
@@ -391,10 +402,11 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
     required TResult orElse(),
   }) {
     if (content != null) {
@@ -438,11 +450,11 @@ class _$_Content implements _Content {
   }
 }
 
-abstract class _Content implements TopicPageState {
-  const factory _Content(TopicPageSupplements supplements) = _$_Content;
+abstract class _Content implements LessonPageState {
+  const factory _Content(LessonPageSupplements supplements) = _$_Content;
 
   @override
-  TopicPageSupplements get supplements;
+  LessonPageSupplements get supplements;
   @override
   @JsonKey(ignore: true)
   _$ContentCopyWith<_Content> get copyWith =>
@@ -450,18 +462,19 @@ abstract class _Content implements TopicPageState {
 }
 
 /// @nodoc
-abstract class _$FailedCopyWith<$Res> implements $TopicPageStateCopyWith<$Res> {
+abstract class _$FailedCopyWith<$Res>
+    implements $LessonPageStateCopyWith<$Res> {
   factory _$FailedCopyWith(_Failed value, $Res Function(_Failed) then) =
       __$FailedCopyWithImpl<$Res>;
   @override
-  $Res call({TopicPageSupplements supplements, String message});
+  $Res call({LessonPageSupplements supplements, String? message});
 
   @override
-  $TopicPageSupplementsCopyWith<$Res> get supplements;
+  $LessonPageSupplementsCopyWith<$Res> get supplements;
 }
 
 /// @nodoc
-class __$FailedCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
+class __$FailedCopyWithImpl<$Res> extends _$LessonPageStateCopyWithImpl<$Res>
     implements _$FailedCopyWith<$Res> {
   __$FailedCopyWithImpl(_Failed _value, $Res Function(_Failed) _then)
       : super(_value, (v) => _then(v as _Failed));
@@ -478,11 +491,11 @@ class __$FailedCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
-              as TopicPageSupplements,
+              as LessonPageSupplements,
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -493,13 +506,13 @@ class _$_Failed implements _Failed {
   const _$_Failed(this.supplements, this.message);
 
   @override
-  final TopicPageSupplements supplements;
+  final LessonPageSupplements supplements;
   @override
-  final String message;
+  final String? message;
 
   @override
   String toString() {
-    return 'TopicPageState.failed(supplements: $supplements, message: $message)';
+    return 'LessonPageState.failed(supplements: $supplements, message: $message)';
   }
 
   @override
@@ -526,10 +539,12 @@ class _$_Failed implements _Failed {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(TopicPageSupplements supplements, String? message)
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         loading,
-    required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(LessonPageSupplements supplements) content,
+    required TResult Function(
+            LessonPageSupplements supplements, String? message)
         failed,
   }) {
     return failed(supplements, message);
@@ -538,10 +553,11 @@ class _$_Failed implements _Failed {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
   }) {
     return failed?.call(supplements, message);
   }
@@ -549,10 +565,11 @@ class _$_Failed implements _Failed {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(TopicPageSupplements supplements, String? message)?
+    TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
-    TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(LessonPageSupplements supplements)? content,
+    TResult Function(LessonPageSupplements supplements, String? message)?
+        failed,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -596,13 +613,13 @@ class _$_Failed implements _Failed {
   }
 }
 
-abstract class _Failed implements TopicPageState {
-  const factory _Failed(TopicPageSupplements supplements, String message) =
+abstract class _Failed implements LessonPageState {
+  const factory _Failed(LessonPageSupplements supplements, String? message) =
       _$_Failed;
 
   @override
-  TopicPageSupplements get supplements;
-  String get message;
+  LessonPageSupplements get supplements;
+  String? get message;
   @override
   @JsonKey(ignore: true)
   _$FailedCopyWith<_Failed> get copyWith => throw _privateConstructorUsedError;

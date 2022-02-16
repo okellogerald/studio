@@ -8,3 +8,5 @@ export 'courses_page.dart';
 export 'login_page.dart';
 export 'password_reset_page.dart';
 export 'topic_page.dart';
+export 'lesson_page.dart';
+export 'profile_page.dart';

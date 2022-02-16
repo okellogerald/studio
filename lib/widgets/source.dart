@@ -11,3 +11,6 @@ export 'date_selector.dart';
 export 'verification_textfield.dart';
 export 'value_indicator.dart';
 export 'lesson_tile.dart';
+export 'topic_page_app_bar.dart';
+export 'failed_state_widget.dart';
+export 'profile_avatar.dart';

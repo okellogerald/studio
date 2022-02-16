@@ -34,13 +34,20 @@ class _HomepageState extends State<Homepage> {
             return state.when(
                 loading: _buildLoading,
                 content: _buildContent,
-                failed: (s, _) => _buildContent(s));
+                failed: _buildFailed);
           }),
     );
   }
 
   Widget _buildLoading(HomepageSupplements supp, String? message) {
     return Scaffold(body: AppLoadingIndicator(message));
+  }
+
+  Widget _buildFailed(HomepageSupplements supp, String message) {
+    return Scaffold(
+        body: FailedStateWidget(message,
+            tryAgainCallback: bloc.init,
+            title: 'Failed to load your information'));
   }
 
   Widget _buildContent(HomepageSupplements supp) {
@@ -69,15 +76,9 @@ class _HomepageState extends State<Homepage> {
             AppText('$grade - $course'),
           ],
         ),
-        CircleAvatar(
-          backgroundColor: AppColors.primaryVariant,
-          radius: 25.dw,
-          child: AppText(
-            userData['name'].toString().substring(0, 1),
-            weight: FontWeight.bold,
-            size: 25.dw,
-            opacity: .7,
-          ),
+        GestureDetector(
+          onTap: _navigateToProfilePage,
+          child: ProfileAvatar(userData['name'])
         )
       ],
     );
@@ -129,10 +130,11 @@ class _HomepageState extends State<Homepage> {
         SizedBox(height: 15.dh),
         LessonTile(
           title: lesson.title,
-          topicId: lesson.topicId,
           subtitle:
               '${lesson.topicName} - ' + (isLearning ? 'LEARN' : 'PRACTICE'),
           image: Constants.kDefaultImage,
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => LessonPage(lesson.id))),
         ),
       ],
     );
@@ -151,12 +153,19 @@ class _HomepageState extends State<Homepage> {
             itemCount: topicList.length,
             itemBuilder: (context, index) {
               final topic = topicList[index];
+              final subtitle =
+                  '${topic.completedLessons} / ${topic.totalLessons} videos completed';
               return LessonTile(
                   title: topic.title,
                   image: Constants.kDefaultImage,
-                  topicId: topic.id,
-                  subtitle:
-                      '${topic.completedLessons} / ${topic.totalLessons} videos completed');
+                  subtitle: subtitle,
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => TopicPage(
+                              title: topic.title,
+                              subtitle: subtitle,
+                              topicId: topic.id))));
             },
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -165,5 +174,10 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
     );
+  }
+
+  _navigateToProfilePage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const ProfilePage()));
   }
 }

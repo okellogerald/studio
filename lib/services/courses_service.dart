@@ -28,13 +28,21 @@ class CoursesService {
         .catchError((e) => _handleError(e));
   }
 
+  Future<Lesson> getLesson(String id) async {
+    return await CoursesApi.getLesson(id, token)
+        .catchError((e) => _handleError(e));
+  }
+
+  Future<Map<String, dynamic>> getProfileData() async {
+    return await CoursesApi.getProfile(token)
+        .catchError((e) => _handleError(e));
+  }
+
   _handleIdChanges(User? user) async {
     if (user == null) {
       log('user is signed out');
     } else {
-      log('assigning another token');
       token = await user.getIdToken();
-      log('done assigning');
     }
   }
 
