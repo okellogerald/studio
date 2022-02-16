@@ -1,14 +1,16 @@
 import '../source.dart';
 
 class ValueIndicator extends StatelessWidget {
-  const ValueIndicator({Key? key}) : super(key: key);
+  const ValueIndicator(this.value, {Key? key}) : super(key: key);
+
+  final double value;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 250.dw,
       height: 15.dh,
-      child: CustomPaint(painter: BarPainter(.7)),
+      child: CustomPaint(painter: BarPainter(value)),
     );
   }
 }

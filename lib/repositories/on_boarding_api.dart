@@ -43,7 +43,7 @@ class OnBoardingApi {
         headers: headers, body: json.encode(body));
 
     final result = json.decode(response.body);
-    log(result.toString());
+    // log(result.toString());
     _handleStatusCodes(result['code']);
     return result;
   }
@@ -59,7 +59,7 @@ class OnBoardingApi {
     final response = await http.post(Uri.parse(url), headers: headers);
 
     final result = json.decode(response.body);
-    log(result.toString());
+    // log(result.toString());
     _handleStatusCodes(result['code']);
     return result;
   }

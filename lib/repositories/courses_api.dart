@@ -13,7 +13,9 @@ class CoursesApi {
     final response = await http.get(Uri.parse(url), headers: header);
     final result = json.decode(response.body);
 
-    log(result.toString());
+    _handleStatusCodes(result['code']);
+
+    // log(result.toString());
     final topicList = <Topic>[];
 
     final values = <String, dynamic>{};
@@ -32,7 +34,33 @@ class CoursesApi {
     values['topics'] = topicList;
     values['generalInfo'] = generalInfo;
 
+    return values;
+  }
+
+  static Future<Map<String, dynamic>> getTopic(String id, String token) async {
+    final url = root + 'topic/$id';
+    final header = {"Authorization": 'Bearer $token'};
+    final response = await http.get(Uri.parse(url), headers: header);
+    final result = json.decode(response.body);
+
     _handleStatusCodes(result['code']);
+
+    // log(result.toString());
+    final values = <String, List>{};
+
+    final topicList = <Topic>[];
+    final lessonList = <Lesson>[];
+
+    for (var topic in result['data']) {
+      topicList.add(Topic.fromJson(topic));
+      for (var lesson in topic['lessons']) {
+        lessonList.add(Lesson.fromJson(lesson));
+      }
+    }
+
+    values['topics'] = topicList;
+    values['lessons'] = lessonList;
+
     return values;
   }
 

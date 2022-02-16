@@ -7,5 +7,6 @@ export 'homepage_supplements.dart';
 export 'lesson.dart';
 export 'general_info.dart';
 export 'topic.dart';
+export 'topic_page_supplements.dart';
 
 export 'package:freezed_annotation/freezed_annotation.dart';

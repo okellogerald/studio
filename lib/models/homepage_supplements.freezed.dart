@@ -19,12 +19,12 @@ class _$HomepageSupplementsTearOff {
   const _$HomepageSupplementsTearOff();
 
   _HomepageSupplements call(
-      {required Lesson lessonlist,
+      {required Lesson lesson,
       required List<Topic> topicList,
       required GeneralInfo generalInfo,
       required Map<dynamic, dynamic> userData}) {
     return _HomepageSupplements(
-      lessonlist: lessonlist,
+      lesson: lesson,
       topicList: topicList,
       generalInfo: generalInfo,
       userData: userData,
@@ -37,7 +37,7 @@ const $HomepageSupplements = _$HomepageSupplementsTearOff();
 
 /// @nodoc
 mixin _$HomepageSupplements {
-  Lesson get lessonlist => throw _privateConstructorUsedError;
+  Lesson get lesson => throw _privateConstructorUsedError;
   List<Topic> get topicList => throw _privateConstructorUsedError;
   GeneralInfo get generalInfo => throw _privateConstructorUsedError;
   Map<dynamic, dynamic> get userData => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $HomepageSupplementsCopyWith<$Res> {
           HomepageSupplements value, $Res Function(HomepageSupplements) then) =
       _$HomepageSupplementsCopyWithImpl<$Res>;
   $Res call(
-      {Lesson lessonlist,
+      {Lesson lesson,
       List<Topic> topicList,
       GeneralInfo generalInfo,
       Map<dynamic, dynamic> userData});
@@ -70,15 +70,15 @@ class _$HomepageSupplementsCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? lessonlist = freezed,
+    Object? lesson = freezed,
     Object? topicList = freezed,
     Object? generalInfo = freezed,
     Object? userData = freezed,
   }) {
     return _then(_value.copyWith(
-      lessonlist: lessonlist == freezed
-          ? _value.lessonlist
-          : lessonlist // ignore: cast_nullable_to_non_nullable
+      lesson: lesson == freezed
+          ? _value.lesson
+          : lesson // ignore: cast_nullable_to_non_nullable
               as Lesson,
       topicList: topicList == freezed
           ? _value.topicList
@@ -104,7 +104,7 @@ abstract class _$HomepageSupplementsCopyWith<$Res>
       __$HomepageSupplementsCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Lesson lessonlist,
+      {Lesson lesson,
       List<Topic> topicList,
       GeneralInfo generalInfo,
       Map<dynamic, dynamic> userData});
@@ -123,15 +123,15 @@ class __$HomepageSupplementsCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? lessonlist = freezed,
+    Object? lesson = freezed,
     Object? topicList = freezed,
     Object? generalInfo = freezed,
     Object? userData = freezed,
   }) {
     return _then(_HomepageSupplements(
-      lessonlist: lessonlist == freezed
-          ? _value.lessonlist
-          : lessonlist // ignore: cast_nullable_to_non_nullable
+      lesson: lesson == freezed
+          ? _value.lesson
+          : lesson // ignore: cast_nullable_to_non_nullable
               as Lesson,
       topicList: topicList == freezed
           ? _value.topicList
@@ -153,13 +153,13 @@ class __$HomepageSupplementsCopyWithImpl<$Res>
 
 class _$_HomepageSupplements implements _HomepageSupplements {
   const _$_HomepageSupplements(
-      {required this.lessonlist,
+      {required this.lesson,
       required this.topicList,
       required this.generalInfo,
       required this.userData});
 
   @override
-  final Lesson lessonlist;
+  final Lesson lesson;
   @override
   final List<Topic> topicList;
   @override
@@ -169,7 +169,7 @@ class _$_HomepageSupplements implements _HomepageSupplements {
 
   @override
   String toString() {
-    return 'HomepageSupplements(lessonlist: $lessonlist, topicList: $topicList, generalInfo: $generalInfo, userData: $userData)';
+    return 'HomepageSupplements(lesson: $lesson, topicList: $topicList, generalInfo: $generalInfo, userData: $userData)';
   }
 
   @override
@@ -177,8 +177,7 @@ class _$_HomepageSupplements implements _HomepageSupplements {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _HomepageSupplements &&
-            const DeepCollectionEquality()
-                .equals(other.lessonlist, lessonlist) &&
+            const DeepCollectionEquality().equals(other.lesson, lesson) &&
             const DeepCollectionEquality().equals(other.topicList, topicList) &&
             const DeepCollectionEquality()
                 .equals(other.generalInfo, generalInfo) &&
@@ -188,7 +187,7 @@ class _$_HomepageSupplements implements _HomepageSupplements {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(lessonlist),
+      const DeepCollectionEquality().hash(lesson),
       const DeepCollectionEquality().hash(topicList),
       const DeepCollectionEquality().hash(generalInfo),
       const DeepCollectionEquality().hash(userData));
@@ -202,13 +201,13 @@ class _$_HomepageSupplements implements _HomepageSupplements {
 
 abstract class _HomepageSupplements implements HomepageSupplements {
   const factory _HomepageSupplements(
-      {required Lesson lessonlist,
+      {required Lesson lesson,
       required List<Topic> topicList,
       required GeneralInfo generalInfo,
       required Map<dynamic, dynamic> userData}) = _$_HomepageSupplements;
 
   @override
-  Lesson get lessonlist;
+  Lesson get lesson;
   @override
   List<Topic> get topicList;
   @override

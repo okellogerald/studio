@@ -23,12 +23,18 @@ class CoursesService {
         .catchError((e) => _handleError(e));
   }
 
+  Future<Map<String, dynamic>> getTopic(String id) async {
+    return await CoursesApi.getTopic(id, token)
+        .catchError((e) => _handleError(e));
+  }
+
   _handleIdChanges(User? user) async {
     if (user == null) {
       log('user is signed out');
     } else {
       log('assigning another token');
       token = await user.getIdToken();
+      log('done assigning');
     }
   }
 

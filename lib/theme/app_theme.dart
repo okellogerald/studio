@@ -35,6 +35,18 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           elevation: 2,
         ),
+        tabBarTheme: TabBarTheme(
+            labelColor: AppColors.primary,
+            labelStyle: const TextStyle(
+                fontSize: 18,
+                fontFamily: Constants.kFontFam,
+                fontWeight: FontWeight.w500),
+            unselectedLabelStyle: const TextStyle(
+                fontSize: 18,
+                fontFamily: Constants.kFontFam,
+                fontWeight: FontWeight.w500),
+            labelPadding: const EdgeInsets.all(10),
+            unselectedLabelColor: AppColors.onBackground.withOpacity(.5)),
         listTileTheme: const ListTileThemeData(
             dense: true, contentPadding: EdgeInsets.zero));
   }

@@ -14,6 +14,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   late final HomepageBloc bloc;
+
   @override
   void initState() {
     final service = Provider.of<CoursesService>(context, listen: false);
@@ -47,8 +48,9 @@ class _HomepageState extends State<Homepage> {
       padding: EdgeInsets.fromLTRB(15.dw, 40.dh, 15.dw, 10.dh),
       children: [
         _buildTitle(supp.userData),
-        _buildGeneralInfo(),
-        _buildContinueLesson(),
+        _buildGeneralInfo(supp.generalInfo),
+        _buildContinueLesson(supp.lesson),
+        _buildTopics(supp.userData['grade'], supp.topicList),
       ],
     );
   }
@@ -69,11 +71,11 @@ class _HomepageState extends State<Homepage> {
         ),
         CircleAvatar(
           backgroundColor: AppColors.primaryVariant,
-          radius: 30.dw,
+          radius: 25.dw,
           child: AppText(
             userData['name'].toString().substring(0, 1),
             weight: FontWeight.bold,
-            size: 30.dw,
+            size: 25.dw,
             opacity: .7,
           ),
         )
@@ -81,7 +83,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  _buildGeneralInfo() {
+  _buildGeneralInfo(GeneralInfo info) {
     return Container(
       height: 100.dh,
       width: double.infinity,
@@ -97,16 +99,17 @@ class _HomepageState extends State<Homepage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const ValueIndicator(),
+              ValueIndicator(info.getRemainingClassesRatio),
               SizedBox(height: 10.dh),
-              AppText('23 classes to complete Grade 1',
+              AppText('${info.remainingClasses} classes to complete Grade 1',
                   color: AppColors.onPrimary, size: 14.dw)
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const AppText('45 %', color: AppColors.onPrimary),
+              AppText('${info.getRemainingClassesPercent} %',
+                  color: AppColors.onPrimary),
               SizedBox(height: 10.dh),
               AppText('COMPLETE', color: AppColors.onPrimary, size: 14.dw)
             ],
@@ -116,42 +119,51 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  _buildContinueLesson() {
+  _buildContinueLesson(Lesson lesson) {
+    final isLearning = lesson.type == LessonType.learn;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText('Continue Lesson', size: 18.dw),
-        SizedBox(height: 10.dh),
-        Container(
-          height: 100.dh,
-          padding: EdgeInsets.symmetric(horizontal: 12.dw),
-          decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.all(Radius.circular(8.dw))),
-          child: Row(
-            children: [
-              ClipRRect(
-               borderRadius: BorderRadius.all(Radius.circular(8.dw)), 
-                child: Image.network(
-                    'https://images.pexels.com/photos/339352/carnival-fasnet-swabian-alemannic-wooden-mask-339352.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                    width: 100.dw,
-                    height: 80.dh,
-                    fit: BoxFit.cover),
-              ),
-              SizedBox(width: 20.dw),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText('Some Course', opacity: .7, size: 18.dw),
-                  SizedBox(height: 5.dh),
-                  const AppText('Course name', opacity: .7),
-                ],
-              )
-            ],
-          ),
+        AppText('Continue Class', weight: FontWeight.bold, size: 18.dw),
+        SizedBox(height: 15.dh),
+        LessonTile(
+          title: lesson.title,
+          topicId: lesson.topicId,
+          subtitle:
+              '${lesson.topicName} - ' + (isLearning ? 'LEARN' : 'PRACTICE'),
+          image: Constants.kDefaultImage,
         ),
       ],
+    );
+  }
+
+  _buildTopics(String grade, List<Topic> topicList) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20.dh),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText('$grade - Topics', weight: FontWeight.bold, size: 18.dw),
+          SizedBox(height: 15.dh),
+          ListView.separated(
+            separatorBuilder: (_, __) => SizedBox(height: 10.dh),
+            itemCount: topicList.length,
+            itemBuilder: (context, index) {
+              final topic = topicList[index];
+              return LessonTile(
+                  title: topic.title,
+                  image: Constants.kDefaultImage,
+                  topicId: topic.id,
+                  subtitle:
+                      '${topic.completedLessons} / ${topic.totalLessons} videos completed');
+            },
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+          ),
+        ],
+      ),
     );
   }
 }
