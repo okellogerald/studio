@@ -14,3 +14,4 @@ export 'lesson_tile.dart';
 export 'topic_page_app_bar.dart';
 export 'failed_state_widget.dart';
 export 'profile_avatar.dart';
+export 'custom_sliver_title.dart';

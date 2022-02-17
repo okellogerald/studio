@@ -90,7 +90,6 @@ class _LogInPageState extends State<LogInPage> {
               hintText: '',
               keyboardType: TextInputType.emailAddress,
               label: 'Password',
-              isPassword: true,
               isLoginPassword: true,
             ),
             _buildForgotPassword(),

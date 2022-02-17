@@ -14,6 +14,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   late final HomepageBloc bloc;
+  final controller = ScrollController();
 
   @override
   void initState() {
@@ -27,16 +28,14 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<HomepageBloc, HomepageState>(
-          bloc: bloc,
-          builder: (_, state) {
-            return state.when(
-                loading: _buildLoading,
-                content: _buildContent,
-                failed: _buildFailed);
-          }),
-    );
+    return BlocBuilder<HomepageBloc, HomepageState>(
+        bloc: bloc,
+        builder: (_, state) {
+          return state.when(
+              loading: _buildLoading,
+              content: _buildContent,
+              failed: _buildFailed);
+        });
   }
 
   Widget _buildLoading(HomepageSupplements supp, String? message) {
@@ -51,44 +50,49 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildContent(HomepageSupplements supp) {
-    return ListView(
-      padding: EdgeInsets.fromLTRB(15.dw, 40.dh, 15.dw, 10.dh),
-      children: [
-        _buildTitle(supp.userData),
-        _buildGeneralInfo(supp.generalInfo),
-        _buildContinueLesson(supp.lesson),
-        _buildTopics(supp.userData['grade'], supp.topicList),
-      ],
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              _buildTitle(supp.userData),
+              Expanded(
+                child: ListView(
+                  shrinkWrap: true,
+                  controller: controller,
+                  padding: EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
+                  children: [
+                    _buildGeneralInfo(supp.generalInfo),
+                    _buildContinueLesson(supp.lesson),
+                    _buildTopics(supp.userData['grade'], supp.topicList),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   _buildTitle(Map userData) {
     final grade = userData['grade'];
     final course = userData['course'];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppText('Hello ' + userData['name'], size: 22.dw),
-            SizedBox(height: 5.dh),
-            AppText('$grade - $course'),
-          ],
-        ),
-        GestureDetector(
-          onTap: _navigateToProfilePage,
-          child: ProfileAvatar(userData['name'])
-        )
-      ],
-    );
+
+    return CustomSliverTitle(controller,
+        title: 'Hello ' + userData['name'] + ',',
+        subtitle: '$grade - $course',
+        trailing: GestureDetector(
+            onTap: _navigateToProfilePage,
+            child: ProfileAvatar(userData['name'])));
   }
 
   _buildGeneralInfo(GeneralInfo info) {
     return Container(
       height: 100.dh,
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 25.dw),
+      margin: EdgeInsets.only(top: 10.dh, bottom: 25.dh),
       padding: EdgeInsets.symmetric(horizontal: 10.dw),
       decoration: BoxDecoration(
           color: AppColors.primary,
