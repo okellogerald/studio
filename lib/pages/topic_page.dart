@@ -17,11 +17,12 @@ class TopicPage extends StatefulWidget {
 class _TopicPageState extends State<TopicPage>
     with SingleTickerProviderStateMixin {
   late final TopicPageBloc bloc;
-  late final TabController controller;
+  late final TabController tabController;
+  final scrollController = ScrollController();
 
   @override
   void initState() {
-    controller = TabController(length: 5, vsync: this, initialIndex: 1);
+    tabController = TabController(length: 5, vsync: this, initialIndex: 1);
     final service = Provider.of<CoursesService>(context, listen: false);
     bloc = TopicPageBloc(service);
     bloc.init(widget.topicId);
@@ -30,33 +31,41 @@ class _TopicPageState extends State<TopicPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: _buildAppBar(), body: _buildBody());
-  }
-
-  _buildAppBar() {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(190.dh),
-      child: BlocBuilder<TopicPageBloc, TopicPageState>(
-          bloc: bloc,
-          builder: (_, state) {
-            return TopicPageAppBar(
-                title: widget.title,
-                subtitle: widget.subtitle,
-                controller: controller,
-                currentFilterType: state.supplements.filterType,
-                onPressed: bloc.updateFilterType);
-          }),
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              _buildHeader(),
+              Expanded(
+                child: BlocBuilder<TopicPageBloc, TopicPageState>(
+                    bloc: bloc,
+                    builder: (_, state) {
+                      return state.when(
+                          loading: _buildLoading,
+                          content: _buildContent,
+                          failed: _buildFailed);
+                    }),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  _buildBody() {
+  _buildHeader() {
     return BlocBuilder<TopicPageBloc, TopicPageState>(
         bloc: bloc,
         builder: (_, state) {
-          return state.when(
-              loading: _buildLoading,
-              content: _buildContent,
-              failed: _buildFailed);
+          return TopicPageAppBar(
+              title: widget.title,
+              subtitle: widget.subtitle,
+              tabController: tabController,
+              scrollController: scrollController,
+              currentFilterType: state.supplements.filterType,
+              onPressed: bloc.updateFilterType);
         });
   }
 
@@ -78,6 +87,7 @@ class _TopicPageState extends State<TopicPage>
       },
       itemCount: idList.length,
       shrinkWrap: true,
+      controller: scrollController,
     );
   }
 

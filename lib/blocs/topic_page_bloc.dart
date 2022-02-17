@@ -28,12 +28,6 @@ class TopicPageBloc extends Cubit<TopicPageState> {
     ];
     var supp = state.supplements;
     emit(TopicPageState.loading(supp));
-    log(supp.lessons.toString());
-    switch (filterTypeIndex) {
-      case 0:
-        break;
-      default:
-    }
     supp = supp.copyWith(filterType: filterTypes[filterTypeIndex]);
     emit(TopicPageState.content(supp));
   }

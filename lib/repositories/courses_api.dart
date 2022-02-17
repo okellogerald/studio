@@ -70,9 +70,9 @@ class CoursesApi {
     final response = await http.get(Uri.parse(url), headers: header);
     final result = json.decode(response.body);
 
-    _handleStatusCodes(result['code']);
+    _handleStatusCodes(response.statusCode);
 
-    // log(result.toString());
+    log(response.body.toString());
     return Lesson.fromJson(result['data']);
   }
 

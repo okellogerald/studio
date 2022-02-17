@@ -1,74 +1,97 @@
 import '../source.dart';
 
-class TopicPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+class TopicPageAppBar extends StatefulWidget {
   const TopicPageAppBar(
       {Key? key,
       required this.title,
       required this.subtitle,
-      required this.controller,
+      required this.tabController,
+      required this.scrollController,
       required this.currentFilterType,
       required this.onPressed})
       : super(key: key);
 
   final String title;
   final String subtitle;
-  final TabController controller;
+  final TabController tabController;
   final ValueChanged<int> onPressed;
   final FilterType currentFilterType;
+  final ScrollController scrollController;
 
   @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      bottom: TopicPageAppBarBottom(
-        title: title,
-        subtitle: subtitle,
-        controller: controller,
-        onPressed: onPressed,
-        currentFilterType: currentFilterType,
-      ),
-    );
+  State<TopicPageAppBar> createState() => _TopicPageAppBarState();
+}
+
+class _TopicPageAppBarState extends State<TopicPageAppBar> {
+  final scrollValueNotifier = ValueNotifier<double>(0.0);
+
+  @override
+  void initState() {
+    widget.scrollController.addListener(() => _handleScrollUpdates());
+    super.initState();
+  }
+
+  _handleScrollUpdates() {
+    scrollValueNotifier.value = widget.scrollController.position.pixels;
   }
 
   @override
-  Size get preferredSize => Size(double.infinity, 190.dh);
-}
-
-class TopicPageAppBarBottom extends StatelessWidget
-    implements PreferredSizeWidget {
-  final String title;
-  final String subtitle;
-  final TabController controller;
-  final ValueChanged<int> onPressed;
-  final FilterType currentFilterType;
-
-  const TopicPageAppBarBottom(
-      {Key? key,
-      required this.title,
-      required this.subtitle,
-      required this.controller,
-      required this.currentFilterType,
-      required this.onPressed})
-      : super(key: key);
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 15.dw),
-            child: AppText(title,
-                style: Theme.of(context).appBarTheme.titleTextStyle!),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10.dh, left: 15.dw),
-            child: AppText(subtitle, opacity: .7),
-          ),
-          _buildTabBar()
-        ],
-      ),
+    return ValueListenableBuilder<double>(
+        valueListenable: scrollValueNotifier,
+        builder: (_, value, snapshot) {
+          return Container(
+            height: value == 0 ? 170.dh : 90.dh,
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildBackIconButton(value),
+                const Spacer(),
+                value == 0
+                    ? Padding(
+                        padding: EdgeInsets.only(left: 15.dw),
+                        child: _buildTitle(),
+                      )
+                    : Container(),
+                value == 0 ? _buildSubtitle() : Container(),
+                _buildTabBar()
+              ],
+            ),
+          );
+        });
+  }
+
+  _buildBackIconButton(double value) {
+    return Row(
+      children: [
+        AppIconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icons.arrow_back,
+          margin: EdgeInsets.only(left: 15.dw, top: 5.dh, right: 15.dw),
+          iconThemeData: Theme.of(context)
+              .iconTheme
+              .copyWith(color: AppColors.onBackground),
+        ),
+        value == 0
+            ? Container()
+            : Padding(
+                padding: EdgeInsets.only(top: 5.dh),
+                child: _buildTitle(),
+              ),
+      ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return AppText(widget.title,
+        style: Theme.of(context).appBarTheme.titleTextStyle!);
+  }
+
+  _buildSubtitle() {
+    return Padding(
+      padding: EdgeInsets.only(top: 10.dh, left: 15.dw),
+      child: AppText(widget.subtitle, opacity: .7),
     );
   }
 
@@ -80,36 +103,37 @@ class TopicPageAppBarBottom extends StatelessWidget
           Row(
             children: [
               Container(
-                decoration: const BoxDecoration(
-                    border: Border(
-                        right:
-                            BorderSide(width: 1.5, color: AppColors.divider))),
+                decoration: const BoxDecoration(border: border),
                 padding: EdgeInsets.only(left: 15.dw, right: 15.dw),
                 child: AppText('FILTERS', size: 16.dw, weight: FontWeight.bold),
               ),
-              Expanded(
-                child: TabBar(
-                    controller: controller,
-                    indicatorColor: Colors.transparent,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicatorWeight: 0.001,
-                    padding: EdgeInsets.only(left: 10.dw),
-                    onTap: onPressed,
-                    isScrollable: true,
-                    tabs: [
-                      _buildTab('All', FilterType.all, currentFilterType),
-                      _buildTab('Learn', FilterType.learn, currentFilterType),
-                      _buildTab(
-                          'Practice', FilterType.practice, currentFilterType),
-                      _buildTab('Free', FilterType.free, currentFilterType),
-                      _buildTab('Paid', FilterType.paid, currentFilterType),
-                    ]),
-              ),
+              _buildFilters(),
             ],
           ),
           const AppDivider(margin: EdgeInsets.zero)
         ],
       ),
+    );
+  }
+
+  _buildFilters() {
+    return Expanded(
+      child: TabBar(
+          controller: widget.tabController,
+          indicatorColor: Colors.transparent,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorWeight: 0.001,
+          padding: EdgeInsets.only(left: 10.dw),
+          onTap: widget.onPressed,
+          isScrollable: true,
+          tabs: [
+            _buildTab('All', FilterType.all, widget.currentFilterType),
+            _buildTab('Learn', FilterType.learn, widget.currentFilterType),
+            _buildTab(
+                'Practice', FilterType.practice, widget.currentFilterType),
+            _buildTab('Free', FilterType.free, widget.currentFilterType),
+            _buildTab('Paid', FilterType.paid, widget.currentFilterType),
+          ]),
     );
   }
 
@@ -119,7 +143,7 @@ class TopicPageAppBarBottom extends StatelessWidget
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.dw),
       decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.primaryVariant,
+          color: isSelected ? AppColors.primary : AppColors.surface,
           borderRadius: BorderRadius.all(Radius.circular(5.dw))),
       height: 30.dh,
       alignment: Alignment.center,
@@ -129,6 +153,6 @@ class TopicPageAppBarBottom extends StatelessWidget
     );
   }
 
-  @override
-  Size get preferredSize => Size.fromHeight(100.dh);
+  static const border =
+      Border(right: BorderSide(width: 1.5, color: AppColors.divider));
 }
