@@ -91,6 +91,7 @@ class _LogInPageState extends State<LogInPage> {
               keyboardType: TextInputType.emailAddress,
               label: 'Password',
               isPassword: true,
+              isLoginPassword: true,
             ),
             _buildForgotPassword(),
             _buildGetStartedButton()
