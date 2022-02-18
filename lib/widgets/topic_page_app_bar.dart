@@ -143,7 +143,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.dw),
       decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.surface,
+          color: isSelected ? AppColors.primary : AppColors.primaryVariant,
           borderRadius: BorderRadius.all(Radius.circular(5.dw))),
       height: 30.dh,
       alignment: Alignment.center,

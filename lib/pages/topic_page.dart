@@ -23,8 +23,9 @@ class _TopicPageState extends State<TopicPage>
   @override
   void initState() {
     tabController = TabController(length: 5, vsync: this, initialIndex: 1);
-    final service = Provider.of<CoursesService>(context, listen: false);
-    bloc = TopicPageBloc(service);
+    final coursesService = Provider.of<CoursesService>(context, listen: false);
+    final lessonsService = Provider.of<LessonsService>(context, listen: false);
+    bloc = TopicPageBloc(coursesService, lessonsService);
     bloc.init(widget.topicId);
     super.initState();
   }
@@ -104,18 +105,7 @@ class _TopicPageState extends State<TopicPage>
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),
             itemCount: lessons.length,
-            itemBuilder: (context, index) {
-              final lesson = lessons[index];
-              final subtitle =
-                  '${lesson.videoTime} | ${lesson.type == LessonType.learn ? 'LEARN' : 'PRACTICE'}';
-              return LessonTile(
-                title: lesson.title,
-                image: Constants.kDefaultImage,
-                subtitle: subtitle,
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => LessonPage(lesson.id))),
-              );
-            },
+            itemBuilder: (context, index) => LessonTile(lessons[index]),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
@@ -132,9 +122,9 @@ class _TopicPageState extends State<TopicPage>
       case FilterType.practice:
         return lessons.where((e) => e.type == LessonType.practice).toList();
       case FilterType.free:
-        return lessons.where((e) => e.isPaid == null).toList();
+        return lessons.where((e) => !e.isPaid).toList();
       case FilterType.paid:
-        return lessons.where((e) => e.isPaid != null).toList();
+        return lessons.where((e) => e.isPaid).toList();
       default:
         return lessons;
     }

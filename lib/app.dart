@@ -3,6 +3,10 @@ import 'source.dart';
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  //ToDo
+  //adding timeimit for all asynchronous methods
+  //configuring the splash screen
+
   @override
   Widget build(BuildContext context) {
     return ScreenSizeInit(

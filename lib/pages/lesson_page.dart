@@ -14,10 +14,10 @@ class _LessonPageState extends State<LessonPage> {
 
   @override
   void initState() {
-    super.initState();
-    final service = Provider.of<CoursesService>(context, listen: false);
+    final service = Provider.of<LessonsService>(context, listen: false);
     bloc = LessonPageBloc(service);
     bloc.init(widget.lessonId);
+    super.initState();
   }
 
   @override
@@ -38,6 +38,7 @@ class _LessonPageState extends State<LessonPage> {
 
   Widget _buildContent(LessonPageSupplements supp) {
     return Scaffold(
+      appBar: AppBar(backgroundColor: AppColors.primaryVariant),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,64 +46,96 @@ class _LessonPageState extends State<LessonPage> {
           _buildVideoDescription(supp.lesson),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
+      bottomNavigationBar: _buildBottomNavBar(supp),
     );
   }
 
-  _buildVideo() => Container(height: 250.dh, color: Colors.yellow);
+  _buildVideo() => Container(height: 150.dh, color: AppColors.primaryVariant);
 
   _buildVideoDescription(Lesson lesson) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 15.dh),
-        _buildText(lesson.title, true),
+        _buildTitle(lesson),
         SizedBox(height: 10.dh),
-        _buildText(lesson.description ??''),
+        _buildText(lesson.description ?? ''),
         AppDivider(margin: EdgeInsets.symmetric(vertical: 10.dh)),
-        _buildText(lesson.body ?? '', false, .7)
+        _buildText(lesson.body ?? '', .7)
       ],
     );
   }
 
-  _buildText(String data, [bool isTitle = false, double opacity = 1]) {
+  _buildTitle(Lesson lesson) {
+    final isCompleted = lesson.completionStatus == Status.completed;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.dw),
-      child: AppText(data,
-          weight: isTitle ? FontWeight.bold : FontWeight.normal,
-          size: isTitle ? 22.dw : 16.dw,
-          opacity: opacity),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          AppText(lesson.title, weight: FontWeight.bold, size: 22.dw),
+          isCompleted ? const CheckMark() : Container()
+        ],
+      ),
     );
   }
 
-  _buildBottomNavBar() {
+  _buildText(String data, [double opacity = 1]) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.dw),
+      child: AppText(data,
+          weight: FontWeight.normal, size: 16.dw, opacity: opacity),
+    );
+  }
+
+  _buildBottomNavBar(LessonPageSupplements supp) {
     return Container(
       decoration: BoxDecoration(
           border: Border(top: BorderSide(color: Colors.grey.withOpacity(.35)))),
       height: 70.dh,
       child: Row(
         children: [
-          Expanded(
-              flex: 2,
-              child: AppTextButton(
-                onPressed: () {},
-                height: 45.dh,
-                backgroundColor: AppColors.surface,
-                textColor: AppColors.onBackground,
-                text: 'Mark As Complete',
-                margin: EdgeInsets.symmetric(horizontal: 15.dw),
-              )),
-          Expanded(
-              child: AppTextButton(
-            onPressed: () {},
-            text: 'NEXT',
-            height: 45.dh,
-            backgroundColor: AppColors.primary,
-            textColor: AppColors.onPrimary,
-            margin: EdgeInsets.symmetric(horizontal: 15.dw),
-          )),
+          _buildMarkStatusButton(supp.lesson),
+          _buildNextButton(),
         ],
       ),
     );
+  }
+
+  _buildMarkStatusButton(Lesson lesson) {
+    final isIncomplete = lesson.completionStatus == 'incomplete';
+    return Expanded(
+        flex: 2,
+        child: GestureDetector(
+            onTap: isIncomplete
+                ? () => bloc.markLessonAs(Status.completed, lesson: lesson)
+                : () => bloc.markLessonAs(Status.incomplete, lesson: lesson),
+            child: Container(
+              height: 45.dh,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  border: !isIncomplete
+                      ? Border.all(color: AppColors.primary, width: 2)
+                      : Border.all(color: Colors.transparent, width: 0),
+                  color: isIncomplete ? AppColors.primary : Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(5.dw))),
+              child: AppText(isIncomplete ? 'MARK COMPLETE' : 'MARK INCOMPLETE',
+                  color:
+                      isIncomplete ? AppColors.onPrimary : AppColors.primary),
+              margin: EdgeInsets.symmetric(horizontal: 15.dw),
+            )));
+  }
+
+  _buildNextButton() {
+    return Expanded(
+        child: AppTextButton(
+      onPressed: () {},
+      text: 'NEXT',
+      height: 45.dh,
+      backgroundColor: AppColors.primary,
+      textColor: AppColors.onPrimary,
+      margin: EdgeInsets.symmetric(horizontal: 15.dw),
+    ));
   }
 }

@@ -11,6 +11,7 @@ class AppTextButton extends StatefulWidget {
       this.alignment,
       this.child,
       this.withIcon = false,
+      this.useBorder = false,
       this.textStyle,
       this.iconColor = AppColors.onBackground,
       this.textColor,
@@ -25,7 +26,7 @@ class AppTextButton extends StatefulWidget {
   final VoidCallback onPressed;
   final EdgeInsetsGeometry? padding, margin;
   final String? text;
-  final bool withIcon;
+  final bool withIcon, useBorder;
   final Widget? child;
   final Alignment? alignment;
   final TextStyle? textStyle;

@@ -19,6 +19,7 @@ void main() async {
     providers: [
       Provider(create: (_) => OnBoardingPagesBloc(UserService(_auth))),
       Provider(create: (_) => CoursesService(_auth)),
+      ChangeNotifierProvider(create: (_) => LessonsService(_auth)),
     ],
     child: const MyApp(),
   );

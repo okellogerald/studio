@@ -1,10 +1,10 @@
 enum LessonType { practice, learn }
 
 class Lesson {
-  final String id, title, videoTime, topicId, topicName;
-  String? thumbnailUrl, videoUrl, description, completionStatus, body;
+  final String id, title, videoTime, topicId, topicName, completionStatus;
+  String? thumbnailUrl, videoUrl, description, body;
   final LessonType type;
-  final bool? isPaid, isPublished;
+  final bool isPaid, isPublished;
 
   Lesson(
       {required this.id,
@@ -32,7 +32,7 @@ class Lesson {
         type: json['lessonType'] == 'learn'
             ? LessonType.learn
             : LessonType.practice,
-        isPaid: json['ispaid'],
+        isPaid: json['isPaid'] ?? false,
         isPublished: json['publishedStatus'] == 'published',
         videoUrl: json['videoURL'] ?? '',
         description: json['description'] ?? '',
@@ -54,6 +54,23 @@ class Lesson {
       type: LessonType.learn,
       isPaid: false,
       isPublished: false);
+
+  Lesson copyWithNewStatus(String newStatus) {
+    return Lesson(
+        id: id,
+        body: body,
+        title: title,
+        thumbnailUrl: thumbnailUrl,
+        videoTime: videoTime,
+        topicId: topicId,
+        topicName: topicName,
+        type: type,
+        isPaid: isPaid,
+        completionStatus: newStatus,
+        description: description,
+        videoUrl: videoUrl,
+        isPublished: isPublished);
+  }
 
   static const defaultImage =
       'https://images.pexels.com/photos/3949699/pexels-photo-3949699.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';

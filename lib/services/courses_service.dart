@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../source.dart';
 
+typedef FutureMap = Future<Map<String, dynamic>>;
+
 class CoursesService {
   CoursesService(this._auth);
 
@@ -29,16 +31,15 @@ class CoursesService {
         .catchError((e) => _handleError(e));
   }
 
-  Future<Lesson> getLesson(String id) async {
-    await refreshToken();
-    return await CoursesApi.getLesson(id, token)
-        .catchError((e) => _handleError(e));
-  }
-
   Future<Map<String, dynamic>> getProfileData() async {
     await refreshToken();
     return await CoursesApi.getProfile(token)
         .catchError((e) => _handleError(e));
+  }
+
+  Future<GeneralInfo> getRefreshedGeneralInfo() async {
+    await refreshToken();
+    return await CoursesApi.getGeneralInfo(token) .catchError((e) => _handleError(e));
   }
 
   _handleError(e) {

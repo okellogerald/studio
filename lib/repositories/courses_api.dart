@@ -83,6 +83,35 @@ class CoursesApi {
     return result['data'];
   }
 
+  static Future<String> updateLessonStatus(
+      String newStatus, String lessonId, String token) async {
+    final url = root + 'lesson/$lessonId/status';
+    final header = {"Authorization": 'Bearer $token'};
+    final data = {'completionStatus': newStatus};
+    final response =
+        await http.post(Uri.parse(url), headers: header, body: data);
+
+    final result = json.decode(response.body);
+    _handleStatusCodes(result['code']);
+    log(result.toString());
+    return result['data']['completionStatus'];
+  }
+
+  static Future<GeneralInfo> getGeneralInfo(String token) async {
+    const url = root + 'home';
+    final header = {"Authorization": 'Bearer $token'};
+    final response = await http.get(Uri.parse(url), headers: header);
+    final result = json.decode(response.body);
+
+    _handleStatusCodes(result['code']);
+
+    log(result.toString());
+    final generalInfo = GeneralInfo(
+        completedLessons: result['info']['completedLessonsCount'],
+        lessonsCount: result['info']['lessonsCount']);
+    return generalInfo;
+  }
+
   static void _handleStatusCodes(int statusCode) {
     if (statusCode == 200) return;
     if (statusCode == 701) throw ApiError.expiredToken();

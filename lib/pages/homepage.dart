@@ -19,9 +19,10 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     final service = Provider.of<CoursesService>(context, listen: false);
+    final lessonsService = Provider.of<LessonsService>(context, listen: false);
     final onBoardingBloc =
         Provider.of<OnBoardingPagesBloc>(context, listen: false);
-    bloc = HomepageBloc(service, onBoardingBloc.service);
+    bloc = HomepageBloc(service, onBoardingBloc.service, lessonsService);
     bloc.init();
     super.initState();
   }
@@ -125,21 +126,12 @@ class _HomepageState extends State<Homepage> {
   }
 
   _buildContinueLesson(Lesson lesson) {
-    final isLearning = lesson.type == LessonType.learn;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppText('Continue Class', weight: FontWeight.bold, size: 18.dw),
         SizedBox(height: 15.dh),
-        LessonTile(
-          title: lesson.title,
-          subtitle:
-              '${lesson.topicName} - ' + (isLearning ? 'LEARN' : 'PRACTICE'),
-          image: Constants.kDefaultImage,
-          onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => LessonPage(lesson.id))),
-        ),
+        LessonTile(lesson),
       ],
     );
   }
@@ -155,22 +147,7 @@ class _HomepageState extends State<Homepage> {
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),
             itemCount: topicList.length,
-            itemBuilder: (context, index) {
-              final topic = topicList[index];
-              final subtitle =
-                  '${topic.completedLessons} / ${topic.totalLessons} videos completed';
-              return LessonTile(
-                  title: topic.title,
-                  image: Constants.kDefaultImage,
-                  subtitle: subtitle,
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => TopicPage(
-                              title: topic.title,
-                              subtitle: subtitle,
-                              topicId: topic.id))));
-            },
+            itemBuilder: (context, index) => TopicTile(topicList[index]),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
