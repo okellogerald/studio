@@ -17,7 +17,6 @@ class CoursesApi {
 
     // log(result.toString());
     final topicList = <Topic>[];
-
     final values = <String, dynamic>{};
 
     for (var item in result['data']) {
@@ -25,7 +24,6 @@ class CoursesApi {
     }
 
     final continueLesson = Lesson.fromJson(result['info']['continueLesson']);
-
     final generalInfo = GeneralInfo(
         completedLessons: result['info']['completedLessonsCount'],
         lessonsCount: result['info']['lessonsCount']);
@@ -64,19 +62,14 @@ class CoursesApi {
     return values;
   }
 
-  static FutureMap getLesson(String id, String token) async {
+  static Future<Lesson> getLesson(String id, String token) async {
     final url = root + 'lesson/$id';
     final header = {"Authorization": 'Bearer $token'};
     final response = await http.get(Uri.parse(url), headers: header);
     final result = json.decode(response.body);
-
     _handleStatusCodes(result['code']);
-
-    final values = <String, dynamic>{};
-    values['lesson'] = Lesson.fromJson(result['data']);
-
     //log(response.body.toString());
-    return values;
+    return Lesson.fromJson(result['data']);
   }
 
   static Future<Map<String, dynamic>> getProfile(String token) async {
@@ -86,9 +79,7 @@ class CoursesApi {
 
     final result = json.decode(response.body);
     _handleStatusCodes(result['code']);
-
     //log(result.toString());
-
     return result['data'];
   }
 

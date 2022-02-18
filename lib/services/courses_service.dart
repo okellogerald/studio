@@ -1,79 +1,44 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import '../source.dart';
 
-typedef FutureMap = Future<Map<String, dynamic>>;
-
 class CoursesService {
-  CoursesService(this._auth) {
-    _auth.idTokenChanges().listen((user) => _handleIdChanges(user));
-  }
+  CoursesService(this._auth);
 
   final FirebaseAuth _auth;
   var token = '';
 
-  Future<String?> init() async {
-    log('changed the token');
+  Future<void> init() async {
     final _token = await _auth.currentUser?.getIdToken();
     if (_token != null) token = _token;
-    return _token;
   }
 
-  FutureMap getHomeContent() async {
+  ///makes sure the token used is valid
+  Future refreshToken() async => await init();
+
+  Future<Map<String, dynamic>> getHomeContent() async {
+    await refreshToken();
     return await CoursesApi.getUserCourseOverview(token)
         .catchError((e) => _handleError(e));
   }
 
-  FutureMap getTopic(String id) async {
+  Future<Map<String, dynamic>> getTopic(String id) async {
+    await refreshToken();
     return await CoursesApi.getTopic(id, token)
         .catchError((e) => _handleError(e));
   }
 
   Future<Lesson> getLesson(String id) async {
-    FutureMap callback() async {
-      final result = await CoursesApi.getLesson(id, token);
-      return result['lesson'];
-    }
-
-    return await _handleCallbacks(callback);
+    await refreshToken();
+    return await CoursesApi.getLesson(id, token)
+        .catchError((e) => _handleError(e));
   }
 
-  FutureMap getProfileData() async {
-    FutureMap callback() async {
-      return await CoursesApi.getProfile(token);
-    }
-
-    return await _handleCallbacks(callback);
-  }
-
-  ///handles the errors that may happen when calling an aoi.
-  Future _handleCallbacks(Function callback) async {
-    var result = <String, dynamic>{};
-
-    try {
-      result = await callback();
-    } on ApiError catch (e) {
-      if (e.message == 'Token') {
-        await init();
-        result = await callback();
-      } else {
-        _handleError(e);
-      }
-    } catch (e) {
-      _handleError(e);
-    }
-
-    return result;
-  }
-
-  _handleIdChanges(User? user) async {
-    if (user == null) {
-      log('user is signed out');
-    } else {
-      token = await user.getIdToken();
-    }
+  Future<Map<String, dynamic>> getProfileData() async {
+    await refreshToken();
+    return await CoursesApi.getProfile(token)
+        .catchError((e) => _handleError(e));
   }
 
   _handleError(e) {

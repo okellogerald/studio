@@ -65,6 +65,7 @@ class OnBoardingApi {
   }
 
   static void _handleStatusCodes(int statusCode) {
+    if (statusCode == 200) return;
     if (statusCode == 701) throw ApiError.expiredToken();
     throw ApiError.unknown();
   }

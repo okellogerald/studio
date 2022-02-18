@@ -59,7 +59,6 @@ class UserService {
     if (e is FirebaseAuthException) throw ApiError.firebaseAuth(e.message);
     if (e is SocketException) throw ApiError.internet();
     if (e is TimeoutException) throw ApiError.timeout();
-    log(e.toString());
     throw ApiError.unknown();
   }
 }
