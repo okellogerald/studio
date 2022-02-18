@@ -64,31 +64,37 @@ class CoursesApi {
     return values;
   }
 
-  static Future<Lesson> getLesson(String id, String token) async {
+  static FutureMap getLesson(String id, String token) async {
     final url = root + 'lesson/$id';
-    final header = {"Authorization": 'Bearer $token'};
-    final response = await http.get(Uri.parse(url), headers: header);
-    final result = json.decode(response.body);
-
-    _handleStatusCodes(response.statusCode);
-
-    log(response.body.toString());
-    return Lesson.fromJson(result['data']);
-  }
-
-  static Future<Map<String, dynamic>> getProfile(String token) async {
-    const url = root + 'profile';
     final header = {"Authorization": 'Bearer $token'};
     final response = await http.get(Uri.parse(url), headers: header);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
 
-    // log(result.toString());
+    final values = <String, dynamic>{};
+    values['lesson'] = Lesson.fromJson(result['data']);
+
+    //log(response.body.toString());
+    return values;
+  }
+
+  static Future<Map<String, dynamic>> getProfile(String token) async {
+    const url = root + 'profile';
+    final header = {"Authorization": 'Bearer $token'};
+    final response = await http.get(Uri.parse(url), headers: header);
+
+    final result = json.decode(response.body);
+    _handleStatusCodes(result['code']);
+
+    //log(result.toString());
+
     return result['data'];
   }
 
   static void _handleStatusCodes(int statusCode) {
-    if (statusCode != 200) throw ApiError.server();
+    if (statusCode == 200) return;
+    if (statusCode == 701) throw ApiError.expiredToken();
+    throw ApiError.unknown();
   }
 }

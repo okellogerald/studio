@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../source.dart';
 
+typedef FutureMap = Future<Map<String, dynamic>>;
+
 class CoursesService {
   CoursesService(this._auth) {
     _auth.idTokenChanges().listen((user) => _handleIdChanges(user));
@@ -13,29 +15,57 @@ class CoursesService {
   var token = '';
 
   Future<String?> init() async {
+    log('changed the token');
     final _token = await _auth.currentUser?.getIdToken();
     if (_token != null) token = _token;
     return _token;
   }
 
-  Future<Map<String, dynamic>> getHomeContent() async {
+  FutureMap getHomeContent() async {
     return await CoursesApi.getUserCourseOverview(token)
         .catchError((e) => _handleError(e));
   }
 
-  Future<Map<String, dynamic>> getTopic(String id) async {
+  FutureMap getTopic(String id) async {
     return await CoursesApi.getTopic(id, token)
         .catchError((e) => _handleError(e));
   }
 
   Future<Lesson> getLesson(String id) async {
-    return await CoursesApi.getLesson(id, token)
-        .catchError((e) => _handleError(e));
+    FutureMap callback() async {
+      final result = await CoursesApi.getLesson(id, token);
+      return result['lesson'];
+    }
+
+    return await _handleCallbacks(callback);
   }
 
-  Future<Map<String, dynamic>> getProfileData() async {
-    return await CoursesApi.getProfile(token)
-        .catchError((e) => _handleError(e));
+  FutureMap getProfileData() async {
+    FutureMap callback() async {
+      return await CoursesApi.getProfile(token);
+    }
+
+    return await _handleCallbacks(callback);
+  }
+
+  ///handles the errors that may happen when calling an aoi.
+  Future _handleCallbacks(Function callback) async {
+    var result = <String, dynamic>{};
+
+    try {
+      result = await callback();
+    } on ApiError catch (e) {
+      if (e.message == 'Token') {
+        await init();
+        result = await callback();
+      } else {
+        _handleError(e);
+      }
+    } catch (e) {
+      _handleError(e);
+    }
+
+    return result;
   }
 
   _handleIdChanges(User? user) async {

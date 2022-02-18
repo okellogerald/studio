@@ -15,8 +15,7 @@ class ApiError extends Error {
   factory ApiError.invalid() =>
       ApiError._(message: 'Either password or email is invalid.');
 
-  factory ApiError.server() =>
-      ApiError._(message: 'Server seems to be having an error');
+  factory ApiError.expiredToken() => ApiError._(message: 'Token');
 
   factory ApiError.firebaseAuth(String? message) =>
       ApiError._(message: message ?? 'An error happened during authentication');
