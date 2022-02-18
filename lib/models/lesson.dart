@@ -2,12 +2,13 @@ enum LessonType { practice, learn }
 
 class Lesson {
   final String id, title, videoTime, topicId, topicName;
-  String? thumbnailUrl, videoUrl, description, completionStatus;
+  String? thumbnailUrl, videoUrl, description, completionStatus, body;
   final LessonType type;
   final bool? isPaid, isPublished;
 
   Lesson(
       {required this.id,
+      required this.body,
       required this.title,
       required this.thumbnailUrl,
       required this.videoTime,
@@ -22,21 +23,21 @@ class Lesson {
 
   factory Lesson.fromJson(Map<String, dynamic> json) {
     return Lesson(
-      id: json['id'],
-      title: json['title'],
-      thumbnailUrl: json['thumbnailUrl'] ?? defaultImage,
-      videoTime: json['videoTime'],
-      topicId: json['topic']['id'],
-      topicName: json['topic']['title'],
-      type: json['lessonType'] == 'learn'
-          ? LessonType.learn
-          : LessonType.practice,
-      isPaid: json['ispaid'],
-      isPublished: json['publishedStatus'] == 'published',
-      videoUrl: json['videoURL'] ?? '',
-      description: json['description'] ?? '',
-      completionStatus: json['completionStatus'] ?? '',
-    );
+        id: json['id'],
+        title: json['title'],
+        thumbnailUrl: json['thumbnailUrl'] ?? defaultImage,
+        videoTime: json['videoTime'],
+        topicId: json['topic']['id'],
+        topicName: json['topic']['title'],
+        type: json['lessonType'] == 'learn'
+            ? LessonType.learn
+            : LessonType.practice,
+        isPaid: json['ispaid'],
+        isPublished: json['publishedStatus'] == 'published',
+        videoUrl: json['videoURL'] ?? '',
+        description: json['description'] ?? '',
+        completionStatus: json['completionStatus'] ?? '',
+        body: json['body'] ?? '');
   }
 
   factory Lesson.empty() => Lesson(
@@ -44,6 +45,7 @@ class Lesson {
       title: '',
       thumbnailUrl: '',
       videoTime: '',
+      body: '',
       topicId: '',
       topicName: '',
       videoUrl: '',

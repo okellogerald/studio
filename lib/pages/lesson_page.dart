@@ -58,9 +58,9 @@ class _LessonPageState extends State<LessonPage> {
         SizedBox(height: 15.dh),
         _buildText(lesson.title, true),
         SizedBox(height: 10.dh),
-        _buildText(lesson.topicName),
+        _buildText(lesson.description ??''),
         AppDivider(margin: EdgeInsets.symmetric(vertical: 10.dh)),
-        _buildText(lesson.description ?? '', false, .7)
+        _buildText(lesson.body ?? '', false, .7)
       ],
     );
   }
