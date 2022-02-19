@@ -111,10 +111,10 @@ class _SignUpPageState extends State<SignUpPage> {
         children: [
           AppTextButton(
             onPressed: bloc.signUp,
-            text: 'Get Started',
+            text: 'GET STARTED',
             textColor: AppColors.onPrimary,
             backgroundColor: AppColors.primary,
-            height: 50.dh,
+            height: 60.dh,
             width: 200.dw,
             margin: EdgeInsets.only(bottom: 40.dh, right: 15.dw),
           ),

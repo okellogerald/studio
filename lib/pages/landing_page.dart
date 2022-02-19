@@ -51,7 +51,8 @@ class LandingPage extends StatelessWidget {
           const AppText(
               'Art is something that makes you breath with a different kind of happiness',
               alignment: TextAlign.center,
-              weight: FontWeight.bold),
+              weight: FontWeight.bold,
+              opacity: .7),
           AppText('Let\'s learn an art today !',
               size: 22.dw, weight: FontWeight.bold),
         ],
@@ -69,7 +70,7 @@ class LandingPage extends StatelessWidget {
             AppTextButton(
               onPressed: () => WelcomePage.navigateTo(context),
               text: 'GET STARTED',
-              height: 50.dh,
+              height: 60.dh,
               width: 230.dw,
               backgroundColor: AppColors.primary,
               textColor: AppColors.onPrimary,
@@ -78,7 +79,8 @@ class LandingPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const AppText('Already have an account ?'),
+                const AppText('Already have an account ?',
+                    color: AppColors.primary),
                 AppTextButton(
                   onPressed: () => LogInPage.navigateTo(context),
                   text: 'LOG IN',

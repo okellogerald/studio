@@ -1,3 +1,5 @@
+import '../source.dart';
+
 enum LessonType { practice, learn }
 
 class Lesson {
@@ -71,6 +73,8 @@ class Lesson {
         videoUrl: videoUrl,
         isPublished: isPublished);
   }
+
+  bool get isComplete => completionStatus == Status.completed;
 
   static const defaultImage =
       'https://images.pexels.com/photos/3949699/pexels-photo-3949699.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';

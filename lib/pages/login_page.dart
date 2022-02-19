@@ -128,7 +128,7 @@ class _LogInPageState extends State<LogInPage> {
             text: 'LOG IN',
             textColor: AppColors.onPrimary,
             backgroundColor: AppColors.primary,
-            height: 50.dh,
+            height: 60.dh,
             width: 200.dw,
             margin: EdgeInsets.only(bottom: 40.dh, right: 15.dw),
           ),

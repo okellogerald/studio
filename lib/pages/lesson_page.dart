@@ -61,7 +61,7 @@ class _LessonPageState extends State<LessonPage> {
         SizedBox(height: 10.dh),
         _buildText(lesson.description ?? ''),
         AppDivider(margin: EdgeInsets.symmetric(vertical: 10.dh)),
-        _buildText(lesson.body ?? '', .7)
+        _buildText(lesson.body ?? '', .7, true)
       ],
     );
   }
@@ -74,26 +74,30 @@ class _LessonPageState extends State<LessonPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AppText(lesson.title, weight: FontWeight.bold, size: 22.dw),
+          AppText(lesson.title,
+              weight: FontWeight.bold, size: 22.dw, color: AppColors.primary),
           isCompleted ? const CheckMark() : Container()
         ],
       ),
     );
   }
 
-  _buildText(String data, [double opacity = 1]) {
+  _buildText(String data, [double opacity = 1, bool isBody = false]) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.dw),
       child: AppText(data,
-          weight: FontWeight.normal, size: 16.dw, opacity: opacity),
+          weight: FontWeight.normal,
+          size: isBody ? 14.dw : 16.dw,
+          opacity: opacity),
     );
   }
 
   _buildBottomNavBar(LessonPageSupplements supp) {
     return Container(
       decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.grey.withOpacity(.35)))),
-      height: 70.dh,
+          border: Border(
+              top: BorderSide(color: Colors.grey.withOpacity(.15), width: 2))),
+      height: 100.dh,
       child: Row(
         children: [
           _buildMarkStatusButton(supp.lesson),
@@ -112,7 +116,7 @@ class _LessonPageState extends State<LessonPage> {
                 ? () => bloc.markLessonAs(Status.completed, lesson: lesson)
                 : () => bloc.markLessonAs(Status.incomplete, lesson: lesson),
             child: Container(
-              height: 45.dh,
+              height: 60.dh,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   border: !isIncomplete
@@ -132,10 +136,10 @@ class _LessonPageState extends State<LessonPage> {
         child: AppTextButton(
       onPressed: () {},
       text: 'NEXT',
-      height: 45.dh,
+      height: 60.dh,
       backgroundColor: AppColors.primary,
       textColor: AppColors.onPrimary,
-      margin: EdgeInsets.symmetric(horizontal: 15.dw),
+      margin: EdgeInsets.only(right: 15.dw),
     ));
   }
 }

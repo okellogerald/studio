@@ -36,12 +36,13 @@ class _CustomSliverTitleState extends State<CustomSliverTitle> {
         valueListenable: scrollValueNotifier,
         builder: (_, value, child) {
           return Container(
-            height: value == 0 ? 120.dh : 60.dh,
+            height: value == 0 ? 120.dh : 65.dh,
             padding: EdgeInsets.symmetric(horizontal: 15.dw, vertical: 5.dh),
             decoration: BoxDecoration(
                 border: value == 0
                     ? const Border()
-                    : const Border(bottom: BorderSide(width: 1.5, color: Colors.grey))),
+                    : const Border(
+                        bottom: BorderSide(width: 1.5, color: Colors.grey))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +70,8 @@ class _CustomSliverTitleState extends State<CustomSliverTitle> {
                     .appBarTheme
                     .titleTextStyle!
                     .copyWith(fontSize: 20.dw)),
-            AppText(widget.subtitle, opacity: .7),
+            AppText(widget.subtitle,
+                opacity: .85, size: 14.dw, color: AppColors.primary),
           ],
         ),
       ),

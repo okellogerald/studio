@@ -53,13 +53,13 @@ class _LevelsPageState extends State<LevelsPage> {
           SignUpPage.navigateTo(context);
         },
         child: Container(
+          height: 85.dh,
           decoration: BoxDecoration(
               color: isSelected ? AppColors.primary : Colors.transparent,
               borderRadius: BorderRadius.all(Radius.circular(5.dw))),
-          alignment: Alignment.center,
+          alignment: Alignment.centerLeft,
           padding: EdgeInsets.symmetric(horizontal: 10.dw, vertical: 15.dw),
           child: AppText(e,
-              alignment: TextAlign.center,
               color: isSelected ? AppColors.onPrimary : AppColors.onBackground),
         ),
         margin: EdgeInsets.only(top: 20.dh, left: 15.dw, right: 15.dw),

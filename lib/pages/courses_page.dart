@@ -98,7 +98,6 @@ class _CoursesPageState extends State<CoursesPage> {
                   children: [
                     AppText(
                       course.title,
-                      size: 20.dw,
                       alignment: TextAlign.center,
                       opacity: .85,
                       color: isSelected

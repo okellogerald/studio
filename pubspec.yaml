@@ -15,10 +15,8 @@ dependencies:
   freezed: ^1.1.1
   bloc: ^8.0.2
   provider: ^6.0.2
-  hive: ^2.0.5
   freezed_annotation: ^1.1.0
   flutter_bloc: ^8.0.1
-  path_provider: ^2.0.8
   firebase_core: ^1.12.0
   firebase_auth: ^3.3.7
   http: ^0.13.4
@@ -27,7 +25,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  hive_generator: ^1.1.2
   build_runner: ^2.1.7
   flutter_native_splash: ^2.0.2
 
@@ -39,24 +36,7 @@ flutter:
     - assets/images/
 
   fonts:
-    - family: Andala
-      fonts:
-        - asset: assets/fonts/Andala/Regular.ttf
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins/medium.ttf
-    - family: QuickSand
-      fonts:
-        - asset: assets/fonts/quicksand.ttf
-    - family: ArminSoft
-      fonts:
-        - asset: assets/fonts/ArminSoft/medium.ttf
-    - family: Antipasto
-      fonts:
-        - asset: assets/fonts/Antipasto/Medium.ttf
-    - family: Stratos
-      fonts:
-        - asset: assets/fonts/Stratos/Medium.ttf
-    - family: GorditaFont
-      fonts:
-        - asset: assets/fonts/GorditaFont/Medium.otf         
+       

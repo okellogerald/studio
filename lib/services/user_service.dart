@@ -1,16 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hive/hive.dart';
 import '../source.dart';
 
 class UserService {
-  final _box = Hive.box(Constants.userDataBox);
   final FirebaseAuth _auth;
   UserService(this._auth);
 
-  Map get getUserData => json.decode(_box.get('user_data'));
+  var _userData = {};
+  Map get getUserData => _userData;
 
   Future<void> signUp(
       {required UserData user, required String password}) async {
@@ -20,8 +18,7 @@ class UserService {
       final token = await credential.user!.getIdToken(true);
       // log('Token is $token');
       final result = await OnBoardingApi.createUser(user, password, token);
-      final userData = UserData.toJson(result['data']);
-      await _box.put('user_data', json.encode(userData));
+      _userData = UserData.toJson(result['data']);
     } catch (e) {
       _handleErrors(e);
     }
@@ -34,8 +31,7 @@ class UserService {
       final token = await credential.user!.getIdToken(true);
       //  log('Token is $token');
       final result = await OnBoardingApi.logInUser(token);
-      final userData = UserData.toJson(result['data']);
-      await _box.put('user_data', json.encode(userData));
+      _userData = UserData.toJson(result['data']);
     } catch (e) {
       _handleErrors(e);
     }

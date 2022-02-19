@@ -22,7 +22,15 @@ class TopicTile extends StatelessWidget {
           children: [
             _buildImage(),
             SizedBox(width: 20.dw),
-            _buildTitle(subtitle)
+            _buildTitle(subtitle),
+            Expanded(
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.chevron_right,
+                      size: 20.dw,
+                      color: AppColors.secondary.withOpacity(.7),
+                    ))),
           ],
         ),
       ),
@@ -42,9 +50,13 @@ class TopicTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(topic.title, opacity: .7, size: 18.dw, weight: FontWeight.bold),
+        AppText(topic.title,
+            opacity: .7,
+            size: 18.dw,
+            weight: FontWeight.bold,
+            color: AppColors.primary),
         SizedBox(height: 10.dh),
-        AppText(subtitle, opacity: .7),
+        AppText(subtitle, opacity: .7, size: 14.dw),
       ],
     );
   }

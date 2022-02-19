@@ -32,14 +32,15 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           AppText(title, style: Theme.of(context).appBarTheme.titleTextStyle!),
           subtitle != null
               ? Padding(
-                  padding: EdgeInsets.only(top: 10.dh),
+                  padding: EdgeInsets.only(top: 5.dh),
                   child: AppText(subtitle!, opacity: .7),
                 )
-              : SizedBox(height: 10.dh),
+              : SizedBox(height: 23.dh),
         ],
       ),
     );

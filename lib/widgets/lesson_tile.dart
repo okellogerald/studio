@@ -11,7 +11,7 @@ class LessonTile extends StatelessWidget {
     final subtitle =
         '${lesson.topicName} - ' + (isLearning ? 'LEARN' : 'PRACTICE');
 
-    return AppTextButton(
+    return AppMaterialButton(
       onPressed: lesson.isPaid
           ? () {}
           : () => _navigateToLessonPage(context, lesson.id),
@@ -25,7 +25,7 @@ class LessonTile extends StatelessWidget {
           children: [
             _buildImage(lesson.completionStatus),
             SizedBox(width: 20.dw),
-            _buildTitle(subtitle),
+            _buildTitle(subtitle, lesson),
             _buildIsPaidIcon(),
           ],
         ),
@@ -58,13 +58,17 @@ class LessonTile extends StatelessWidget {
     );
   }
 
-  _buildTitle(String subtitle) {
+  _buildTitle(String subtitle, Lesson lesson) {
+    final isDisabled = lesson.isPaid || lesson.isComplete;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppText(lesson.title,
-            opacity: .7, size: 18.dw, weight: FontWeight.bold),
+            opacity: .7,
+            size: 18.dw,
+            weight: FontWeight.bold,
+            color: isDisabled ? AppColors.secondary : AppColors.primary),
         SizedBox(height: 10.dh),
         AppText(subtitle, opacity: .7),
       ],
@@ -76,7 +80,8 @@ class LessonTile extends StatelessWidget {
     return Expanded(
         child: Align(
             alignment: Alignment.centerRight,
-            child: Icon(isPaid ? Icons.lock_outlined : Icons.chevron_right)));
+            child: Icon(isPaid ? Icons.lock : Icons.chevron_right,
+                size: 20.dw, color: AppColors.secondary.withOpacity(.7))));
   }
 
   _navigateToLessonPage(BuildContext context, String id) {

@@ -100,7 +100,7 @@ class _WelcomePageState extends State<WelcomePage> {
         children: [
           AppTextButton(
             onPressed: bloc.saveWelcomeDetails,
-            text: 'Next',
+            text: 'NEXT',
             height: 50.dh,
             width: 200.dw,
             margin: EdgeInsets.only(bottom: 40.dh, right: 15.dw),

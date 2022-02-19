@@ -41,7 +41,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
         valueListenable: scrollValueNotifier,
         builder: (_, value, snapshot) {
           return Container(
-            height: value == 0 ? 170.dh : 90.dh,
+            height: value == 0 ? 170.dh : 95.dh,
             alignment: Alignment.centerLeft,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,9 +69,8 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
           onPressed: () => Navigator.pop(context),
           icon: Icons.arrow_back,
           margin: EdgeInsets.only(left: 15.dw, top: 5.dh, right: 15.dw),
-          iconThemeData: Theme.of(context)
-              .iconTheme
-              .copyWith(color: AppColors.onBackground),
+          iconThemeData:
+              Theme.of(context).iconTheme.copyWith(color: AppColors.primary),
         ),
         value == 0
             ? Container()
@@ -85,12 +84,15 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
 
   Widget _buildTitle() {
     return AppText(widget.title,
-        style: Theme.of(context).appBarTheme.titleTextStyle!);
+        style: Theme.of(context)
+            .appBarTheme
+            .titleTextStyle!
+            .copyWith(color: AppColors.secondary));
   }
 
   _buildSubtitle() {
     return Padding(
-      padding: EdgeInsets.only(top: 10.dh, left: 15.dw),
+      padding: EdgeInsets.only(top: 5.dh, left: 15.dw),
       child: AppText(widget.subtitle, opacity: .7),
     );
   }
@@ -127,12 +129,12 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
           onTap: widget.onPressed,
           isScrollable: true,
           tabs: [
-            _buildTab('All', FilterType.all, widget.currentFilterType),
-            _buildTab('Learn', FilterType.learn, widget.currentFilterType),
+            _buildTab('ALL', FilterType.all, widget.currentFilterType),
+            _buildTab('LEARN', FilterType.learn, widget.currentFilterType),
             _buildTab(
-                'Practice', FilterType.practice, widget.currentFilterType),
-            _buildTab('Free', FilterType.free, widget.currentFilterType),
-            _buildTab('Paid', FilterType.paid, widget.currentFilterType),
+                'PRACTICE', FilterType.practice, widget.currentFilterType),
+            _buildTab('FREE', FilterType.free, widget.currentFilterType),
+            _buildTab('PAID', FilterType.paid, widget.currentFilterType),
           ]),
     );
   }

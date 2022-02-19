@@ -67,7 +67,9 @@ class _AppMaterialButtonState extends State<AppMaterialButton>
               margin: widget.margin ?? EdgeInsets.zero,
               padding: widget.padding ?? EdgeInsets.zero,
               alignment: widget.alignment ?? Alignment.center,
-              color: animation.value,
+              decoration: BoxDecoration(
+                  color: animation.value,
+                  borderRadius: BorderRadius.all(Radius.circular(8.dw))),
               child: child),
         );
       },

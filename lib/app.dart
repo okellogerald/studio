@@ -5,7 +5,7 @@ class MyApp extends StatelessWidget {
 
   //ToDo
   //adding timeimit for all asynchronous methods
-  //configuring the splash screen
+  //manage failed states for all screens
 
   @override
   Widget build(BuildContext context) {
