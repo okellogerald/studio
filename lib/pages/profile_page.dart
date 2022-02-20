@@ -89,16 +89,9 @@ class _ProfilePageState extends State<ProfilePage> {
   _holdingContainer({required Widget child}) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.dw),
-        color: AppColors.background,
-        boxShadow: const [
-          BoxShadow(
-              color: AppColors.divider,
-              blurRadius: .5,
-              spreadRadius: .5,
-              offset: Offset(.4, .1))
-        ],
-      ),
+          borderRadius: BorderRadius.circular(10.dw),
+          color: AppColors.background,
+          border: Border.all(width: 2, color: AppColors.surface)),
       margin: EdgeInsets.symmetric(horizontal: 15.dw),
       child: child,
     );
@@ -117,16 +110,21 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  _buildTextButton(String title,
-      {VoidCallback? onPressed, bool isLogOut = false}) {
-    return AppTextButton(
-      onPressed: onPressed ?? () {},
-      text: title,
-      alignment: Alignment.centerLeft,
-      textColor: isLogOut ? AppColors.error : AppColors.onBackground,
-      height: 45.dh,
-      padding: EdgeInsets.only(left: 15.dw),
-    );
+  _buildTextButton(String title, {VoidCallback? onPressed}) {
+    return AppMaterialButton(
+        onPressed: onPressed ?? () {},
+        isFilled: false,
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.dw),
+            height: 60.dh,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppText(title),
+                Icon(Icons.chevron_right,
+                    size: 20.dw, color: AppColors.secondary.withOpacity(.85))
+              ],
+            )));
   }
 
   _buildAccountDetails() {
@@ -140,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return _buildListView([
       _buildTextButton('Terms & Conditions'),
       _buildTextButton('About Us'),
-      _buildTextButton('Log Out', isLogOut: true, onPressed: bloc.logOut),
+      _buildTextButton('Log Out', onPressed: bloc.logOut),
     ]);
   }
 }

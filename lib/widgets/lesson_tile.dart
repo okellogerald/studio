@@ -70,7 +70,7 @@ class LessonTile extends StatelessWidget {
             weight: FontWeight.bold,
             color: isDisabled ? AppColors.secondary : AppColors.primary),
         SizedBox(height: 10.dh),
-        AppText(subtitle, opacity: .7),
+        AppText(subtitle, opacity: .7, size: 14.dw),
       ],
     );
   }

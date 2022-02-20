@@ -11,7 +11,6 @@ class ProfileAvatar extends StatelessWidget {
     return Container(
       height: size ?? 45.dw,
       width: size ?? 45.dw,
-      padding: EdgeInsets.only(top: 5.dw),
       alignment: Alignment.center,
       decoration: const BoxDecoration(
           shape: BoxShape.circle, color: AppColors.primaryVariant),
