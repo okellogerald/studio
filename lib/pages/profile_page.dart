@@ -110,13 +110,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  _buildTextButton(String title, {VoidCallback? onPressed}) {
+  _buildButton(String title, {VoidCallback? onPressed}) {
     return AppMaterialButton(
         onPressed: onPressed ?? () {},
         isFilled: false,
+        height: 60.dh,
         child: Container(
             padding: EdgeInsets.symmetric(horizontal: 15.dw),
-            height: 60.dh,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -129,16 +129,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _buildAccountDetails() {
     return _buildListView([
-      _buildTextButton('Change Courses & Grade'),
-      _buildTextButton('Subscription'),
+      _buildButton('Change Courses & Grade'),
+      _buildButton('Subscription'),
     ]);
   }
 
   _buildOtherDetails() {
     return _buildListView([
-      _buildTextButton('Terms & Conditions'),
-      _buildTextButton('About Us'),
-      _buildTextButton('Log Out', onPressed: bloc.logOut),
+      _buildButton('Terms & Conditions'),
+      _buildButton('About Us'),
+      _buildButton('Log Out', onPressed: bloc.logOut),
     ]);
   }
 }
