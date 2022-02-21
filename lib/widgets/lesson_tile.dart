@@ -1,9 +1,11 @@
 import '../source.dart';
 
 class LessonTile extends StatelessWidget {
-  const LessonTile(this.lesson, {Key? key}) : super(key: key);
+  const LessonTile(this.lesson, this.lessonsIdList, {Key? key})
+      : super(key: key);
 
   final Lesson lesson;
+  final List<String> lessonsIdList;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class LessonTile extends StatelessWidget {
     return AppMaterialButton(
       onPressed: lesson.isPaid
           ? () {}
-          : () => _navigateToLessonPage(context, lesson.id),
+          : () => _navigateToLessonPage(context, lesson.id, lessonsIdList),
       backgroundColor: AppColors.surface,
       child: Container(
         height: 100.dh,
@@ -84,7 +86,9 @@ class LessonTile extends StatelessWidget {
                 size: 20.dw, color: AppColors.secondary.withOpacity(.7))));
   }
 
-  _navigateToLessonPage(BuildContext context, String id) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => LessonPage(id)));
+  _navigateToLessonPage(
+      BuildContext context, String id, List<String> lessonsIdList) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (_) => LessonPage(id, lessonsIdList)));
   }
 }

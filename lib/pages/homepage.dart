@@ -15,6 +15,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   late final HomepageBloc bloc;
   final controller = ScrollController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -29,14 +30,31 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomepageBloc, HomepageState>(
+    return BlocConsumer<HomepageBloc, HomepageState>(
         bloc: bloc,
+        listener: (_, state) {
+          final showSnackbarError = state.maybeWhen(
+              failed: (_, __, showOnScreen) => showOnScreen,
+              orElse: () => false);
+
+          if (showSnackbarError) {
+            final message = state.maybeWhen(
+                failed: (_, message, __) => message, orElse: () => null);
+            _showSnackbar(message!);
+          }
+        },
         builder: (_, state) {
           return state.when(
               loading: _buildLoading,
               content: _buildContent,
               failed: _buildFailed);
         });
+  }
+
+  _showSnackbar(String message) {
+    ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(
+        backgroundColor: AppColors.error,
+        content: AppText(message, color: AppColors.onError)));
   }
 
   Widget _buildLoading(
@@ -49,7 +67,9 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(body: AppLoadingIndicator(message));
   }
 
-  Widget _buildFailed(HomepageSupplements supp, String message) {
+  Widget _buildFailed(
+      HomepageSupplements supp, String message, bool showOnScreen) {
+    if (!showOnScreen) return _buildContent(supp);
     return Scaffold(
         body: FailedStateWidget(message,
             tryAgainCallback: bloc.init,
@@ -61,22 +81,26 @@ class _HomepageState extends State<Homepage> {
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
-          body: Column(
-            children: [
-              _buildTitle(supp.userData),
-              Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  controller: controller,
-                  padding: EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
-                  children: [
-                    _buildGeneralInfo(supp.generalInfo),
-                    _buildContinueLesson(supp.lesson),
-                    _buildTopics(supp.userData['grade'], supp.topicList),
-                  ],
+          key: _scaffoldKey,
+          body: RefreshIndicator(
+            onRefresh: bloc.refresh,
+            child: Column(
+              children: [
+                _buildTitle(supp.userData),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    controller: controller,
+                    padding: EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
+                    children: [
+                      _buildGeneralInfo(supp.generalInfo),
+                      _buildContinueLesson(supp.lesson),
+                      _buildTopics(supp.userData['grade'], supp.topicList),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -137,7 +161,7 @@ class _HomepageState extends State<Homepage> {
       children: [
         AppText('Continue Class', weight: FontWeight.bold, size: 18.dw),
         SizedBox(height: 15.dh),
-        LessonTile(lesson),
+        LessonTile(lesson, [lesson.id]),
       ],
     );
   }

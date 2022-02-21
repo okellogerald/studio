@@ -83,7 +83,7 @@ class _TopicPageState extends State<TopicPage>
         final topicId = idList[i];
         final lessons = lessonList.where((e) => e.topicId == topicId).toList();
         if (lessons.isEmpty) return Container();
-        return _buildLessons(lessons);
+        return _buildLessons(lessons, supp);
       },
       itemCount: idList.length,
       shrinkWrap: true,
@@ -91,7 +91,7 @@ class _TopicPageState extends State<TopicPage>
     );
   }
 
-  _buildLessons(List<Lesson> lessons) {
+  _buildLessons(List<Lesson> lessons, TopicPageSupplements supp) {
     final subTopicName = lessons.first.topicName;
 
     return Padding(
@@ -104,7 +104,7 @@ class _TopicPageState extends State<TopicPage>
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),
             itemCount: lessons.length,
-            itemBuilder: (context, index) => LessonTile(lessons[index]),
+            itemBuilder: (context, index) => LessonTile(lessons[index], supp.getLessonsIdList),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,

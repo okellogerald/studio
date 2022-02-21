@@ -22,11 +22,15 @@ class HomepageBloc extends Cubit<HomepageState> {
           topicList: values['topics'],
           userData: userData,
           generalInfo: values['generalInfo']);
+
       emit(HomepageState.content(supp));
     } on ApiError catch (_) {
-      emit(HomepageState.failed(supp, _.message));
+      final error = isUpdatingContent ? 'Failed to update content' : _.message;
+      emit(HomepageState.failed(supp, error, showOnScreen: isUpdatingContent));
     }
   }
 
   _handleLessonUpdates() async => await init(true);
+
+  Future<void> refresh() async => await init(true);
 }

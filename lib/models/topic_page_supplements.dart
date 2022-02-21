@@ -17,10 +17,16 @@ class TopicPageSupplements with _$TopicPageSupplements {
   factory TopicPageSupplements.empty() => const TopicPageSupplements(
       filterType: FilterType.all, topics: [], lessons: [], completedCount: 0);
 
-  List<String> get getTopicsIdList {
+  List<String> get getTopicsIdList => _getIdList(topics);
+  List<String> get getLessonsIdList => _getIdList(lessons);
+
+  List<String> _getIdList(List list) {
     final idList = <String>[];
-    for (Topic topic in topics) {
-      idList.add(topic.id);
+    for (var item in list) {
+      if (item is Lesson) {
+        if (item.isPaid) continue;
+      }
+      idList.add(item.id);
     }
     return idList;
   }

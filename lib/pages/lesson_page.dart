@@ -1,9 +1,11 @@
 import '../source.dart';
 
 class LessonPage extends StatefulWidget {
-  const LessonPage(this.lessonId, {Key? key}) : super(key: key);
+  const LessonPage(this.lessonId, this.lessonsIdList, {Key? key})
+      : super(key: key);
 
   final String lessonId;
+  final List<String> lessonsIdList;
 
   @override
   State<LessonPage> createState() => _LessonPageState();
@@ -16,7 +18,7 @@ class _LessonPageState extends State<LessonPage> {
   void initState() {
     final service = Provider.of<LessonsService>(context, listen: false);
     bloc = LessonPageBloc(service);
-    bloc.init(widget.lessonId);
+    bloc.init(widget.lessonId, widget.lessonsIdList);
     super.initState();
   }
 
@@ -101,7 +103,7 @@ class _LessonPageState extends State<LessonPage> {
       child: Row(
         children: [
           _buildMarkStatusButton(supp.lesson),
-          _buildNextButton(),
+          _buildNextButton(supp.isLast),
         ],
       ),
     );
@@ -131,10 +133,11 @@ class _LessonPageState extends State<LessonPage> {
             )));
   }
 
-  _buildNextButton() {
+  _buildNextButton(bool isLast) {
+    if (isLast) return Container();
     return Expanded(
         child: AppTextButton(
-      onPressed: () {},
+      onPressed: bloc.goToNext,
       text: 'NEXT',
       height: 60.dh,
       backgroundColor: AppColors.primary,

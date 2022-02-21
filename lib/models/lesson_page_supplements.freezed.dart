@@ -18,9 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$LessonPageSupplementsTearOff {
   const _$LessonPageSupplementsTearOff();
 
-  _LessonPageSupplements call({required Lesson lesson}) {
+  _LessonPageSupplements call({required Lesson lesson, required bool isLast}) {
     return _LessonPageSupplements(
       lesson: lesson,
+      isLast: isLast,
     );
   }
 }
@@ -31,6 +32,7 @@ const $LessonPageSupplements = _$LessonPageSupplementsTearOff();
 /// @nodoc
 mixin _$LessonPageSupplements {
   Lesson get lesson => throw _privateConstructorUsedError;
+  bool get isLast => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LessonPageSupplementsCopyWith<LessonPageSupplements> get copyWith =>
@@ -42,7 +44,7 @@ abstract class $LessonPageSupplementsCopyWith<$Res> {
   factory $LessonPageSupplementsCopyWith(LessonPageSupplements value,
           $Res Function(LessonPageSupplements) then) =
       _$LessonPageSupplementsCopyWithImpl<$Res>;
-  $Res call({Lesson lesson});
+  $Res call({Lesson lesson, bool isLast});
 }
 
 /// @nodoc
@@ -57,12 +59,17 @@ class _$LessonPageSupplementsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? lesson = freezed,
+    Object? isLast = freezed,
   }) {
     return _then(_value.copyWith(
       lesson: lesson == freezed
           ? _value.lesson
           : lesson // ignore: cast_nullable_to_non_nullable
               as Lesson,
+      isLast: isLast == freezed
+          ? _value.isLast
+          : isLast // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -74,7 +81,7 @@ abstract class _$LessonPageSupplementsCopyWith<$Res>
           $Res Function(_LessonPageSupplements) then) =
       __$LessonPageSupplementsCopyWithImpl<$Res>;
   @override
-  $Res call({Lesson lesson});
+  $Res call({Lesson lesson, bool isLast});
 }
 
 /// @nodoc
@@ -91,12 +98,17 @@ class __$LessonPageSupplementsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? lesson = freezed,
+    Object? isLast = freezed,
   }) {
     return _then(_LessonPageSupplements(
       lesson: lesson == freezed
           ? _value.lesson
           : lesson // ignore: cast_nullable_to_non_nullable
               as Lesson,
+      isLast: isLast == freezed
+          ? _value.isLast
+          : isLast // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -104,14 +116,16 @@ class __$LessonPageSupplementsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_LessonPageSupplements implements _LessonPageSupplements {
-  const _$_LessonPageSupplements({required this.lesson});
+  const _$_LessonPageSupplements({required this.lesson, required this.isLast});
 
   @override
   final Lesson lesson;
+  @override
+  final bool isLast;
 
   @override
   String toString() {
-    return 'LessonPageSupplements(lesson: $lesson)';
+    return 'LessonPageSupplements(lesson: $lesson, isLast: $isLast)';
   }
 
   @override
@@ -119,12 +133,15 @@ class _$_LessonPageSupplements implements _LessonPageSupplements {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _LessonPageSupplements &&
-            const DeepCollectionEquality().equals(other.lesson, lesson));
+            const DeepCollectionEquality().equals(other.lesson, lesson) &&
+            const DeepCollectionEquality().equals(other.isLast, isLast));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(lesson));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(lesson),
+      const DeepCollectionEquality().hash(isLast));
 
   @JsonKey(ignore: true)
   @override
@@ -134,11 +151,14 @@ class _$_LessonPageSupplements implements _LessonPageSupplements {
 }
 
 abstract class _LessonPageSupplements implements LessonPageSupplements {
-  const factory _LessonPageSupplements({required Lesson lesson}) =
-      _$_LessonPageSupplements;
+  const factory _LessonPageSupplements(
+      {required Lesson lesson,
+      required bool isLast}) = _$_LessonPageSupplements;
 
   @override
   Lesson get lesson;
+  @override
+  bool get isLast;
   @override
   @JsonKey(ignore: true)
   _$LessonPageSupplementsCopyWith<_LessonPageSupplements> get copyWith =>
