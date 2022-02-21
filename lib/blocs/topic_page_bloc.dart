@@ -9,13 +9,15 @@ class TopicPageBloc extends Cubit<TopicPageState> {
   final CoursesService service;
   final LessonsService lessonsService;
 
-  void init(String topicId) async {
+  void init(Topic topic) async {
     var supp = state.supplements;
     emit(TopicPageState.loading(supp));
     try {
-      final values = await service.getTopic(topicId);
-      supp =
-          supp.copyWith(topics: values['topics'], lessons: values['lessons']);
+      final values = await service.getTopic(topic.id);
+      supp = supp.copyWith(
+          topics: values['topics'],
+          lessons: values['lessons'],
+          completedCount: topic.completedLessons);
       emit(TopicPageState.content(supp));
     } on ApiError catch (_) {
       emit(TopicPageState.failed(supp, _.message));
@@ -47,9 +49,13 @@ class TopicPageBloc extends Cubit<TopicPageState> {
     final lessons = supp.lessons;
     //converting to unmodifiable list to a modifiable one
     final list = List<Lesson>.from(lessons);
-    list[index] =
-        lessons[index].copyWithNewStatus(_updatedLesson.completionStatus);
-    supp = supp.copyWith(lessons: list);
+    final completionStatus = _updatedLesson.completionStatus;
+    var completedCount = supp.completedCount;
+    list[index] = lessons[index].copyWithNewStatus(completionStatus);
+    if (completionStatus == Status.completed) completedCount += 1;
+    if (completionStatus == Status.incomplete) completedCount -= 1;
+
+    supp = supp.copyWith(lessons: list, completedCount: completedCount);
     emit(TopicPageState.content(supp));
   }
 }

@@ -1,11 +1,11 @@
+import 'package:hive/hive.dart';
 import 'source.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  //ToDo
-  //adding timeimit for all asynchronous methods
-  //manage failed states for all screens
+  static final noAccountYet =
+      Hive.box(Constants.kUserDataBox).get(Constants.kUserData) == null;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Siila',
         theme: AppTheme.themeData(),
-        home: const LandingPage(),
+        home: noAccountYet ? const LandingPage() : const Homepage(),
       ),
     );
   }

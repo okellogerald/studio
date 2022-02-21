@@ -11,10 +11,11 @@ class TopicPageSupplements with _$TopicPageSupplements {
     required FilterType filterType,
     required List<Lesson> lessons,
     required List<Topic> topics,
+    required int completedCount,
   }) = _TopicPageSupplements;
 
   factory TopicPageSupplements.empty() => const TopicPageSupplements(
-      filterType: FilterType.all, topics: [], lessons: []);
+      filterType: FilterType.all, topics: [], lessons: [], completedCount: 0);
 
   List<String> get getTopicsIdList {
     final idList = <String>[];

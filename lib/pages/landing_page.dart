@@ -85,6 +85,7 @@ class LandingPage extends StatelessWidget {
                   onPressed: () => LogInPage.navigateTo(context),
                   text: 'LOG IN',
                   textColor: AppColors.primary,
+                  padding: EdgeInsets.symmetric(horizontal: 10.dw),
                   margin: EdgeInsets.only(left: 15.dw, right: 20.dw),
                 ),
               ],

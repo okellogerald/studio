@@ -10,12 +10,11 @@ class HomepageBloc extends Cubit<HomepageState> {
   final UserService userService;
   final LessonsService lessonsService;
 
-  Future<void> init() async {
+  Future<void> init([bool isUpdatingContent = false]) async {
     var supp = state.supplements;
-    emit(HomepageState.loading(supp));
+    emit(HomepageState.loading(supp, isUpdatingContent: isUpdatingContent));
 
     try {
-      await coursesService.init();
       final values = await coursesService.getHomeContent();
       final userData = userService.getUserData;
       supp = supp.copyWith(
@@ -29,19 +28,5 @@ class HomepageBloc extends Cubit<HomepageState> {
     }
   }
 
-  _handleLessonUpdates() async {
-    var supp = state.supplements;
-    emit(HomepageState.loading(supp));
-
-    final _updatedLesson = lessonsService.getUpdatedLesson;
-    if (_updatedLesson.id == supp.lesson.id) {
-      final _lesson =
-          supp.lesson.copyWithNewStatus(_updatedLesson.completionStatus);
-      supp = supp.copyWith(lesson: _lesson);
-    }
-    log('updating the general info');
-    final generalInfo = await coursesService.getRefreshedGeneralInfo();
-    supp = supp.copyWith(generalInfo: generalInfo);
-    emit(HomepageState.content(supp));
-  }
+  _handleLessonUpdates() async => await init(true);
 }

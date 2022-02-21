@@ -39,7 +39,13 @@ class _HomepageState extends State<Homepage> {
         });
   }
 
-  Widget _buildLoading(HomepageSupplements supp, String? message) {
+  Widget _buildLoading(
+      HomepageSupplements supp, String? message, bool isUpdatingContent) {
+    if (isUpdatingContent) {
+      return Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: [_buildContent(supp), const LinearProgressIndicator()]);
+    }
     return Scaffold(body: AppLoadingIndicator(message));
   }
 
@@ -138,7 +144,7 @@ class _HomepageState extends State<Homepage> {
 
   _buildTopics(String grade, List<Topic> topicList) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.dh),
+      padding: EdgeInsets.only(top: 20.dh),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

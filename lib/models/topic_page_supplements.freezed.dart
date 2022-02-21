@@ -21,11 +21,13 @@ class _$TopicPageSupplementsTearOff {
   _TopicPageSupplements call(
       {required FilterType filterType,
       required List<Lesson> lessons,
-      required List<Topic> topics}) {
+      required List<Topic> topics,
+      required int completedCount}) {
     return _TopicPageSupplements(
       filterType: filterType,
       lessons: lessons,
       topics: topics,
+      completedCount: completedCount,
     );
   }
 }
@@ -38,6 +40,7 @@ mixin _$TopicPageSupplements {
   FilterType get filterType => throw _privateConstructorUsedError;
   List<Lesson> get lessons => throw _privateConstructorUsedError;
   List<Topic> get topics => throw _privateConstructorUsedError;
+  int get completedCount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TopicPageSupplementsCopyWith<TopicPageSupplements> get copyWith =>
@@ -49,7 +52,11 @@ abstract class $TopicPageSupplementsCopyWith<$Res> {
   factory $TopicPageSupplementsCopyWith(TopicPageSupplements value,
           $Res Function(TopicPageSupplements) then) =
       _$TopicPageSupplementsCopyWithImpl<$Res>;
-  $Res call({FilterType filterType, List<Lesson> lessons, List<Topic> topics});
+  $Res call(
+      {FilterType filterType,
+      List<Lesson> lessons,
+      List<Topic> topics,
+      int completedCount});
 }
 
 /// @nodoc
@@ -66,6 +73,7 @@ class _$TopicPageSupplementsCopyWithImpl<$Res>
     Object? filterType = freezed,
     Object? lessons = freezed,
     Object? topics = freezed,
+    Object? completedCount = freezed,
   }) {
     return _then(_value.copyWith(
       filterType: filterType == freezed
@@ -80,6 +88,10 @@ class _$TopicPageSupplementsCopyWithImpl<$Res>
           ? _value.topics
           : topics // ignore: cast_nullable_to_non_nullable
               as List<Topic>,
+      completedCount: completedCount == freezed
+          ? _value.completedCount
+          : completedCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -91,7 +103,11 @@ abstract class _$TopicPageSupplementsCopyWith<$Res>
           $Res Function(_TopicPageSupplements) then) =
       __$TopicPageSupplementsCopyWithImpl<$Res>;
   @override
-  $Res call({FilterType filterType, List<Lesson> lessons, List<Topic> topics});
+  $Res call(
+      {FilterType filterType,
+      List<Lesson> lessons,
+      List<Topic> topics,
+      int completedCount});
 }
 
 /// @nodoc
@@ -110,6 +126,7 @@ class __$TopicPageSupplementsCopyWithImpl<$Res>
     Object? filterType = freezed,
     Object? lessons = freezed,
     Object? topics = freezed,
+    Object? completedCount = freezed,
   }) {
     return _then(_TopicPageSupplements(
       filterType: filterType == freezed
@@ -124,6 +141,10 @@ class __$TopicPageSupplementsCopyWithImpl<$Res>
           ? _value.topics
           : topics // ignore: cast_nullable_to_non_nullable
               as List<Topic>,
+      completedCount: completedCount == freezed
+          ? _value.completedCount
+          : completedCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -132,7 +153,10 @@ class __$TopicPageSupplementsCopyWithImpl<$Res>
 
 class _$_TopicPageSupplements extends _TopicPageSupplements {
   const _$_TopicPageSupplements(
-      {required this.filterType, required this.lessons, required this.topics})
+      {required this.filterType,
+      required this.lessons,
+      required this.topics,
+      required this.completedCount})
       : super._();
 
   @override
@@ -141,10 +165,12 @@ class _$_TopicPageSupplements extends _TopicPageSupplements {
   final List<Lesson> lessons;
   @override
   final List<Topic> topics;
+  @override
+  final int completedCount;
 
   @override
   String toString() {
-    return 'TopicPageSupplements(filterType: $filterType, lessons: $lessons, topics: $topics)';
+    return 'TopicPageSupplements(filterType: $filterType, lessons: $lessons, topics: $topics, completedCount: $completedCount)';
   }
 
   @override
@@ -155,7 +181,9 @@ class _$_TopicPageSupplements extends _TopicPageSupplements {
             const DeepCollectionEquality()
                 .equals(other.filterType, filterType) &&
             const DeepCollectionEquality().equals(other.lessons, lessons) &&
-            const DeepCollectionEquality().equals(other.topics, topics));
+            const DeepCollectionEquality().equals(other.topics, topics) &&
+            const DeepCollectionEquality()
+                .equals(other.completedCount, completedCount));
   }
 
   @override
@@ -163,7 +191,8 @@ class _$_TopicPageSupplements extends _TopicPageSupplements {
       runtimeType,
       const DeepCollectionEquality().hash(filterType),
       const DeepCollectionEquality().hash(lessons),
-      const DeepCollectionEquality().hash(topics));
+      const DeepCollectionEquality().hash(topics),
+      const DeepCollectionEquality().hash(completedCount));
 
   @JsonKey(ignore: true)
   @override
@@ -176,7 +205,8 @@ abstract class _TopicPageSupplements extends TopicPageSupplements {
   const factory _TopicPageSupplements(
       {required FilterType filterType,
       required List<Lesson> lessons,
-      required List<Topic> topics}) = _$_TopicPageSupplements;
+      required List<Topic> topics,
+      required int completedCount}) = _$_TopicPageSupplements;
   const _TopicPageSupplements._() : super._();
 
   @override
@@ -185,6 +215,8 @@ abstract class _TopicPageSupplements extends TopicPageSupplements {
   List<Lesson> get lessons;
   @override
   List<Topic> get topics;
+  @override
+  int get completedCount;
   @override
   @JsonKey(ignore: true)
   _$TopicPageSupplementsCopyWith<_TopicPageSupplements> get copyWith =>

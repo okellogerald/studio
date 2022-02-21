@@ -1,14 +1,9 @@
 import '../source.dart';
 
 class TopicPage extends StatefulWidget {
-  const TopicPage(
-      {Key? key,
-      required this.title,
-      required this.subtitle,
-      required this.topicId})
-      : super(key: key);
+  const TopicPage({Key? key, required this.topic}) : super(key: key);
 
-  final String title, subtitle, topicId;
+  final Topic topic;
 
   @override
   State<TopicPage> createState() => _TopicPageState();
@@ -26,7 +21,7 @@ class _TopicPageState extends State<TopicPage>
     final coursesService = Provider.of<CoursesService>(context, listen: false);
     final lessonsService = Provider.of<LessonsService>(context, listen: false);
     bloc = TopicPageBloc(coursesService, lessonsService);
-    bloc.init(widget.topicId);
+    bloc.init(widget.topic);
     super.initState();
   }
 
@@ -60,9 +55,13 @@ class _TopicPageState extends State<TopicPage>
     return BlocBuilder<TopicPageBloc, TopicPageState>(
         bloc: bloc,
         builder: (_, state) {
+          final completedCount = state.supplements.completedCount;
+          final subtitle =
+              '$completedCount / ${widget.topic.totalLessons} videos completed';
+
           return TopicPageAppBar(
-              title: widget.title,
-              subtitle: widget.subtitle,
+              title: widget.topic.title,
+              subtitle: subtitle,
               tabController: tabController,
               scrollController: scrollController,
               currentFilterType: state.supplements.filterType,
@@ -139,7 +138,7 @@ class _TopicPageState extends State<TopicPage>
   Widget _buildFailed(TopicPageSupplements supp, String message) {
     return Scaffold(
         body: FailedStateWidget(message,
-            tryAgainCallback: () => bloc.init(widget.topicId),
+            tryAgainCallback: () => bloc.init(widget.topic),
             title: 'Failed to load the topic'));
   }
 }

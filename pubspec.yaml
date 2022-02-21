@@ -1,6 +1,6 @@
 name: silla_studio
 description: A new Flutter project.
-publish_to: "none" 
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -20,6 +20,8 @@ dependencies:
   firebase_core: ^1.12.0
   firebase_auth: ^3.3.7
   http: ^0.13.4
+  hive: ^2.0.5
+  path_provider: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -39,4 +41,3 @@ flutter:
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins/medium.ttf
-       

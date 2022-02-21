@@ -11,7 +11,7 @@ class TopicTile extends StatelessWidget {
         '${topic.completedLessons} / ${topic.totalLessons} videos completed';
 
     return AppMaterialButton(
-      onPressed: () => _navigateToTopicPage(context, subtitle),
+      onPressed: () => _navigateToTopicPage(context, topic),
       backgroundColor: AppColors.surface,
       child: Container(
         height: 100.dh,
@@ -61,11 +61,8 @@ class TopicTile extends StatelessWidget {
     );
   }
 
-  _navigateToTopicPage(BuildContext context, String subtitle) {
+  _navigateToTopicPage(BuildContext context, Topic topic) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => TopicPage(
-                title: topic.title, subtitle: subtitle, topicId: topic.id)));
+        context, MaterialPageRoute(builder: (_) => TopicPage(topic: topic)));
   }
 }

@@ -18,10 +18,12 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$HomepageStateTearOff {
   const _$HomepageStateTearOff();
 
-  _Loading loading(HomepageSupplements supplements, {String? message}) {
+  _Loading loading(HomepageSupplements supplements,
+      {String? message, bool isUpdatingContent = false}) {
     return _Loading(
       supplements,
       message: message,
+      isUpdatingContent: isUpdatingContent,
     );
   }
 
@@ -48,7 +50,8 @@ mixin _$HomepageState {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(HomepageSupplements supplements, String? message)
+    required TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
     required TResult Function(HomepageSupplements supplements, String messaage)
@@ -57,14 +60,18 @@ mixin _$HomepageState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
     required TResult orElse(),
@@ -142,7 +149,10 @@ abstract class _$LoadingCopyWith<$Res> implements $HomepageStateCopyWith<$Res> {
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
       __$LoadingCopyWithImpl<$Res>;
   @override
-  $Res call({HomepageSupplements supplements, String? message});
+  $Res call(
+      {HomepageSupplements supplements,
+      String? message,
+      bool isUpdatingContent});
 
   @override
   $HomepageSupplementsCopyWith<$Res> get supplements;
@@ -161,6 +171,7 @@ class __$LoadingCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
   $Res call({
     Object? supplements = freezed,
     Object? message = freezed,
+    Object? isUpdatingContent = freezed,
   }) {
     return _then(_Loading(
       supplements == freezed
@@ -171,6 +182,10 @@ class __$LoadingCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String?,
+      isUpdatingContent: isUpdatingContent == freezed
+          ? _value.isUpdatingContent
+          : isUpdatingContent // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -178,16 +193,20 @@ class __$LoadingCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loading implements _Loading {
-  const _$_Loading(this.supplements, {this.message});
+  const _$_Loading(this.supplements,
+      {this.message, this.isUpdatingContent = false});
 
   @override
   final HomepageSupplements supplements;
   @override
   final String? message;
+  @JsonKey()
+  @override
+  final bool isUpdatingContent;
 
   @override
   String toString() {
-    return 'HomepageState.loading(supplements: $supplements, message: $message)';
+    return 'HomepageState.loading(supplements: $supplements, message: $message, isUpdatingContent: $isUpdatingContent)';
   }
 
   @override
@@ -197,14 +216,17 @@ class _$_Loading implements _Loading {
             other is _Loading &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements) &&
-            const DeepCollectionEquality().equals(other.message, message));
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality()
+                .equals(other.isUpdatingContent, isUpdatingContent));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(supplements),
-      const DeepCollectionEquality().hash(message));
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(isUpdatingContent));
 
   @JsonKey(ignore: true)
   @override
@@ -214,35 +236,40 @@ class _$_Loading implements _Loading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(HomepageSupplements supplements, String? message)
+    required TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
     required TResult Function(HomepageSupplements supplements, String messaage)
         failed,
   }) {
-    return loading(supplements, message);
+    return loading(supplements, message, isUpdatingContent);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
   }) {
-    return loading?.call(supplements, message);
+    return loading?.call(supplements, message, isUpdatingContent);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
-      return loading(supplements, message);
+      return loading(supplements, message, isUpdatingContent);
     }
     return orElse();
   }
@@ -283,12 +310,13 @@ class _$_Loading implements _Loading {
 }
 
 abstract class _Loading implements HomepageState {
-  const factory _Loading(HomepageSupplements supplements, {String? message}) =
-      _$_Loading;
+  const factory _Loading(HomepageSupplements supplements,
+      {String? message, bool isUpdatingContent}) = _$_Loading;
 
   @override
   HomepageSupplements get supplements;
   String? get message;
+  bool get isUpdatingContent;
   @override
   @JsonKey(ignore: true)
   _$LoadingCopyWith<_Loading> get copyWith =>
@@ -362,7 +390,8 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(HomepageSupplements supplements, String? message)
+    required TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
     required TResult Function(HomepageSupplements supplements, String messaage)
@@ -374,7 +403,9 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
   }) {
@@ -384,7 +415,9 @@ class _$_Content implements _Content {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
     required TResult orElse(),
@@ -518,7 +551,8 @@ class _$_Failed implements _Failed {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(HomepageSupplements supplements, String? message)
+    required TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
     required TResult Function(HomepageSupplements supplements, String messaage)
@@ -530,7 +564,9 @@ class _$_Failed implements _Failed {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
   }) {
@@ -540,7 +576,9 @@ class _$_Failed implements _Failed {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(HomepageSupplements supplements, String? message)? loading,
+    TResult Function(HomepageSupplements supplements, String? message,
+            bool isUpdatingContent)?
+        loading,
     TResult Function(HomepageSupplements supplements)? content,
     TResult Function(HomepageSupplements supplements, String messaage)? failed,
     required TResult orElse(),

@@ -11,13 +11,11 @@ class CoursesService {
   final FirebaseAuth _auth;
   var token = '';
 
-  Future<void> init() async {
+  ///makes sure the token used is always valid
+  Future refreshToken() async {
     final _token = await _auth.currentUser?.getIdToken();
     if (_token != null) token = _token;
   }
-
-  ///makes sure the token used is valid
-  Future refreshToken() async => await init();
 
   Future<Map<String, dynamic>> getHomeContent() async {
     await refreshToken();
@@ -35,11 +33,6 @@ class CoursesService {
     await refreshToken();
     return await CoursesApi.getProfile(token)
         .catchError((e) => _handleError(e));
-  }
-
-  Future<GeneralInfo> getRefreshedGeneralInfo() async {
-    await refreshToken();
-    return await CoursesApi.getGeneralInfo(token) .catchError((e) => _handleError(e));
   }
 
   _handleError(e) {

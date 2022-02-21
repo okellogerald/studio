@@ -1,7 +1,7 @@
 class Topic {
   final String id, title;
   String? description, thumbnailUrl, parentID;
-  final int? totalLessons, completedLessons;
+  final int totalLessons, completedLessons;
   final bool isPublished;
 
   Topic({
