@@ -18,9 +18,9 @@ class AppTheme {
         appBarTheme: const AppBarTheme(
             backgroundColor: AppColors.background,
             elevation: 0,
-            iconTheme: IconThemeData(color: AppColors.primary),
+            iconTheme: IconThemeData(color: AppColors.secondary),
             titleTextStyle: TextStyle(
-                color: AppColors.primary,
+                color: AppColors.secondary,
                 fontSize: 24,
                 fontFamily: Constants.kFontFam,
                 fontWeight: FontWeight.bold)),
@@ -40,12 +40,13 @@ class AppTheme {
             labelStyle: const TextStyle(
                 fontSize: 18,
                 fontFamily: Constants.kFontFam,
-                fontWeight: FontWeight.w500),
+                fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(
                 fontSize: 18,
                 fontFamily: Constants.kFontFam,
                 fontWeight: FontWeight.w500),
             labelPadding: const EdgeInsets.all(10),
+            indicatorSize: TabBarIndicatorSize.tab,
             unselectedLabelColor: AppColors.onBackground.withOpacity(.5)),
         listTileTheme: const ListTileThemeData(
             dense: true, contentPadding: EdgeInsets.zero));

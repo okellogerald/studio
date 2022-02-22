@@ -70,8 +70,7 @@ class _CustomSliverTitleState extends State<CustomSliverTitle> {
                     .appBarTheme
                     .titleTextStyle!
                     .copyWith(fontSize: 20.dw)),
-            AppText(widget.subtitle,
-                opacity: .85, size: 14.dw, color: AppColors.primary),
+            AppText(widget.subtitle, opacity: .85, size: 14.dw),
           ],
         ),
       ),

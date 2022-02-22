@@ -69,8 +69,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
           onPressed: () => Navigator.pop(context),
           icon: Icons.arrow_back,
           margin: EdgeInsets.only(left: 15.dw, top: 5.dh, right: 15.dw),
-          iconThemeData:
-              Theme.of(context).iconTheme.copyWith(color: AppColors.primary),
+          iconThemeData: Theme.of(context).iconTheme,
         ),
         value == 0
             ? Container()
@@ -98,63 +97,29 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
   }
 
   _buildTabBar() {
-    return SizedBox(
-      height: 52.dh,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                decoration: const BoxDecoration(border: border),
-                padding: EdgeInsets.only(left: 15.dw, right: 15.dw),
-                child: AppText('FILTERS', size: 16.dw, weight: FontWeight.bold),
-              ),
-              _buildFilters(),
-            ],
-          ),
-          const AppDivider(margin: EdgeInsets.zero)
-        ],
-      ),
-    );
-  }
-
-  _buildFilters() {
-    return Expanded(
+    return Container(
+      color: AppColors.surface.withOpacity(.5),
+      padding: EdgeInsets.only(top: 5.dh),
+      margin: EdgeInsets.only(top: 5.dh),
+      width: ScreenSizeConfig.getFullWidth,
       child: TabBar(
           controller: widget.tabController,
-          indicatorColor: Colors.transparent,
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorWeight: 0.001,
-          padding: EdgeInsets.only(left: 10.dw),
-          onTap: widget.onPressed,
+          padding: const EdgeInsets.only(left: 19),
           isScrollable: true,
+          onTap: widget.onPressed,
           tabs: [
-            _buildTab('ALL', FilterType.all, widget.currentFilterType),
-            _buildTab('LEARN', FilterType.learn, widget.currentFilterType),
-            _buildTab(
-                'PRACTICE', FilterType.practice, widget.currentFilterType),
-            _buildTab('FREE', FilterType.free, widget.currentFilterType),
-            _buildTab('PAID', FilterType.paid, widget.currentFilterType),
+            _buildTabItem('All', FilterType.all),
+            _buildTabItem('Learn', FilterType.learn),
+            _buildTabItem('Practice', FilterType.practice),
+            _buildTabItem('Free', FilterType.free),
+            _buildTabItem('Paid', FilterType.paid),
           ]),
     );
   }
 
-  _buildTab(String title, FilterType filterType, FilterType currentFilterType) {
-    final isSelected = filterType == currentFilterType;
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.dw),
-      decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.primaryVariant,
-          borderRadius: BorderRadius.all(Radius.circular(5.dw))),
-      height: 30.dh,
-      alignment: Alignment.center,
-      child: AppText(title,
-          color: isSelected ? AppColors.onPrimary : AppColors.onBackground,
-          opacity: isSelected ? 1 : .7),
-    );
+  _buildTabItem(String value, FilterType filterStyle) {
+    final isSelected = widget.currentFilterType == filterStyle;
+    return AppText(value,
+        weight: isSelected ? FontWeight.bold : FontWeight.normal);
   }
-
-  static const border =
-      Border(right: BorderSide(width: 1.5, color: AppColors.divider));
 }

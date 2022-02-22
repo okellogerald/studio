@@ -1,7 +1,7 @@
 import '../source.dart';
 
 class AppColors {
-  static const primary = Color(0xff0093ED);
+  static const primary = Color(0xff2F3A8F);
   static const primaryVariant = Color(0xffCAF0F8);
   static const secondary = Color(0xff1B2E3C);
   static const secondaryVariant = Color(0xff212121);
@@ -11,10 +11,8 @@ class AppColors {
   static const surface = Color(0xffEDEDED);
   static const onBackground = Colors.black;
   static const onBackground2 = Color(0xff423F3E);
-  static const positive = Color(0xff77D970);
-  static const negative = Color(0xffF58840);
   static const divider = Colors.grey;
-  static const accent = Colors.green;
+  static const accent = Color(0xffFE7E6D);
   static const error = Color(0xffBC3A38);
   static const onError = Colors.white;
   static const disabled = Colors.white54;

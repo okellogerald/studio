@@ -45,11 +45,6 @@ class UserService {
       .sendPasswordResetEmail(email: email)
       .catchError((e) => _handleErrors(e));
 
-  Map<int, String> updateOTP(Map<int, String> current, int id, int otp) {
-    current[id] = otp.toString();
-    return current;
-  }
-
   Future logOutUser() async {
     await _auth
         .signOut()

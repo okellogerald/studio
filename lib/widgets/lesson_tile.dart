@@ -61,7 +61,6 @@ class LessonTile extends StatelessWidget {
   }
 
   _buildTitle(String subtitle, Lesson lesson) {
-    final isDisabled = lesson.isPaid || lesson.isComplete;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +69,7 @@ class LessonTile extends StatelessWidget {
             opacity: .7,
             size: 18.dw,
             weight: FontWeight.bold,
-            color: isDisabled ? AppColors.secondary : AppColors.primary),
+            color:  AppColors.secondary),
         SizedBox(height: 10.dh),
         AppText(subtitle, opacity: .7, size: 14.dw),
       ],
@@ -83,7 +82,10 @@ class LessonTile extends StatelessWidget {
         child: Align(
             alignment: Alignment.centerRight,
             child: Icon(isPaid ? Icons.lock : Icons.chevron_right,
-                size: 20.dw, color: AppColors.secondary.withOpacity(.7))));
+                size: 20.dw,
+                color: isPaid
+                    ? AppColors.accent
+                    : AppColors.secondary)));
   }
 
   _navigateToLessonPage(

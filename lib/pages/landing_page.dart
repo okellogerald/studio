@@ -36,26 +36,29 @@ class LandingPage extends StatelessWidget {
   _buildValueProposition() {
     return Expanded(
       flex: 2,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const AppText(
-            'Spreading harmony through art',
-            style: TextStyle(
-                color: AppColors.primary, fontStyle: FontStyle.italic),
-          ),
-          AppDivider(
-              height: 2,
-              margin: EdgeInsets.symmetric(horizontal: 80.dw),
-              color: AppColors.divider.shade300),
-          const AppText(
-              'Art is something that makes you breath with a different kind of happiness',
-              alignment: TextAlign.center,
-              weight: FontWeight.bold,
-              opacity: .7),
-          AppText('Let\'s learn an art today !',
-              size: 22.dw, weight: FontWeight.bold),
-        ],
+      child: Padding(
+        padding:  EdgeInsets.symmetric(horizontal: 15.dw),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const AppText(
+              'Spreading harmony through art',
+              style: TextStyle(
+                  color: AppColors.primary, fontStyle: FontStyle.italic),
+            ),
+            AppDivider(
+                height: 2,
+                margin: EdgeInsets.symmetric(horizontal: 80.dw),
+                color: AppColors.divider.shade300),
+            const AppText(
+                'Art is something that makes you breath with a different kind of happiness',
+                alignment: TextAlign.center,
+                weight: FontWeight.bold,
+                opacity: .7),
+            AppText('Let\'s learn an art today !',
+                size: 22.dw, weight: FontWeight.bold),
+          ],
+        ),
       ),
     );
   }
