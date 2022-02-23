@@ -50,13 +50,9 @@ class TopicTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(topic.title,
-            opacity: .7,
-            size: 18.dw,
-            weight: FontWeight.bold,
-            color: AppColors.primary),
-        SizedBox(height: 10.dh),
-        AppText(subtitle, opacity: .7, size: 14.dw),
+        AppText(topic.title, size: 18.dw, weight: FontWeight.w700),
+        SizedBox(height: 5.dh),
+        AppText(subtitle, opacity: .7),
       ],
     );
   }

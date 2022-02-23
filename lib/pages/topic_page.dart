@@ -17,7 +17,7 @@ class _TopicPageState extends State<TopicPage>
 
   @override
   void initState() {
-    tabController = TabController(length: 5, vsync: this, initialIndex: 1);
+    tabController = TabController(length: 5, vsync: this, initialIndex: 0);
     final coursesService = Provider.of<CoursesService>(context, listen: false);
     final lessonsService = Provider.of<LessonsService>(context, listen: false);
     bloc = TopicPageBloc(coursesService, lessonsService);
@@ -78,7 +78,7 @@ class _TopicPageState extends State<TopicPage>
     final lessonList = _getLessons(supp.lessons, supp.filterType);
     if (lessonList.isEmpty) return _buildEmptyState();
     return ListView.builder(
-      padding: EdgeInsets.only(top: 20.dh, bottom: 20.dh),
+      padding: EdgeInsets.only(top: 20.dh),
       itemBuilder: (context, i) {
         final topicId = idList[i];
         final lessons = lessonList.where((e) => e.topicId == topicId).toList();
@@ -99,12 +99,13 @@ class _TopicPageState extends State<TopicPage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(subTopicName, weight: FontWeight.bold, size: 18.dw),
+          AppText(subTopicName.toUpperCase(), weight: FontWeight.w700, size: 18.dw),
           SizedBox(height: 15.dh),
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),
             itemCount: lessons.length,
-            itemBuilder: (context, index) => LessonTile(lessons[index], supp.getLessonsIdList),
+            itemBuilder: (context, index) =>
+                LessonTile(lessons[index], supp.getLessonsIdList),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,

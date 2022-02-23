@@ -63,7 +63,7 @@ class _LessonPageState extends State<LessonPage> {
         SizedBox(height: 10.dh),
         _buildText(lesson.description ?? ''),
         AppDivider(margin: EdgeInsets.symmetric(vertical: 10.dh)),
-        _buildText(lesson.body ?? '', .7, true)
+        _buildText(lesson.body ?? '', .7)
       ],
     );
   }
@@ -76,20 +76,18 @@ class _LessonPageState extends State<LessonPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AppText(lesson.title,
-              weight: FontWeight.bold, size: 22.dw, color: AppColors.primary),
+          AppText(lesson.title, weight: FontWeight.bold, size: 22.dw),
           isCompleted ? const CheckMark() : Container()
         ],
       ),
     );
   }
 
-  _buildText(String data, [double opacity = 1, bool isBody = false]) {
+  _buildText(String data, [double opacity = 1]) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.dw),
       child: AppText(data,
           weight: FontWeight.normal,
-          size: isBody ? 14.dw : 16.dw,
           opacity: opacity),
     );
   }

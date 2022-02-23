@@ -112,7 +112,7 @@ class _HomepageState extends State<Homepage> {
     final course = userData['course'];
 
     return CustomSliverTitle(controller,
-        title: 'Hello ' + userData['name'] + ',',
+        title: 'Hello ' + userData['name'].trim() + ',',
         subtitle: '$grade - $course',
         trailing: GestureDetector(
             onTap: _navigateToProfilePage,
@@ -124,7 +124,7 @@ class _HomepageState extends State<Homepage> {
       height: 100.dh,
       width: double.infinity,
       margin: EdgeInsets.only(top: 10.dh, bottom: 25.dh),
-      padding: EdgeInsets.symmetric(horizontal: 10.dw),
+      padding: EdgeInsets.fromLTRB(15.dw, 10.dw, 15.dw, 0),
       decoration: BoxDecoration(
           color: AppColors.primary,
           borderRadius: BorderRadius.all(Radius.circular(8.dw))),
@@ -159,7 +159,7 @@ class _HomepageState extends State<Homepage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText('Continue Class', weight: FontWeight.bold, size: 18.dw),
+        AppText('Continue Class', weight: FontWeight.bold, size: 22.dw),
         SizedBox(height: 15.dh),
         LessonTile(lesson, [lesson.id]),
       ],
@@ -172,7 +172,7 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText('$grade - Topics', weight: FontWeight.bold, size: 18.dw),
+          AppText('$grade - Topics', weight: FontWeight.bold, size: 22.dw),
           SizedBox(height: 15.dh),
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),

@@ -11,14 +11,15 @@ class ProfileAvatar extends StatelessWidget {
     return Container(
       height: size ?? 45.dw,
       width: size ?? 45.dw,
+      padding: EdgeInsets.only(bottom: 5.dw, left: 2.dw),
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-          shape: BoxShape.circle, color: AppColors.primaryVariant),
+      decoration:
+          const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
       child: AppText(
         name.toString().substring(0, 1),
         weight: FontWeight.bold,
         size: 25.dw,
-        opacity: .7,
+        color: AppColors.onPrimary,
       ),
     );
   }

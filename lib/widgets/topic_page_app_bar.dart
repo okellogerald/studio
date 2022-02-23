@@ -41,7 +41,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
         valueListenable: scrollValueNotifier,
         builder: (_, value, snapshot) {
           return Container(
-            height: value == 0 ? 170.dh : 95.dh,
+            height: value == 0 ? 170.dh : 100.dh,
             alignment: Alignment.centerLeft,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +55,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
                       )
                     : Container(),
                 value == 0 ? _buildSubtitle() : Container(),
-                _buildTabBar()
+                _buildTabBar(value)
               ],
             ),
           );
@@ -86,7 +86,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
         style: Theme.of(context)
             .appBarTheme
             .titleTextStyle!
-            .copyWith(color: AppColors.secondary));
+            .copyWith(color: AppColors.secondary, fontSize: 24.dw));
   }
 
   _buildSubtitle() {
@@ -96,30 +96,36 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
     );
   }
 
-  _buildTabBar() {
+  _buildTabBar(double value) {
     return Container(
-      color: AppColors.surface.withOpacity(.5),
       padding: EdgeInsets.only(top: 5.dh),
       margin: EdgeInsets.only(top: 5.dh),
       width: ScreenSizeConfig.getFullWidth,
+      decoration: BoxDecoration(
+          color: value == 0
+              ? AppColors.surface.withOpacity(.5)
+              : AppColors.primary),
       child: TabBar(
           controller: widget.tabController,
           padding: const EdgeInsets.only(left: 19),
           isScrollable: true,
           onTap: widget.onPressed,
+          indicatorColor: AppColors.accent,
+          indicatorWeight: 4.dw,
           tabs: [
-            _buildTabItem('All', FilterType.all),
-            _buildTabItem('Learn', FilterType.learn),
-            _buildTabItem('Practice', FilterType.practice),
-            _buildTabItem('Free', FilterType.free),
-            _buildTabItem('Paid', FilterType.paid),
+            _buildTabItem('All', FilterType.all, value),
+            _buildTabItem('Learn', FilterType.learn, value),
+            _buildTabItem('Practice', FilterType.practice, value),
+            _buildTabItem('Free', FilterType.free, value),
+            _buildTabItem('Paid', FilterType.paid, value),
           ]),
     );
   }
 
-  _buildTabItem(String value, FilterType filterStyle) {
+  _buildTabItem(String value, FilterType filterStyle, double scrollValue) {
     final isSelected = widget.currentFilterType == filterStyle;
     return AppText(value,
+        color: scrollValue == 0 ? AppColors.onBackground : AppColors.onPrimary,
         weight: isSelected ? FontWeight.bold : FontWeight.normal);
   }
 }

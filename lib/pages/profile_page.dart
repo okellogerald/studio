@@ -110,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  _buildButton(String title, {VoidCallback? onPressed}) {
+  _buildButton(String title, {VoidCallback? onPressed, bool isLogOut = false}) {
     return AppMaterialButton(
         onPressed: onPressed ?? () {},
         isFilled: false,
@@ -120,9 +120,14 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppText(title),
-                Icon(Icons.chevron_right,
-                    size: 20.dw, color: AppColors.secondary.withOpacity(.85))
+                AppText(title,
+                    color: isLogOut ? AppColors.error : AppColors.onBackground,
+                    weight: isLogOut ? FontWeight.bold : FontWeight.normal),
+                isLogOut
+                    ? Container()
+                    : Icon(Icons.chevron_right,
+                        size: 20.dw,
+                        color: AppColors.secondary.withOpacity(.85))
               ],
             )));
   }
@@ -138,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return _buildListView([
       _buildButton('Terms & Conditions'),
       _buildButton('About Us'),
-      _buildButton('Log Out', onPressed: bloc.logOut),
+      _buildButton('Log Out', onPressed: bloc.logOut, isLogOut: true),
     ]);
   }
 }

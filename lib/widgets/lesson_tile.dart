@@ -65,13 +65,9 @@ class LessonTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(lesson.title,
-            opacity: .7,
-            size: 18.dw,
-            weight: FontWeight.bold,
-            color:  AppColors.secondary),
-        SizedBox(height: 10.dh),
-        AppText(subtitle, opacity: .7, size: 14.dw),
+        AppText(lesson.title, size: 18.dw, weight: FontWeight.w700),
+        SizedBox(height: 5.dh),
+        AppText(subtitle, opacity: .7),
       ],
     );
   }
@@ -81,11 +77,9 @@ class LessonTile extends StatelessWidget {
     return Expanded(
         child: Align(
             alignment: Alignment.centerRight,
-            child: Icon(isPaid ? Icons.lock : Icons.chevron_right,
-                size: 20.dw,
-                color: isPaid
-                    ? AppColors.accent
-                    : AppColors.secondary)));
+            child: Icon(isPaid ? EvaIcons.lock : EvaIcons.chevronRight,
+                size: 24.dw,
+                color: isPaid ? AppColors.primary : AppColors.secondary)));
   }
 
   _navigateToLessonPage(
