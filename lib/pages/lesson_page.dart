@@ -97,7 +97,7 @@ class _LessonPageState extends State<LessonPage> {
       decoration: BoxDecoration(
           border: Border(
               top: BorderSide(color: Colors.grey.withOpacity(.15), width: 2))),
-      height: 100.dh,
+      height: 80.dh,
       child: Row(
         children: [
           _buildMarkStatusButton(supp.lesson),
@@ -116,7 +116,7 @@ class _LessonPageState extends State<LessonPage> {
                 ? () => bloc.markLessonAs(Status.completed, lesson: lesson)
                 : () => bloc.markLessonAs(Status.incomplete, lesson: lesson),
             child: Container(
-              height: 60.dh,
+              height: 50.dh,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   border: !isIncomplete
@@ -137,7 +137,7 @@ class _LessonPageState extends State<LessonPage> {
         child: AppTextButton(
       onPressed: bloc.goToNext,
       text: 'NEXT',
-      height: 60.dh,
+      height: 50.dh,
       backgroundColor: AppColors.primary,
       textColor: AppColors.onPrimary,
       margin: EdgeInsets.only(right: 15.dw),

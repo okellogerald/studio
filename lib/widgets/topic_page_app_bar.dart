@@ -86,7 +86,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
         style: Theme.of(context)
             .appBarTheme
             .titleTextStyle!
-            .copyWith(color: AppColors.secondary, fontSize: 24.dw));
+            .copyWith(color: AppColors.secondary, fontSize: 24.dw, fontWeight: FontWeight.w900));
   }
 
   _buildSubtitle() {

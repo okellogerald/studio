@@ -37,7 +37,7 @@ class LandingPage extends StatelessWidget {
     return Expanded(
       flex: 2,
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 15.dw),
+        padding: EdgeInsets.symmetric(horizontal: 15.dw),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -53,7 +53,6 @@ class LandingPage extends StatelessWidget {
             const AppText(
                 'Art is something that makes you breath with a different kind of happiness',
                 alignment: TextAlign.center,
-                weight: FontWeight.bold,
                 opacity: .7),
             AppText('Let\'s learn an art today !',
                 size: 22.dw, weight: FontWeight.bold),
@@ -73,25 +72,18 @@ class LandingPage extends StatelessWidget {
             AppTextButton(
               onPressed: () => WelcomePage.navigateTo(context),
               text: 'GET STARTED',
-              height: 60.dh,
-              width: 230.dw,
+              height: 50.dh,
               backgroundColor: AppColors.primary,
               textColor: AppColors.onPrimary,
+              margin: EdgeInsets.symmetric(horizontal: 15.dw),
             ),
-            SizedBox(height: 30.dh),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppText('Already have an account ?',
-                    color: AppColors.primary),
-                AppTextButton(
-                  onPressed: () => LogInPage.navigateTo(context),
-                  text: 'LOG IN',
-                  textColor: AppColors.primary,
-                  padding: EdgeInsets.symmetric(horizontal: 10.dw),
-                  margin: EdgeInsets.only(left: 15.dw, right: 20.dw),
-                ),
-              ],
+            AppTextButton(
+              onPressed: () => LogInPage.navigateTo(context),
+              text: 'Already have an account ?',
+              height: 50.dh,
+              textColor: AppColors.primary,
+              padding: EdgeInsets.symmetric(horizontal: 10.dw),
+              margin: EdgeInsets.only(left: 15.dw, right: 15.dw, top: 15.dh),
             ),
           ],
         );

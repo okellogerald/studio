@@ -57,7 +57,7 @@ class _LevelsPageState extends State<LevelsPage> {
           decoration: BoxDecoration(
               color: isSelected ? AppColors.primary : Colors.transparent,
               borderRadius: BorderRadius.all(Radius.circular(5.dw))),
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 10.dw, vertical: 15.dw),
           child: AppText(e,
               color: isSelected ? AppColors.onPrimary : AppColors.onBackground),

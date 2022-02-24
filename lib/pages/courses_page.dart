@@ -100,6 +100,7 @@ class _CoursesPageState extends State<CoursesPage> {
                       course.title,
                       alignment: TextAlign.center,
                       opacity: .85,
+                      weight: FontWeight.bold,
                       color: isSelected
                           ? AppColors.onPrimary
                           : AppColors.onBackground,

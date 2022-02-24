@@ -105,13 +105,16 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
 
     final error = InputValidation.validateEmail(supp.user.email);
     if (error != null) {
-      emit(OnBoardingPagesState.failed(supp,
-          'Make sure the email you provided is valid, then press Reset again.'));
+      supp = supp.copyWith(errors: {'email': 'A valid email id is required'});
+      emit(OnBoardingPagesState.content(supp));
       return;
     }
 
+    //clearing errors
+    supp = supp.copyWith(errors: {});
+
     emit(OnBoardingPagesState.laoding(supp,
-        message: 'sending email with OTP Code ...'));
+        message: 'sending email with reset password link ...'));
 
     try {
       await service.sendEmailForVerification(supp.user.email);

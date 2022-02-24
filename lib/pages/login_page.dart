@@ -93,10 +93,10 @@ class _LogInPageState extends State<LogInPage> {
               isLoginPassword: true,
             ),
             _buildForgotPassword(),
-            _buildGetStartedButton()
           ],
         ),
       ),
+      bottomNavigationBar: _buildGetStartedButton(),
     );
   }
 
@@ -118,22 +118,14 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   _buildGetStartedButton() {
-    return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          AppTextButton(
-            onPressed: bloc.logIn,
-            text: 'LOG IN',
-            textColor: AppColors.onPrimary,
-            backgroundColor: AppColors.primary,
-            height: 60.dh,
-            width: 200.dw,
-            margin: EdgeInsets.only(bottom: 40.dh, right: 15.dw),
-          ),
-        ],
-      ),
+    return AppTextButton(
+      onPressed: bloc.logIn,
+      text: 'LOG IN',
+      textColor: AppColors.onPrimary,
+      backgroundColor: AppColors.primary,
+      height: 50.dh,
+      width: 200.dw,
+      margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),
     );
   }
 }
