@@ -70,7 +70,7 @@ class _LogInPageState extends State<LogInPage> {
 
   Widget _buildContent(OnBoardingSupplements supp) {
     return Scaffold(
-      appBar: const PageAppBar(title: 'Welcome back to Siila!'),
+      appBar: const PageAppBar(title: 'Welcome back to Siila !'),
       body: Padding(
         padding: EdgeInsets.only(top: 40.dh),
         child: Column(
