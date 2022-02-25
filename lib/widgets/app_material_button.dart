@@ -9,13 +9,13 @@ class AppMaterialButton extends StatefulWidget {
       this.alignment,
       required this.child,
       this.isFilled = true,
+      this.borderRadius,
       required this.onPressed,
       this.backgroundColor = AppColors.primary,
       Key? key})
       : super(key: key);
 
-  final double? height;
-  final double? width;
+  final double? width, height, borderRadius;
   final VoidCallback onPressed;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -69,7 +69,8 @@ class _AppMaterialButtonState extends State<AppMaterialButton>
               alignment: widget.alignment ?? Alignment.center,
               decoration: BoxDecoration(
                   color: animation.value,
-                  borderRadius: BorderRadius.all(Radius.circular(8.dw))),
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(widget.borderRadius ?? 8.dw))),
               child: child),
         );
       },

@@ -88,6 +88,7 @@ class _CoursesPageState extends State<CoursesPage> {
             backgroundColor: course.isPublished
                 ? AppColors.primary.withOpacity(.2)
                 : AppColors.surface,
+            borderRadius: 10.dw,
             child: Container(
                 width: double.infinity,
                 color: isSelected ? AppColors.primary : Colors.transparent,

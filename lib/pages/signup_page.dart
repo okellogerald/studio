@@ -64,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildContent(OnBoardingSupplements supp) {
     return Scaffold(
       appBar: const PageAppBar(
-          title: 'One Last Thing!',
+          title: 'One Last Thing !',
           subtitle: 'Let\'s create an account for you.'),
       body: Padding(
         padding: EdgeInsets.only(top: 40.dh),
