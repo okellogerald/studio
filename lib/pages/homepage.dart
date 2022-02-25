@@ -159,7 +159,7 @@ class _HomepageState extends State<Homepage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText('Continue Class', weight: FontWeight.bold, size: 22.dw),
+        AppText('Continue Class', weight: FontWeight.bold, size: 20.dw),
         SizedBox(height: 15.dh),
         LessonTile(lesson, [lesson.id]),
       ],
@@ -172,7 +172,7 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText('$grade - Topics', weight: FontWeight.bold, size: 22.dw),
+          AppText('$grade - Topics', weight: FontWeight.bold, size: 20.dw),
           SizedBox(height: 15.dh),
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),

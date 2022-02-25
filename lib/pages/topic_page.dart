@@ -95,11 +95,11 @@ class _TopicPageState extends State<TopicPage>
     final subTopicName = lessons.first.topicName;
 
     return Padding(
-      padding: EdgeInsets.only(left: 15.dw, right: 15.dw, bottom: 15.dh),
+      padding: EdgeInsets.only(left: 15.dw, right: 15.dw, bottom: 20.dh),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(subTopicName.toUpperCase(), weight: FontWeight.w700, size: 18.dw),
+          AppText(subTopicName, weight: FontWeight.w500, size: 18.dw),
           SizedBox(height: 15.dh),
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),

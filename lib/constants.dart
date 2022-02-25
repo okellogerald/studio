@@ -1,5 +1,5 @@
 class Constants {
-  static const kFontFam = 'ZenKaku';
+  static const kFontFam = 'hibana';
   static const kUserDataBox = 'user_data_box';
   static const kUserData = 'user_data';
 

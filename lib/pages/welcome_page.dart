@@ -100,6 +100,7 @@ class _WelcomePageState extends State<WelcomePage> {
       margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),
       backgroundColor: AppColors.primary,
       textColor: AppColors.onPrimary,
+      borderRadius: 30.dw,
     );
   }
 }

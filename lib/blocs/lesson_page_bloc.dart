@@ -12,7 +12,6 @@ class LessonPageBloc extends Cubit<LessonPageState> {
   }
 
   final LessonsService service;
-  var _lessonsIdList = <String>[];
 
   void init(String lessonId, List<String> lessonsIdList) async {
     var supp = state.supplements;
@@ -21,9 +20,11 @@ class LessonPageBloc extends Cubit<LessonPageState> {
     try {
       final lesson = await service.getLesson(lessonId);
       final currentLessonIndex = lessonsIdList.indexOf(lessonId);
-      final isLast = currentLessonIndex == lessonsIdList.length - 1;
-      _lessonsIdList = lessonsIdList;
-      supp = supp.copyWith(lesson: lesson, isLast: isLast);
+      supp = supp.copyWith(
+          lesson: lesson,
+          lessonsIdList: lessonsIdList,
+          currentIndex: currentLessonIndex,
+          lessonsLength: lessonsIdList.length);
       emit(LessonPageState.content(supp));
     } on ApiError catch (_) {
       emit(LessonPageState.failed(supp, _.message));
@@ -44,13 +45,29 @@ class LessonPageBloc extends Cubit<LessonPageState> {
   void goToNext() async {
     var supp = state.supplements;
     emit(LessonPageState.loading(supp, message: 'loading next lesson'));
-    final currentIndex = _lessonsIdList.indexOf(supp.lesson.id);
-    final nextLessonId = _lessonsIdList[currentIndex + 1];
+    final lessonsIdList = supp.lessonsIdList;
+    final currentIndex = lessonsIdList.indexOf(supp.lesson.id);
+    final nextLessonId = lessonsIdList[currentIndex + 1];
 
     try {
       final lesson = await service.getLesson(nextLessonId);
-      final isLast = currentIndex + 1 == _lessonsIdList.length - 1;
-      supp = supp.copyWith(lesson: lesson, isLast: isLast);
+      supp = supp.copyWith(lesson: lesson, currentIndex: currentIndex + 1);
+      emit(LessonPageState.content(supp));
+    } on ApiError catch (_) {
+      emit(LessonPageState.failed(supp, _.message));
+    }
+  }
+
+  void goToPrev() async {
+    var supp = state.supplements;
+    emit(LessonPageState.loading(supp, message: 'loading previous lesson'));
+    final lessonsIdList = supp.lessonsIdList;
+    final currentIndex = lessonsIdList.indexOf(supp.lesson.id);
+    final nextLessonId = lessonsIdList[currentIndex - 1];
+
+    try {
+      final lesson = await service.getLesson(nextLessonId);
+      supp = supp.copyWith(lesson: lesson, currentIndex: currentIndex - 1);
       emit(LessonPageState.content(supp));
     } on ApiError catch (_) {
       emit(LessonPageState.failed(supp, _.message));

@@ -76,6 +76,7 @@ class LandingPage extends StatelessWidget {
               backgroundColor: AppColors.primary,
               textColor: AppColors.onPrimary,
               margin: EdgeInsets.symmetric(horizontal: 15.dw),
+              borderRadius: 30.dw,
             ),
             AppTextButton(
               onPressed: () => LogInPage.navigateTo(context),
@@ -84,6 +85,7 @@ class LandingPage extends StatelessWidget {
               textColor: AppColors.primary,
               padding: EdgeInsets.symmetric(horizontal: 10.dw),
               margin: EdgeInsets.only(left: 15.dw, right: 15.dw, top: 15.dh),
+              borderRadius: 30.dw,
             ),
           ],
         );

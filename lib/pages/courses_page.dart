@@ -82,12 +82,11 @@ class _CoursesPageState extends State<CoursesPage> {
       children: courseList.map((course) {
         final isSelected = supp.user.courseId == course.id;
 
-        return AppTextButton(
+        return AppMaterialButton(
             onPressed:
                 course.isPublished ? () => _onCoursePressed(course) : () {},
-            borderRadius: 0,
             backgroundColor: course.isPublished
-                ? AppColors.primaryVariant
+                ? AppColors.primary.withOpacity(.2)
                 : AppColors.surface,
             child: Container(
                 width: double.infinity,
@@ -100,10 +99,9 @@ class _CoursesPageState extends State<CoursesPage> {
                       course.title,
                       alignment: TextAlign.center,
                       opacity: .85,
-                      weight: FontWeight.bold,
                       color: isSelected
                           ? AppColors.onPrimary
-                          : AppColors.onBackground,
+                          : AppColors.primaryVariant,
                     ),
                     !course.isPublished
                         ? Padding(

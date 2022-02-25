@@ -16,7 +16,7 @@ void main() async {
 
   final _auth = FirebaseAuth.instance;
 
-  //Hive.box(Constants.kUserDataBox).clear();
+  Hive.box(Constants.kUserDataBox).clear();
 
   final myApp = MultiProvider(
     providers: [

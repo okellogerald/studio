@@ -60,7 +60,8 @@ class _LevelsPageState extends State<LevelsPage> {
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 10.dw, vertical: 15.dw),
           child: AppText(e,
-              color: isSelected ? AppColors.onPrimary : AppColors.onBackground),
+              color: isSelected ? AppColors.onPrimary : AppColors.onBackground,
+              alignment: TextAlign.center),
         ),
         margin: EdgeInsets.only(top: 20.dh, left: 15.dw, right: 15.dw),
       );

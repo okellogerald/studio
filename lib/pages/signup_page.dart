@@ -111,6 +111,7 @@ class _SignUpPageState extends State<SignUpPage> {
       backgroundColor: AppColors.primary,
       height: 50.dh,
       width: 200.dw,
+      borderRadius: 30.dw,
       margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),
     );
   }

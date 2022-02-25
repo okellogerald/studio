@@ -83,10 +83,10 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
 
   Widget _buildTitle() {
     return AppText(widget.title,
-        style: Theme.of(context)
-            .appBarTheme
-            .titleTextStyle!
-            .copyWith(color: AppColors.secondary, fontSize: 24.dw, fontWeight: FontWeight.w900));
+        style: Theme.of(context).appBarTheme.titleTextStyle!.copyWith(
+            color: AppColors.secondary,
+            fontSize: 24.dw,
+            fontWeight: FontWeight.w900));
   }
 
   _buildSubtitle() {
@@ -102,9 +102,11 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
       margin: EdgeInsets.only(top: 5.dh),
       width: ScreenSizeConfig.getFullWidth,
       decoration: BoxDecoration(
-          color: value == 0
-              ? AppColors.surface.withOpacity(.5)
-              : AppColors.primary),
+          color: AppColors.surface.withOpacity(.5),
+          border: value == 0
+              ? Border.all(color: Colors.transparent, width: 0)
+              : const Border(
+                  bottom: BorderSide(width: 1.5, color: AppColors.divider))),
       child: TabBar(
           controller: widget.tabController,
           padding: const EdgeInsets.only(left: 19),
@@ -113,19 +115,19 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
           indicatorColor: AppColors.accent,
           indicatorWeight: 4.dw,
           tabs: [
-            _buildTabItem('All', FilterType.all, value),
-            _buildTabItem('Learn', FilterType.learn, value),
-            _buildTabItem('Practice', FilterType.practice, value),
-            _buildTabItem('Free', FilterType.free, value),
-            _buildTabItem('Paid', FilterType.paid, value),
+            _buildTabItem('All', FilterType.all),
+            _buildTabItem('Learn', FilterType.learn),
+            _buildTabItem('Practice', FilterType.practice),
+            _buildTabItem('Free', FilterType.free),
+            _buildTabItem('Paid', FilterType.paid),
           ]),
     );
   }
 
-  _buildTabItem(String value, FilterType filterStyle, double scrollValue) {
+  _buildTabItem(String value, FilterType filterStyle) {
     final isSelected = widget.currentFilterType == filterStyle;
     return AppText(value,
-        color: scrollValue == 0 ? AppColors.onBackground : AppColors.onPrimary,
+        opacity: isSelected ? 1 : .7,
         weight: isSelected ? FontWeight.bold : FontWeight.normal);
   }
 }

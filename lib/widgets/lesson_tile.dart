@@ -65,7 +65,7 @@ class LessonTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(lesson.title, size: 18.dw, weight: FontWeight.w700),
+        AppText(lesson.title, color: AppColors.primaryVariant),
         SizedBox(height: 5.dh),
         AppText(subtitle, opacity: .7),
       ],
