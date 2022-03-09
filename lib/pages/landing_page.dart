@@ -70,7 +70,7 @@ class LandingPage extends StatelessWidget {
           children: [
             SizedBox(height: 40.dh),
             AppTextButton(
-              onPressed: () => WelcomePage.navigateTo(context),
+              onPressed: () => push(const WelcomePage()),
               text: 'GET STARTED',
               height: 50.dh,
               backgroundColor: AppColors.primary,
@@ -79,7 +79,7 @@ class LandingPage extends StatelessWidget {
               borderRadius: 30.dw,
             ),
             AppTextButton(
-              onPressed: () => LogInPage.navigateTo(context),
+              onPressed: () => push(const LogInPage()),
               text: 'Already have an account ?',
               height: 50.dh,
               textColor: AppColors.primary,

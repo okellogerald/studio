@@ -1,16 +1,12 @@
-import 'dart:convert';
 import '../source.dart';
 import 'package:http/http.dart' as http;
 
 class OnBoardingApi {
-  static const root =
-      'http://siila-env.eba-m2zsdqgd.ap-southeast-1.elasticbeanstalk.com/api/';
-
   static Future<List<Course>> getAllCategories() async {
     const url = root + 'signup/';
-
     final response = await http.get(Uri.parse(url));
     final result = json.decode(response.body);
+
     _handleStatusCodes(result['code']);
 
     final results = result['data']['courses'];
@@ -25,11 +21,6 @@ class OnBoardingApi {
   static Future<Map<String, dynamic>> createUser(
       UserData userData, String password, String token) async {
     const url = root + 'signup/';
-    final headers = {
-      "Authorization": 'Bearer $token',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
     final body = {
       'gender': userData.gender.toLowerCase(),
       'dob': userData.dateOfBirth.millisecondsSinceEpoch,
@@ -39,23 +30,20 @@ class OnBoardingApi {
       'gradeID': userData.gradeId,
     };
 
+    final headers = _getHeaders(token);
     final response = await http.post(Uri.parse(url),
         headers: headers, body: json.encode(body));
-
     final result = json.decode(response.body);
+
     // log(result.toString());
+
     _handleStatusCodes(result['code']);
     return result;
   }
 
   static Future<Map<String, dynamic>> logInUser(String token) async {
     const url = root + 'login/';
-    final headers = {
-      "Authorization": 'Bearer $token',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
+    final headers = _getHeaders(token);
     final response = await http.post(Uri.parse(url), headers: headers);
 
     final result = json.decode(response.body);
@@ -68,5 +56,11 @@ class OnBoardingApi {
     if (statusCode == 200) return;
     if (statusCode == 701) throw ApiError.expiredToken();
     throw ApiError.unknown();
+  }
+
+  static Map<String, String> _getHeaders(String token) {
+    final _headers = Map<String, String>.from(headers);
+    _headers["Authorization"] = 'Bearer $token';
+    return _headers;
   }
 }

@@ -28,11 +28,11 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
         listener: (_, state) {
           final isSignedIn =
               state.maybeWhen(success: (_) => true, orElse: () => false);
-          if (isSignedIn) _navigateToLogInPage();
+          if (isSignedIn) push(const LogInPage());
 
-          final error = state.maybeWhen(
+          final errorMessage = state.maybeWhen(
               failed: (_, message) => message, orElse: () => null);
-          if (error != null) _showError(error);
+          if (errorMessage != null) showSnackbar(context, errorMessage);
         },
         builder: (_, state) {
           return state.when(
@@ -41,20 +41,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
               success: _buildContent,
               failed: (s, _) => _buildContent(s));
         });
-  }
-
-  void _navigateToLogInPage() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => const LogInPage()), (route) => false);
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: AppText(message,
-            style: Theme.of(context)
-                .snackBarTheme
-                .contentTextStyle!
-                .copyWith(fontSize: 14.dw))));
   }
 
   Widget _buildLoading(OnBoardingSupplements supp, String? message) {
@@ -90,7 +76,10 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
           children: [
             const AppText('Didn\'t get it ?'),
             AppTextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+                bloc.sendPasswordResetEmail();
+              },
               text: 'Resend Code',
               textColor: AppColors.primary,
               margin: EdgeInsets.only(left: 20.dw),

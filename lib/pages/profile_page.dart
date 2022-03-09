@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
             final isSignedOut =
                 state.maybeWhen(success: (_) => true, orElse: () => false);
 
-            if (isSignedOut) _navigateToLandingPage();
+            if (isSignedOut) pushAndRemoveUntil(const LandingPage());
           },
           builder: (_, state) {
             return state.when(
@@ -39,13 +39,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 success: _buildContent);
           }),
     );
-  }
-
-  _navigateToLandingPage() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const LandingPage()),
-        (route) => false);
   }
 
   Widget _buildLoading(Map<String, dynamic> userData, String? message) {

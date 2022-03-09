@@ -25,7 +25,10 @@ class AppTextField extends StatefulWidget {
   final double? letterSpacing;
   final TextInputType keyboardType;
   final TextCapitalization textCapitalization;
-  final bool isPassword, isLoginPassword, shouldShowErrorText;
+  final bool isPassword, shouldShowErrorText;
+
+  /// does not show the eye suffix icon
+  final bool isLoginPassword;
 
   @override
   _AppTextFieldState createState() => _AppTextFieldState();
@@ -51,14 +54,14 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     final hasError = widget.error != null;
-    final border = hasError ? _errorBorder : _inputBorder;
+    final border = hasError ? errorBorder : inputBorder;
 
     return Padding(
       padding: EdgeInsets.only(left: 15.dw, right: 15.dw, bottom: 20.dh),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(widget.label, opacity: .7),
+          AppText(widget.label, opacity: .7, size: 14.dw),
           Container(
             height: 40.dh,
             margin: EdgeInsets.only(top: 8.dh),
@@ -72,24 +75,14 @@ class _AppTextFieldState extends State<AppTextField> {
                       minLines: 1,
                       keyboardType: widget.keyboardType,
                       textCapitalization: widget.textCapitalization,
-                      style: TextStyle(
-                        color: AppColors.onBackground,
-                        letterSpacing: widget.letterSpacing,
-                        fontSize: 16.dw,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: valueStyle,
                       cursorColor: AppColors.primary,
                       obscureText: widget.isLoginPassword
                           ? true
                           : widget.isPassword && !isVisible,
-                      obscuringCharacter: '*',
                       decoration: InputDecoration(
                           hintText: widget.hintText,
-                          hintStyle: TextStyle(
-                            color: AppColors.onBackground.withOpacity(.5),
-                            fontSize: 16.dw,
-                            fontWeight: FontWeight.w100,
-                          ),
+                          hintStyle: hintStyle,
                           fillColor: AppColors.surface,
                           suffixIcon: _suffixIcon(isVisible),
                           filled: true,
@@ -97,8 +90,7 @@ class _AppTextFieldState extends State<AppTextField> {
                           border: border,
                           focusedBorder: border,
                           enabledBorder: border,
-                          contentPadding:
-                              EdgeInsets.only(left: 8.dw, top: 15.dh)));
+                          contentPadding: EdgeInsets.only(left: 10.dw)));
                 }),
           ),
           _buildError(),
@@ -126,7 +118,7 @@ class _AppTextFieldState extends State<AppTextField> {
     final hasNoText = controller.text.isEmpty;
     final emptyContainer = Container(width: 0.01);
 
-    return hasNoText
+    return hasNoText || widget.isLoginPassword
         ? emptyContainer
         : widget.isPassword
             ? GestureDetector(
@@ -138,13 +130,4 @@ class _AppTextFieldState extends State<AppTextField> {
               )
             : emptyContainer;
   }
-
-  final _inputBorder = OutlineInputBorder(
-    borderSide: const BorderSide(width: 0.0, color: Colors.transparent),
-    borderRadius: BorderRadius.all(Radius.circular(5.dw)),
-  );
-
-  final _errorBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(5.dw)),
-      borderSide: const BorderSide(width: 1.2, color: AppColors.error));
 }

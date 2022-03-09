@@ -51,12 +51,6 @@ class _HomepageState extends State<Homepage> {
         });
   }
 
-  _showSnackbar(String message) {
-    ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(
-        backgroundColor: AppColors.error,
-        content: AppText(message, color: AppColors.onError)));
-  }
-
   Widget _buildLoading(
       HomepageSupplements supp, String? message, bool isUpdatingContent) {
     if (isUpdatingContent) {
@@ -86,7 +80,7 @@ class _HomepageState extends State<Homepage> {
             onRefresh: bloc.refresh,
             child: Column(
               children: [
-                _buildTitle(supp.userData),
+                _buildHeader(supp.userData),
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
@@ -107,12 +101,12 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  _buildTitle(Map userData) {
+  _buildHeader(Map userData) {
     final grade = userData['grade'];
     final course = userData['course'];
 
-    return CustomSliverTitle(controller,
-        title: 'Hello ' + userData['name'].trim() + ',',
+    return HomepageHeader(controller,
+        title: 'Hello ' /* /*  userData['name']/* .trim() */ */ + ',' */,
         subtitle: '$grade - $course',
         trailing: GestureDetector(
             onTap: _navigateToProfilePage,
@@ -135,7 +129,7 @@ class _HomepageState extends State<Homepage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ValueIndicator(info.getRemainingClassesRatio),
+              CompletionProgressBar(info.getRemainingClassesRatio),
               SizedBox(height: 10.dh),
               AppText('${info.remainingClasses} classes to complete Grade 1',
                   color: AppColors.onPrimary, size: 14.dw)
@@ -190,5 +184,10 @@ class _HomepageState extends State<Homepage> {
   _navigateToProfilePage() {
     Navigator.push(
         context, MaterialPageRoute(builder: (_) => const ProfilePage()));
+  }
+
+  _showSnackbar(String message) {
+    final _context = _scaffoldKey.currentContext!;
+    showSnackbar(_context, message);
   }
 }

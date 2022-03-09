@@ -16,7 +16,7 @@ class LessonTile extends StatelessWidget {
     return AppMaterialButton(
       onPressed: lesson.isPaid
           ? () {}
-          : () => _navigateToLessonPage(context, lesson.id, lessonsIdList),
+          : () => push( LessonPage(lesson.id, lessonsIdList)),
       backgroundColor: AppColors.surface,
       child: Container(
         height: 100.dh,
@@ -80,11 +80,5 @@ class LessonTile extends StatelessWidget {
             child: Icon(isPaid ? EvaIcons.lock : EvaIcons.chevronRight,
                 size: 24.dw,
                 color: isPaid ? AppColors.primary : AppColors.secondary)));
-  }
-
-  _navigateToLessonPage(
-      BuildContext context, String id, List<String> lessonsIdList) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (_) => LessonPage(id, lessonsIdList)));
   }
 }

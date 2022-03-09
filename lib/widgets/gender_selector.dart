@@ -1,22 +1,22 @@
 import '../source.dart';
 
-class OptionSelector extends StatefulWidget {
-  const OptionSelector({
+class GenderSelector extends StatefulWidget {
+  const GenderSelector({
     Key? key,
     required this.title,
-    required this.onValueSelected,
-    required this.value,
+    required this.onGenderSelected,
+    required this.selectedGender,
   }) : super(key: key);
 
   final String title;
-  final ValueChanged<String> onValueSelected;
-  final String? value;
+  final ValueChanged<String> onGenderSelected;
+  final String? selectedGender;
 
   @override
-  State<OptionSelector> createState() => _OptionSelectorState();
+  State<GenderSelector> createState() => _GenderSelectorState();
 }
 
-class _OptionSelectorState extends State<OptionSelector> {
+class _GenderSelectorState extends State<GenderSelector> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,7 +24,7 @@ class _OptionSelectorState extends State<OptionSelector> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(widget.title, opacity: .7),
+          AppText(widget.title, opacity: .7, size: 14.dw),
           SizedBox(height: 8.dh),
           AppTextButton(
             backgroundColor: AppColors.surface,
@@ -34,8 +34,9 @@ class _OptionSelectorState extends State<OptionSelector> {
               height: 40.dh,
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 10.dw),
-              child: AppText(widget.value?.toUpperCase() ?? 'Tap to select',
-                  weight: FontWeight.bold),
+              child: AppText(
+                  widget.selectedGender?.toUpperCase() ?? 'Tap to select',
+                  weight: FontWeight.w500),
             ),
           ),
         ],
@@ -79,13 +80,13 @@ class _OptionSelectorState extends State<OptionSelector> {
     return AppTextButton(
         onPressed: () {
           Navigator.pop(context);
-          widget.onValueSelected(option);
+          widget.onGenderSelected(option);
         },
         borderRadius: 0,
         child: Container(
           height: 40.dh,
           alignment: Alignment.center,
-          child: AppText(option, weight: FontWeight.bold),
+          child: AppText(option),
           width: double.infinity,
         ));
   }

@@ -1,7 +1,7 @@
 import '../source.dart';
 
-class CustomSliverTitle extends StatefulWidget {
-  const CustomSliverTitle(this.controller,
+class HomepageHeader extends StatefulWidget {
+  const HomepageHeader(this.controller,
       {required this.title,
       required this.subtitle,
       required this.trailing,
@@ -13,10 +13,10 @@ class CustomSliverTitle extends StatefulWidget {
   final ScrollController controller;
 
   @override
-  State<CustomSliverTitle> createState() => _CustomSliverTitleState();
+  State<HomepageHeader> createState() => _HomepageHeaderState();
 }
 
-class _CustomSliverTitleState extends State<CustomSliverTitle> {
+class _HomepageHeaderState extends State<HomepageHeader> {
   final scrollValueNotifier = ValueNotifier<double>(0.0);
 
   @override
@@ -75,5 +75,11 @@ class _CustomSliverTitleState extends State<CustomSliverTitle> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
   }
 }

@@ -50,7 +50,7 @@ class _LevelsPageState extends State<LevelsPage> {
         backgroundColor: AppColors.surface,
         onPressed: () {
           bloc.updateAttributes(level: e);
-          SignUpPage.navigateTo(context);
+          push(const SignUpPage());
         },
         child: Container(
           height: 85.dh,

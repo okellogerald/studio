@@ -12,9 +12,10 @@ class MyApp extends StatelessWidget {
     return ScreenSizeInit(
       designSize: const Size(411.4, 866.3),
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: 'Siila',
+        navigatorKey: navigatorKey,
         theme: AppTheme.themeData(),
+        debugShowCheckedModeBanner: false,
         home: noAccountYet ? const LandingPage() : const Homepage(),
       ),
     );

@@ -1,7 +1,7 @@
 import '../source.dart';
 
-class ValueIndicator extends StatelessWidget {
-  const ValueIndicator(this.value, {Key? key}) : super(key: key);
+class CompletionProgressBar extends StatelessWidget {
+  const CompletionProgressBar(this.value, {Key? key}) : super(key: key);
 
   final double value;
 

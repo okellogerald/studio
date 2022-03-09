@@ -76,6 +76,12 @@ class _AppIconButtonState extends State<AppIconButton>
           );
         });
   }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 }
 
 class TappedRippleEffectPainter extends CustomPainter {

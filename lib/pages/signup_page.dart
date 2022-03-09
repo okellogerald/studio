@@ -14,6 +14,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   late final OnBoardingPagesBloc bloc;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -23,38 +24,27 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-        bloc: bloc,
-        listener: (_, state) {
-          final isSuccess =
-              state.maybeWhen(success: (_) => true, orElse: () => false);
-          if (isSuccess) _navigateToHomepage();
+    return Scaffold(
+      key: _scaffoldKey,
+      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
+          bloc: bloc,
+          listener: (_, state) {
+            final isSuccess =
+                state.maybeWhen(success: (_) => true, orElse: () => false);
+            if (isSuccess) pushAndRemoveUntil(const Homepage());
 
-          final error = state.maybeWhen(
-              failed: (_, message) => message, orElse: () => null);
-          if (error != null) _showError(error);
-        },
-        builder: (_, state) {
-          return state.when(
-              laoding: _buildLoading,
-              content: _buildContent,
-              success: _buildContent,
-              failed: (s, _) => _buildContent(s));
-        });
-  }
-
-  void _navigateToHomepage() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => const Homepage()), (route) => false);
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: AppText(message,
-            style: Theme.of(context)
-                .snackBarTheme
-                .contentTextStyle!
-                .copyWith(fontSize: 14.dw))));
+            final error = state.maybeWhen(
+                failed: (_, message) => message, orElse: () => null);
+            if (error != null) _showSnackbar(error);
+          },
+          builder: (_, state) {
+            return state.when(
+                laoding: _buildLoading,
+                content: _buildContent,
+                success: _buildContent,
+                failed: (s, _) => _buildContent(s));
+          }),
+    );
   }
 
   Widget _buildLoading(OnBoardingSupplements supp, String? message) {
@@ -95,6 +85,7 @@ class _SignUpPageState extends State<SignUpPage> {
               keyboardType: TextInputType.emailAddress,
               label: 'Confirm Passowrd',
               isPassword: true,
+              isLoginPassword: true,
             ),
           ],
         ),
@@ -114,5 +105,10 @@ class _SignUpPageState extends State<SignUpPage> {
       borderRadius: 30.dw,
       margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),
     );
+  }
+
+  _showSnackbar(String message) {
+    final _context = _scaffoldKey.currentContext!;
+    showSnackbar(_context, message);
   }
 }

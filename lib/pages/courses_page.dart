@@ -15,6 +15,7 @@ class CoursesPage extends StatefulWidget {
 
 class _CoursesPageState extends State<CoursesPage> {
   late final OnBoardingPagesBloc bloc;
+  final scrollController = ScrollController();
 
   @override
   void initState() {
@@ -42,34 +43,49 @@ class _CoursesPageState extends State<CoursesPage> {
   }
 
   Widget _buildContent(OnBoardingSupplements supp) {
-    return Scaffold(
-      appBar: const PageAppBar(
-          title: 'Choose Courses', subtitle: 'What would you like to learn ?'),
-      body: _buildCourses(supp),
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              PageAnimatedAppBar(
+                title: 'Choose Courses',
+                subtitle: 'What would you like to learn ?',
+                scrollController: scrollController,
+              ),
+              _buildCourses(supp),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  _buildCourses(OnBoardingSupplements supp) {
-    return ListView(
-        padding: EdgeInsets.only(bottom: 20.dh),
-        children: supp.courseTypes.map((e) {
-          final courseList =
-              supp.courseList.where((course) => course.type == e).toList();
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.dw),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 40.dh),
-                  child: AppText(e.toUpperCase(), size: 20.dw),
-                ),
-                SizedBox(height: 10.dh),
-                _buildClassesGrid(courseList, supp)
-              ],
-            ),
-          );
-        }).toList());
+  Widget _buildCourses(OnBoardingSupplements supp) {
+    return Expanded(
+      child: ListView(
+          controller: scrollController,
+          padding: EdgeInsets.only(bottom: 20.dh),
+          children: supp.courseTypes.map((e) {
+            final courseList =
+                supp.courseList.where((course) => course.type == e).toList();
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.dw),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 40.dh),
+                    child: AppText(e.toUpperCase(), size: 20.dw),
+                  ),
+                  SizedBox(height: 10.dh),
+                  _buildClassesGrid(courseList, supp)
+                ],
+              ),
+            );
+          }).toList()),
+    );
   }
 
   _buildClassesGrid(List<Course> courseList, OnBoardingSupplements supp) {
@@ -91,8 +107,10 @@ class _CoursesPageState extends State<CoursesPage> {
             borderRadius: 10.dw,
             child: Container(
                 width: double.infinity,
-                color: isSelected ? AppColors.primary : Colors.transparent,
                 padding: EdgeInsets.symmetric(horizontal: 10.dw),
+                decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primary : Colors.transparent,
+                    borderRadius: BorderRadius.all(Radius.circular(10.dw))),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -121,11 +139,10 @@ class _CoursesPageState extends State<CoursesPage> {
         courseId: course.id, gradeId: course.gradeList.first.id);
 
     if (course.levelList.isEmpty) {
-      SignUpPage.navigateTo(context);
-    } else {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (_) => LevelsPage(course.levelList)));
+      push(const SignUpPage());
+      return;
     }
+    push(LevelsPage(course.levelList));
   }
 
   Widget _buildFailed(OnBoardingSupplements supp, String message) {

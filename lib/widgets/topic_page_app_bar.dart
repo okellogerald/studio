@@ -31,10 +31,6 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
     super.initState();
   }
 
-  _handleScrollUpdates() {
-    scrollValueNotifier.value = widget.scrollController.position.pixels;
-  }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<double>(
@@ -129,5 +125,15 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
     return AppText(value,
         opacity: isSelected ? 1 : .7,
         weight: isSelected ? FontWeight.bold : FontWeight.normal);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.dispose();
+    super.dispose();
+  }
+
+  _handleScrollUpdates() {
+    scrollValueNotifier.value = widget.scrollController.position.pixels;
   }
 }

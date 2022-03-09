@@ -19,16 +19,6 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     }
   }
 
-  List<String> _getCourseTypes(List<Course> courseList) {
-    final types = <String>[];
-
-    for (Course course in courseList) {
-      if (!types.contains(course.type)) types.add(course.type);
-    }
-
-    return types;
-  }
-
   void updateAttributes(
       {String? email,
       String? password,
@@ -88,7 +78,12 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
   }
 
   void logIn() async {
+    _validateLogInDetails();
+    
     var supp = state.supplements;
+    final hasErrors = InputValidation.checkErrors(supp.errors);
+    if (hasErrors) return;
+
     emit(OnBoardingPagesState.laoding(supp, message: 'logging you in ...'));
 
     try {
@@ -146,6 +141,20 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     emit(OnBoardingPagesState.content(supp));
   }
 
+  _validateLogInDetails() {
+    var supp = state.supplements;
+    emit(OnBoardingPagesState.laoding(supp));
+
+    final errors = <String, String?>{};
+
+    errors['email'] = InputValidation.validateEmail(supp.user.email);
+    errors['password'] =
+        InputValidation.validateText(supp.password, 'Password');
+
+    supp = supp.copyWith(errors: errors);
+    emit(OnBoardingPagesState.content(supp));
+  }
+
   _validateWelcomeDetails() {
     var supp = state.supplements;
     emit(OnBoardingPagesState.laoding(supp));
@@ -155,5 +164,13 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     errors['name'] = InputValidation.validateText(supp.user.name, 'Name');
     supp = supp.copyWith(errors: errors);
     emit(OnBoardingPagesState.content(supp));
+  }
+
+  List<String> _getCourseTypes(List<Course> courseList) {
+    final types = <String>[];
+    for (Course course in courseList) {
+      if (!types.contains(course.type)) types.add(course.type);
+    }
+    return types;
   }
 }

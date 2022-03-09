@@ -26,7 +26,7 @@ class _DateSelectorState extends State<DateSelector> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(widget.title, opacity: .7),
+          AppText(widget.title, opacity: .7, size: 14.dw),
           SizedBox(height: 8.dh),
           AppTextButton(
             backgroundColor: AppColors.surface,
@@ -36,7 +36,7 @@ class _DateSelectorState extends State<DateSelector> {
               height: 40.dh,
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric( horizontal: 10.dw),
-              child: AppText(formattedDate, weight: FontWeight.bold),
+              child: AppText(formattedDate, weight: FontWeight.w500),
             ),
           ),
         ],
