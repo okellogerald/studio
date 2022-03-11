@@ -106,7 +106,7 @@ class _HomepageState extends State<Homepage> {
     final course = userData['course'];
 
     return HomepageHeader(controller,
-        title: 'Hello ' /* /*  userData['name']/* .trim() */ */ + ',' */,
+        title: 'Hello ' + userData['name'].trim() + ',',
         subtitle: '$grade - $course',
         trailing: GestureDetector(
             onTap: _navigateToProfilePage,

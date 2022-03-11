@@ -5,12 +5,13 @@ class CoursesApi {
   static Future<Map<String, dynamic>> getUserCourseOverview(
       String token) async {
     const url = root + 'home';
+    final headers = _getHeaders(token);
     final response = await http.get(Uri.parse(url), headers: headers);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
 
-    //log(result.toString());
+    log(result.toString());
     final topicList = <Topic>[];
     final values = <String, dynamic>{};
 

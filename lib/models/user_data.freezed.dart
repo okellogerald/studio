@@ -20,12 +20,12 @@ class _$UserDataTearOff {
 
   _UserData call(
       {required DateTime dateOfBirth,
-      required String email,
-      required String name,
-      required String gender,
-      required int courseId,
-      required String level,
-      required int gradeId}) {
+      String email = '',
+      String name = '',
+      String gender = '',
+      int courseId = 0,
+      String level = '',
+      int gradeId = 0}) {
     return _UserData(
       dateOfBirth: dateOfBirth,
       email: email,
@@ -193,28 +193,39 @@ class __$UserDataCopyWithImpl<$Res> extends _$UserDataCopyWithImpl<$Res>
 class _$_UserData extends _UserData {
   const _$_UserData(
       {required this.dateOfBirth,
-      required this.email,
-      required this.name,
-      required this.gender,
-      required this.courseId,
-      required this.level,
-      required this.gradeId})
+      this.email = '',
+      this.name = '',
+      this.gender = '',
+      this.courseId = 0,
+      this.level = '',
+      this.gradeId = 0})
       : super._();
 
   @override
   final DateTime dateOfBirth;
+  @JsonKey()
   @override
   final String email;
+  @JsonKey()
   @override
   final String name;
+  @JsonKey()
   @override
   final String gender;
+  @JsonKey()
   @override
   final int courseId;
+  @JsonKey()
   @override
   final String level;
+  @JsonKey()
   @override
   final int gradeId;
+
+  @override
+  String toString() {
+    return 'UserData(dateOfBirth: $dateOfBirth, email: $email, name: $name, gender: $gender, courseId: $courseId, level: $level, gradeId: $gradeId)';
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -251,12 +262,12 @@ class _$_UserData extends _UserData {
 abstract class _UserData extends UserData {
   const factory _UserData(
       {required DateTime dateOfBirth,
-      required String email,
-      required String name,
-      required String gender,
-      required int courseId,
-      required String level,
-      required int gradeId}) = _$_UserData;
+      String email,
+      String name,
+      String gender,
+      int courseId,
+      String level,
+      int gradeId}) = _$_UserData;
   const _UserData._() : super._();
 
   @override

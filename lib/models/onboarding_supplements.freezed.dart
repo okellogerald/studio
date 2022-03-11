@@ -19,13 +19,12 @@ class _$OnBoardingSupplementsTearOff {
   const _$OnBoardingSupplementsTearOff();
 
   _OnBoardingSupplements call(
-      {required String password,
-      required String confirmationPassword,
-      required Map<String, String?> errors,
+      {String password = '',
+      String confirmationPassword = '',
+      Map<String, String?> errors = const {},
       required UserData user,
-      required List<Course> courseList,
-      required List<String> courseTypes,
-      required Map<int, String> otp}) {
+      List<Course> courseList = const [],
+      List<String> courseTypes = const []}) {
     return _OnBoardingSupplements(
       password: password,
       confirmationPassword: confirmationPassword,
@@ -33,7 +32,6 @@ class _$OnBoardingSupplementsTearOff {
       user: user,
       courseList: courseList,
       courseTypes: courseTypes,
-      otp: otp,
     );
   }
 }
@@ -49,7 +47,6 @@ mixin _$OnBoardingSupplements {
   UserData get user => throw _privateConstructorUsedError;
   List<Course> get courseList => throw _privateConstructorUsedError;
   List<String> get courseTypes => throw _privateConstructorUsedError;
-  Map<int, String> get otp => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $OnBoardingSupplementsCopyWith<OnBoardingSupplements> get copyWith =>
@@ -67,8 +64,7 @@ abstract class $OnBoardingSupplementsCopyWith<$Res> {
       Map<String, String?> errors,
       UserData user,
       List<Course> courseList,
-      List<String> courseTypes,
-      Map<int, String> otp});
+      List<String> courseTypes});
 
   $UserDataCopyWith<$Res> get user;
 }
@@ -90,7 +86,6 @@ class _$OnBoardingSupplementsCopyWithImpl<$Res>
     Object? user = freezed,
     Object? courseList = freezed,
     Object? courseTypes = freezed,
-    Object? otp = freezed,
   }) {
     return _then(_value.copyWith(
       password: password == freezed
@@ -117,10 +112,6 @@ class _$OnBoardingSupplementsCopyWithImpl<$Res>
           ? _value.courseTypes
           : courseTypes // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      otp: otp == freezed
-          ? _value.otp
-          : otp // ignore: cast_nullable_to_non_nullable
-              as Map<int, String>,
     ));
   }
 
@@ -145,8 +136,7 @@ abstract class _$OnBoardingSupplementsCopyWith<$Res>
       Map<String, String?> errors,
       UserData user,
       List<Course> courseList,
-      List<String> courseTypes,
-      Map<int, String> otp});
+      List<String> courseTypes});
 
   @override
   $UserDataCopyWith<$Res> get user;
@@ -171,7 +161,6 @@ class __$OnBoardingSupplementsCopyWithImpl<$Res>
     Object? user = freezed,
     Object? courseList = freezed,
     Object? courseTypes = freezed,
-    Object? otp = freezed,
   }) {
     return _then(_OnBoardingSupplements(
       password: password == freezed
@@ -198,10 +187,6 @@ class __$OnBoardingSupplementsCopyWithImpl<$Res>
           ? _value.courseTypes
           : courseTypes // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      otp: otp == freezed
-          ? _value.otp
-          : otp // ignore: cast_nullable_to_non_nullable
-              as Map<int, String>,
     ));
   }
 }
@@ -210,32 +195,34 @@ class __$OnBoardingSupplementsCopyWithImpl<$Res>
 
 class _$_OnBoardingSupplements implements _OnBoardingSupplements {
   const _$_OnBoardingSupplements(
-      {required this.password,
-      required this.confirmationPassword,
-      required this.errors,
+      {this.password = '',
+      this.confirmationPassword = '',
+      this.errors = const {},
       required this.user,
-      required this.courseList,
-      required this.courseTypes,
-      required this.otp});
+      this.courseList = const [],
+      this.courseTypes = const []});
 
+  @JsonKey()
   @override
   final String password;
+  @JsonKey()
   @override
   final String confirmationPassword;
+  @JsonKey()
   @override
   final Map<String, String?> errors;
   @override
   final UserData user;
+  @JsonKey()
   @override
   final List<Course> courseList;
+  @JsonKey()
   @override
   final List<String> courseTypes;
-  @override
-  final Map<int, String> otp;
 
   @override
   String toString() {
-    return 'OnBoardingSupplements(password: $password, confirmationPassword: $confirmationPassword, errors: $errors, user: $user, courseList: $courseList, courseTypes: $courseTypes, otp: $otp)';
+    return 'OnBoardingSupplements(password: $password, confirmationPassword: $confirmationPassword, errors: $errors, user: $user, courseList: $courseList, courseTypes: $courseTypes)';
   }
 
   @override
@@ -251,8 +238,7 @@ class _$_OnBoardingSupplements implements _OnBoardingSupplements {
             const DeepCollectionEquality()
                 .equals(other.courseList, courseList) &&
             const DeepCollectionEquality()
-                .equals(other.courseTypes, courseTypes) &&
-            const DeepCollectionEquality().equals(other.otp, otp));
+                .equals(other.courseTypes, courseTypes));
   }
 
   @override
@@ -263,8 +249,7 @@ class _$_OnBoardingSupplements implements _OnBoardingSupplements {
       const DeepCollectionEquality().hash(errors),
       const DeepCollectionEquality().hash(user),
       const DeepCollectionEquality().hash(courseList),
-      const DeepCollectionEquality().hash(courseTypes),
-      const DeepCollectionEquality().hash(otp));
+      const DeepCollectionEquality().hash(courseTypes));
 
   @JsonKey(ignore: true)
   @override
@@ -275,13 +260,12 @@ class _$_OnBoardingSupplements implements _OnBoardingSupplements {
 
 abstract class _OnBoardingSupplements implements OnBoardingSupplements {
   const factory _OnBoardingSupplements(
-      {required String password,
-      required String confirmationPassword,
-      required Map<String, String?> errors,
+      {String password,
+      String confirmationPassword,
+      Map<String, String?> errors,
       required UserData user,
-      required List<Course> courseList,
-      required List<String> courseTypes,
-      required Map<int, String> otp}) = _$_OnBoardingSupplements;
+      List<Course> courseList,
+      List<String> courseTypes}) = _$_OnBoardingSupplements;
 
   @override
   String get password;
@@ -295,8 +279,6 @@ abstract class _OnBoardingSupplements implements OnBoardingSupplements {
   List<Course> get courseList;
   @override
   List<String> get courseTypes;
-  @override
-  Map<int, String> get otp;
   @override
   @JsonKey(ignore: true)
   _$OnBoardingSupplementsCopyWith<_OnBoardingSupplements> get copyWith =>

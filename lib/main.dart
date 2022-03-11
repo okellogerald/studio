@@ -16,8 +16,6 @@ void main() async {
 
   final _auth = FirebaseAuth.instance;
 
-  Hive.box(Constants.kUserDataBox).clear();
-
   final myApp = MultiProvider(
     providers: [
       Provider(create: (_) => OnBoardingPagesBloc(UserService(_auth))),

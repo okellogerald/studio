@@ -79,7 +79,7 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
 
   void logIn() async {
     _validateLogInDetails();
-    
+
     var supp = state.supplements;
     final hasErrors = InputValidation.checkErrors(supp.errors);
     if (hasErrors) return;
