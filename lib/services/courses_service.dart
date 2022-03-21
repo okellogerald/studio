@@ -17,30 +17,19 @@ class CoursesService {
     if (_token != null) token = _token;
   }
 
-  Future<Map<String, dynamic>> getHomeContent() async {
+  FutureMap getHomeContent() async {
     await refreshToken();
     return await CoursesApi.getUserCourseOverview(token)
-        .catchError((e) => _handleError(e));
+        .catchError(handleError);
   }
 
-  Future<Map<String, dynamic>> getTopic(String id) async {
+  FutureMap getTopic(String id) async {
     await refreshToken();
-    return await CoursesApi.getTopic(id, token)
-        .catchError((e) => _handleError(e));
+    return await CoursesApi.getTopic(id, token).catchError(handleError);
   }
 
-  Future<Map<String, dynamic>> getProfileData() async {
+  FutureMap getProfileData() async {
     await refreshToken();
-    return await CoursesApi.getProfile(token)
-        .catchError((e) => _handleError(e));
-  }
-
-  _handleError(e) {
-    if (e is ApiError) throw e;
-    if (e is FirebaseAuthException) throw ApiError.firebaseAuth(e.message);
-    if (e is SocketException) throw ApiError.internet();
-    if (e is TimeoutException) throw ApiError.timeout();
-    log(e.toString());
-    throw ApiError.unknown();
+    return await CoursesApi.getProfile(token).catchError(handleError);
   }
 }

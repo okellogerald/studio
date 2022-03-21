@@ -1,17 +1,19 @@
 import '../source.dart';
 import 'package:http/http.dart' as http;
 
+const timeLimit = Duration(seconds: 5);
+
 class CoursesApi {
   static Future<Map<String, dynamic>> getUserCourseOverview(
       String token) async {
     const url = root + 'home';
     final headers = _getHeaders(token);
-    final response = await http.get(Uri.parse(url), headers: headers);
+    final response =
+        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
 
-    log(result.toString());
     final topicList = <Topic>[];
     final values = <String, dynamic>{};
 
@@ -34,7 +36,8 @@ class CoursesApi {
   static Future<Map<String, dynamic>> getTopic(String id, String token) async {
     final url = root + 'topic/$id';
     final headers = _getHeaders(token);
-    final response = await http.get(Uri.parse(url), headers: headers);
+    final response =
+        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
@@ -60,7 +63,8 @@ class CoursesApi {
   static Future<Lesson> getLesson(String id, String token) async {
     final url = root + 'lesson/$id';
     final headers = _getHeaders(token);
-    final response = await http.get(Uri.parse(url), headers: headers);
+    final response =
+        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
@@ -72,7 +76,8 @@ class CoursesApi {
   static Future<Map<String, dynamic>> getProfile(String token) async {
     const url = root + 'profile';
     final headers = _getHeaders(token);
-    final response = await http.get(Uri.parse(url), headers: headers);
+    final response =
+        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
@@ -86,8 +91,9 @@ class CoursesApi {
     final url = root + 'lesson/$lessonId/status';
     final data = json.encode({'completionStatus': newStatus});
     final headers = _getHeaders(token);
-    final response =
-        await http.post(Uri.parse(url), headers: headers, body: data);
+    final response = await http
+        .post(Uri.parse(url), headers: headers, body: data)
+        .timeout(timeLimit);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
@@ -99,7 +105,8 @@ class CoursesApi {
   static Future<GeneralInfo> getGeneralInfo(String token) async {
     const url = root + 'home';
     final headers = _getHeaders(token);
-    final response = await http.get(Uri.parse(url), headers: headers);
+    final response =
+        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);

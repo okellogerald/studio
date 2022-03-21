@@ -1,6 +1,8 @@
 class InputValidation {
-  static String? validateText(String value, String errorId) {
-    if (value.trim().isEmpty) return '$errorId can\'t be empty';
+  static String? validateText(String? value, String errorId) {
+    if (value == null || value.trim().isEmpty) {
+      return '$errorId can\'t be empty';
+    }
     return null;
   }
 

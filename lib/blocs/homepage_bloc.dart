@@ -16,10 +16,7 @@ class HomepageBloc extends Cubit<HomepageState> {
 
     try {
       final values = await coursesService.getHomeContent();
-      log(values.toString());
       final userData = userService.getUserData;
-      log('userdata');
-      log(userData.toString());
       supp = supp.copyWith(
           lesson: values['lessons'],
           topicList: values['topics'],

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class OnBoardingApi {
   static Future<List<Course>> getAllCategories() async {
     const url = root + 'signup/';
-    final response = await http.get(Uri.parse(url));
+    final response = await http.get(Uri.parse(url)).timeout(timeLimit);
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
@@ -22,7 +22,7 @@ class OnBoardingApi {
       UserData userData, String password, String token) async {
     const url = root + 'signup/';
     final body = {
-      'gender': userData.gender.toLowerCase(),
+      'gender': userData.gender!.toLowerCase(),
       'dob': userData.dateOfBirth.millisecondsSinceEpoch,
       'name': userData.name,
       'level': userData.level,
@@ -31,12 +31,11 @@ class OnBoardingApi {
     };
 
     final headers = _getHeaders(token);
-    final response = await http.post(Uri.parse(url),
-        headers: headers, body: json.encode(body));
+    final response = await http
+        .post(Uri.parse(url), headers: headers, body: json.encode(body))
+        .timeout(timeLimit);
     final result = json.decode(response.body);
-
     // log(result.toString());
-
     _handleStatusCodes(result['code']);
     return result;
   }
@@ -44,7 +43,8 @@ class OnBoardingApi {
   static Future<Map<String, dynamic>> logInUser(String token) async {
     const url = root + 'login/';
     final headers = _getHeaders(token);
-    final response = await http.post(Uri.parse(url), headers: headers);
+    final response =
+        await http.post(Uri.parse(url), headers: headers).timeout(timeLimit);
 
     final result = json.decode(response.body);
     // log(result.toString());

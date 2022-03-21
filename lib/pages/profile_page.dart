@@ -103,28 +103,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  _buildButton(String title, {VoidCallback? onPressed, bool isLogOut = false}) {
-    return AppMaterialButton(
-        onPressed: onPressed ?? () {},
-        isFilled: false,
-        height: 60.dh,
-        child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15.dw),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppText(title,
-                    color: isLogOut ? AppColors.error : AppColors.onBackground,
-                    weight: isLogOut ? FontWeight.bold : FontWeight.normal),
-                isLogOut
-                    ? Container()
-                    : Icon(Icons.chevron_right,
-                        size: 20.dw,
-                        color: AppColors.secondary.withOpacity(.85))
-              ],
-            )));
-  }
-
   _buildAccountDetails() {
     return _buildListView([
       _buildButton('Change Courses & Grade'),
@@ -138,5 +116,27 @@ class _ProfilePageState extends State<ProfilePage> {
       _buildButton('About Us'),
       _buildButton('Log Out', onPressed: bloc.logOut, isLogOut: true),
     ]);
+  }
+
+  _buildButton(String title, {VoidCallback? onPressed, bool isLogOut = false}) {
+    return AppMaterialButton(
+        onPressed: onPressed ?? () {},
+        isFilled: false,
+        height: 60.dh,
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.dw),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppText(title,
+                    color: isLogOut ? AppColors.error : AppColors.onBackground,
+                    weight: FontWeight.normal),
+                isLogOut
+                    ? Container()
+                    : Icon(Icons.chevron_right,
+                        size: 20.dw,
+                        color: AppColors.secondary.withOpacity(.85))
+              ],
+            )));
   }
 }

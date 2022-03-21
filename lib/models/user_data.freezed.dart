@@ -22,7 +22,7 @@ class _$UserDataTearOff {
       {required DateTime dateOfBirth,
       String email = '',
       String name = '',
-      String gender = '',
+      String? gender,
       int courseId = 0,
       String level = '',
       int gradeId = 0}) {
@@ -46,7 +46,7 @@ mixin _$UserData {
   DateTime get dateOfBirth => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get gender => throw _privateConstructorUsedError;
+  String? get gender => throw _privateConstructorUsedError;
   int get courseId => throw _privateConstructorUsedError;
   String get level => throw _privateConstructorUsedError;
   int get gradeId => throw _privateConstructorUsedError;
@@ -64,7 +64,7 @@ abstract class $UserDataCopyWith<$Res> {
       {DateTime dateOfBirth,
       String email,
       String name,
-      String gender,
+      String? gender,
       int courseId,
       String level,
       int gradeId});
@@ -104,7 +104,7 @@ class _$UserDataCopyWithImpl<$Res> implements $UserDataCopyWith<$Res> {
       gender: gender == freezed
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       courseId: courseId == freezed
           ? _value.courseId
           : courseId // ignore: cast_nullable_to_non_nullable
@@ -130,7 +130,7 @@ abstract class _$UserDataCopyWith<$Res> implements $UserDataCopyWith<$Res> {
       {DateTime dateOfBirth,
       String email,
       String name,
-      String gender,
+      String? gender,
       int courseId,
       String level,
       int gradeId});
@@ -171,7 +171,7 @@ class __$UserDataCopyWithImpl<$Res> extends _$UserDataCopyWithImpl<$Res>
       gender: gender == freezed
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       courseId: courseId == freezed
           ? _value.courseId
           : courseId // ignore: cast_nullable_to_non_nullable
@@ -195,7 +195,7 @@ class _$_UserData extends _UserData {
       {required this.dateOfBirth,
       this.email = '',
       this.name = '',
-      this.gender = '',
+      this.gender,
       this.courseId = 0,
       this.level = '',
       this.gradeId = 0})
@@ -209,9 +209,8 @@ class _$_UserData extends _UserData {
   @JsonKey()
   @override
   final String name;
-  @JsonKey()
   @override
-  final String gender;
+  final String? gender;
   @JsonKey()
   @override
   final int courseId;
@@ -264,7 +263,7 @@ abstract class _UserData extends UserData {
       {required DateTime dateOfBirth,
       String email,
       String name,
-      String gender,
+      String? gender,
       int courseId,
       String level,
       int gradeId}) = _$_UserData;
@@ -277,7 +276,7 @@ abstract class _UserData extends UserData {
   @override
   String get name;
   @override
-  String get gender;
+  String? get gender;
   @override
   int get courseId;
   @override

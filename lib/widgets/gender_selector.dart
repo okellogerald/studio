@@ -6,11 +6,12 @@ class GenderSelector extends StatefulWidget {
     required this.title,
     required this.onGenderSelected,
     required this.selectedGender,
+    required this.error,
   }) : super(key: key);
 
   final String title;
   final ValueChanged<String> onGenderSelected;
-  final String? selectedGender;
+  final String? selectedGender, error;
 
   @override
   State<GenderSelector> createState() => _GenderSelectorState();
@@ -39,6 +40,7 @@ class _GenderSelectorState extends State<GenderSelector> {
                   weight: FontWeight.w500),
             ),
           ),
+          _buildError()
         ],
       ),
     );
@@ -89,5 +91,20 @@ class _GenderSelectorState extends State<GenderSelector> {
           child: AppText(option),
           width: double.infinity,
         ));
+  }
+
+  _buildError() {
+    final hasError = widget.error != null;
+
+    return hasError
+        ? Padding(
+            padding: EdgeInsets.only(top: 8.dw),
+            child: AppText(
+              widget.error!,
+              color: AppColors.error,
+              size: 14.dw,
+            ),
+          )
+        : Container();
   }
 }

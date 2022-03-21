@@ -81,7 +81,8 @@ class _WelcomePageState extends State<WelcomePage> {
           GenderSelector(
               title: 'Your Gender',
               onGenderSelected: (_) => bloc.updateAttributes(gender: _),
-              selectedGender: supp.user.gender),
+              selectedGender: supp.user.gender,
+              error: supp.errors['gender']),
         ],
       ),
     );

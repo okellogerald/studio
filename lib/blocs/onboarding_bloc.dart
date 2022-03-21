@@ -162,6 +162,7 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     final errors = <String, String?>{};
 
     errors['name'] = InputValidation.validateText(supp.user.name, 'Name');
+    errors['gender'] = InputValidation.validateText(supp.user.gender, 'Gender');
     supp = supp.copyWith(errors: errors);
     emit(OnBoardingPagesState.content(supp));
   }

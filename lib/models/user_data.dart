@@ -10,7 +10,7 @@ class UserData with _$UserData {
       {required DateTime dateOfBirth,
       @Default('') String email,
       @Default('') String name,
-      @Default('') String gender,
+      String? gender,
       @Default(0) int courseId,
       @Default('') String level,
       @Default(0) int gradeId}) = _UserData;
