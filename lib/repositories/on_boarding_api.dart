@@ -1,3 +1,5 @@
+import 'package:silla_studio/secret.dart';
+
 import '../source.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,9 +47,8 @@ class OnBoardingApi {
     final headers = _getHeaders(token);
     final response =
         await http.post(Uri.parse(url), headers: headers).timeout(timeLimit);
-
     final result = json.decode(response.body);
-    // log(result.toString());
+     log(result.toString());
     _handleStatusCodes(result['code']);
     return result;
   }

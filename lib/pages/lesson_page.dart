@@ -1,4 +1,5 @@
 import '../source.dart';
+import 'video_page.dart';
 
 class LessonPage extends StatefulWidget {
   const LessonPage(this.lessonId, this.lessonsIdList, {Key? key})
@@ -44,7 +45,7 @@ class _LessonPageState extends State<LessonPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildVideo(),
+          _buildVideoImage(),
           _buildVideoDescription(supp.lesson),
         ],
       ),
@@ -52,7 +53,20 @@ class _LessonPageState extends State<LessonPage> {
     );
   }
 
-  _buildVideo() => Container(height: 150.dh, color: AppColors.primaryVariant);
+  _buildVideoImage() {
+    return Container(
+      height: 240.dh,
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: NetworkImage(Constants.kDefaultImage), fit: BoxFit.fill)),
+      child: AppTextButton(
+          text: 'Play',
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const VideoPage()));
+          }),
+    );
+  }
 
   _buildVideoDescription(Lesson lesson) {
     return Column(
