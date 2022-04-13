@@ -2,7 +2,9 @@ import '../source.dart';
 
 class AppLoadingIndicator extends StatelessWidget {
   final String? message;
-  const AppLoadingIndicator(this.message, {key}) : super(key: key);
+  final Color? textColor;
+  const AppLoadingIndicator(this.message, {this.textColor, key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class AppLoadingIndicator extends StatelessWidget {
                 children: [
                   const CircularProgressIndicator(),
                   SizedBox(height: 20.dh),
-                  AppText(message!)
+                  AppText(message!, color: textColor ?? AppColors.onBackground)
                 ],
               )
             : const CircularProgressIndicator());

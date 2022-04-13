@@ -105,12 +105,14 @@ class _AppTextButtonState extends State<AppTextButton>
   }
 
   _text() {
-    return AppText(
-      widget.text ?? 'Click Me',
-      color: widget.textColor,
-      alignment: TextAlign.center,
-      weight: FontWeight.bold,
-    );
+    return widget.textStyle != null
+        ? Text(widget.text ?? 'click me', style: widget.textStyle)
+        : AppText(
+            widget.text ?? 'Click Me',
+            color: widget.textColor,
+            alignment: TextAlign.center,
+            weight: FontWeight.bold,
+          );
   }
 
   @override

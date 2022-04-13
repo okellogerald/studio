@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../manager/video_page/video_controls_actions_handler.dart';
 import '../source.dart';
 
 class ScreenSizeConfig {
   static Size _designSize = const Size(0, 0);
   static Size _screenSize = const Size(0, 0);
 
-  static void init(Size designSize, Size screenSize) {
+  static void init(Size designSize, Size screenSize, WidgetRef ref,
+      Orientation orientation) {
     _designSize = designSize;
     _screenSize = screenSize;
+    initOrientationMode(ref, orientation);
   }
 
   //s for screen

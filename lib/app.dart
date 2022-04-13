@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenSizeInit(
-      designSize: const Size(411.4, 866.3),
-      child: ProviderScope(
+    return ProviderScope(
+      child: ScreenSizeInit(
+        designSize: const Size(411.4, 866.3),
         child: MaterialApp(
           title: 'Siila',
           navigatorKey: navigatorKey,

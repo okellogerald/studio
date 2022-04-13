@@ -31,6 +31,27 @@ enum QualityLabel {
   unknown
 }
 
+extension QualityLabelExtension on QualityLabel {
+  String get labelName {
+    switch (this) {
+      case QualityLabel.label180:
+        return '180p';
+      case QualityLabel.label270:
+        return '270p';
+      case QualityLabel.label360:
+        return '360p';
+      case QualityLabel.label540:
+        return '540p';
+      case QualityLabel.label720:
+        return '720p';
+      case QualityLabel.label1080:
+        return '1080p';
+      case QualityLabel.unknown:
+        return '';
+    }
+  }
+}
+
 QualityLabel _getLabel(String label) {
   final index = labels.indexOf(label);
   if (index == -1) return QualityLabel.unknown;

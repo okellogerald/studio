@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'video.dart';
 
 class VideoDetails {

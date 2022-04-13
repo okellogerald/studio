@@ -13,7 +13,7 @@ class AppSlider extends StatefulWidget {
   final int currentValue;
   final int bufferedValue;
   final int duration;
-  final ValueChanged<double> onValueChanged;
+  final ValueChanged<int> onValueChanged;
   final double sliderWidth;
 
   @override
@@ -43,7 +43,7 @@ class _AppSliderState extends State<AppSlider> {
         final dx = d.localPosition.dx;
         setState(() {
           xTapped = dx < 0 ? 0 : dx;
-          widget.onValueChanged(reverseFrom(xTapped));
+          widget.onValueChanged(reverseFrom(xTapped).toInt());
         });
       },
       onHorizontalDragUpdate: (d) {
@@ -59,7 +59,7 @@ class _AppSliderState extends State<AppSlider> {
         });
       },
       onHorizontalDragEnd: (d) {
-        widget.onValueChanged(reverseFrom(xTapped));
+        widget.onValueChanged(reverseFrom(xTapped).toInt());
         shouldUseTappedValue = false;
       },
       child: SizedBox(

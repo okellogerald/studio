@@ -1,12 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 import 'models/video.dart';
 
-enum OrientationMode { portrait, landscape }
-
 enum PlayerState { playing, paused, end }
 
-extension PlayerStateExtensio on PlayerState {
+extension PlayerStateExtension on PlayerState {
   bool get isPlaying => this == PlayerState.playing;
   bool get isPaused => this == PlayerState.paused;
   bool get isEnd => this == PlayerState.end;
@@ -20,8 +19,10 @@ final qualityLabelProvider =
 
 final videosProvider = StateProvider<List<Video>>((ref) => []);
 
-final orintationModeProvider =
-    StateProvider<OrientationMode>((ref) => OrientationMode.portrait);
+final orientationModeProvider =
+    StateProvider<Orientation>((ref) => Orientation.portrait);
 
 final playerStateProvider =
     StateProvider<PlayerState>((ref) => PlayerState.playing);
+
+final positionProvider = StateProvider<int>((ref) => 0);
