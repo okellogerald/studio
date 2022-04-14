@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../source.dart';
 
 class LessonTile extends StatelessWidget {
@@ -16,7 +18,7 @@ class LessonTile extends StatelessWidget {
     return AppMaterialButton(
       onPressed: lesson.isPaid
           ? () {}
-          : () => push( LessonPage(lesson.id, lessonsIdList)),
+          : () => push(LessonPage(lesson.id, lessonsIdList)),
       backgroundColor: AppColors.surface,
       child: Container(
         height: 100.dh,
@@ -67,7 +69,7 @@ class LessonTile extends StatelessWidget {
       children: [
         AppText(lesson.title, color: AppColors.primaryVariant),
         SizedBox(height: 5.dh),
-        AppText(subtitle, opacity: .7),
+        AppText(subtitle, opacity: .7, size: 14.dw),
       ],
     );
   }
@@ -77,8 +79,9 @@ class LessonTile extends StatelessWidget {
     return Expanded(
         child: Align(
             alignment: Alignment.centerRight,
-            child: Icon(isPaid ? EvaIcons.lock : EvaIcons.chevronRight,
-                size: 24.dw,
-                color: isPaid ? AppColors.primary : AppColors.secondary)));
+            child: Icon(
+                isPaid ? FontAwesomeIcons.lock : FontAwesomeIcons.angleRight,
+                size: 20.dw,
+                color: AppColors.secondary.withOpacity(1))));
   }
 }

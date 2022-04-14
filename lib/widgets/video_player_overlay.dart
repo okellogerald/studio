@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:silla_studio/manager/video_page/providers.dart';
+import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/source.dart';
 import 'package:silla_studio/widgets/video_action_controls.dart';
-import '../manager/video_page/models/video.dart';
-import '../manager/video_page/video_controls_actions_handler.dart';
+
+import '../manager/video/models/video.dart';
+import '../manager/video/video_controls_actions_handler.dart';
 
 class VideoPlayerOverlay extends ConsumerStatefulWidget {
   const VideoPlayerOverlay(this.title, {Key? key}) : super(key: key);
@@ -38,19 +39,24 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: animation,
-        child: _buildGestureHandler(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-              _buildTitle(),
-              _buildPlayPauseButton(),
-              VideoActionControls(onLabelButtonTap: _handleLabelButtonTap),
-            ])),
-        builder: (context, child) {
-          return animation.isCompleted ? _buildGestureHandler() : child!;
-        });
+    return WillPopScope(
+      onWillPop: () async {
+        overlayEntry.remove();
+        return true;
+      },
+      child: AnimatedBuilder(
+          animation: animation,
+          child: _buildGestureHandler(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                _buildTitle(),
+                VideoActionControls(onLabelButtonTap: _handleLabelButtonTap),
+              ])),
+          builder: (context, child) {
+            return animation.isCompleted ? _buildGestureHandler() : child!;
+          }),
+    );
   }
 
   Widget _buildTitle() {
@@ -59,11 +65,14 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
         ? Container(
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 15.dw, vertical: 10.dh),
-            color: Colors.black,
+            color: AppColors.secondary,
             child: Row(
               children: [
                 AppIconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      handleVideoControlsActions(
+                          ref, VideoControlAction.changeOrientation);
+                    },
                     icon: FontAwesomeIcons.angleLeft,
                     margin: EdgeInsets.only(right: 15.dw),
                     iconThemeData: IconThemeData(
@@ -85,39 +94,12 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
             child: child));
   }
 
-  Widget _buildPlayPauseButton() {
-    final playerState = ref.watch(playerStateProvider);
-    return Expanded(
-      child: Container(
-        alignment: Alignment.center,
-        child: AppIconButton(
-          onPressed: () => _handlePlayPauseButtonTap(playerState),
-          iconThemeData:
-              IconThemeData(size: 70.dw, color: AppColors.onSecondary),
-          icon: playerState.isPlaying
-              ? EvaIcons.pauseCircleOutline
-              : EvaIcons.playCircleOutline,
-        ),
-      ),
-    );
-  }
-
   void _handleOnTapUp() {
     controller.forward();
     handleStatusBarVisibility(ref);
   }
 
   void _handleOnTapDown() => controller.reset();
-
-  void _handlePlayPauseButtonTap(PlayerState playerState) {
-    if (playerState.isPlaying) {
-      handleVideoControlsActions(ref, VideoControlAction.pause);
-    } else if (playerState.isPaused) {
-      handleVideoControlsActions(ref, VideoControlAction.resume);
-    } else {
-      handleVideoControlsActions(ref, VideoControlAction.replay);
-    }
-  }
 
   _handleLabelButtonTap(Offset position) {
     tappedPositionNotifier.value = position;
@@ -126,6 +108,10 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
   }
 
   labelsOverlayEntry() {
+    final orientation = ref.watch(orientationModeProvider);
+    final isPortrait = orientation == Orientation.portrait;
+    log(isPortrait.toString());
+
     return OverlayEntry(
         builder: (_) => GestureDetector(
               onTap: () {
@@ -138,9 +124,10 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
                     ValueListenableBuilder<Offset>(
                         valueListenable: tappedPositionNotifier,
                         builder: (context, tappedPosition, snapshot) {
+                          final leftOffset = isPortrait ? 35.dw : 350.dh;
                           return Positioned(
-                            top: tappedPosition.dy - 60.dh,
-                            right: tappedPosition.dx - 250.dw,
+                            top: tappedPosition.dy - 65.dh,
+                            left: leftOffset,
                             child: _buildLabelsListView(),
                           );
                         })
@@ -183,5 +170,11 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
                 );
               }),
         ));
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

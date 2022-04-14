@@ -14,23 +14,19 @@ class HomepageBloc extends Cubit<HomepageState> {
     var supp = state.supplements;
     emit(HomepageState.loading(supp, isUpdatingContent: isUpdatingContent));
 
-    log('in here');
-
     try {
       final values = await coursesService.getHomeContent();
       final userData = userService.getUserData;
-      log('user data');
-      log(userData.toString());
       supp = supp.copyWith(
           lesson: values['lessons'],
           topicList: values['topics'],
           userData: userData,
           generalInfo: values['generalInfo']);
-
       emit(HomepageState.content(supp));
     } on ApiError catch (_) {
       final error = isUpdatingContent ? 'Failed to update content' : _.message;
-      emit(HomepageState.failed(supp, error, showOnScreen: isUpdatingContent));
+      emit(HomepageState.failed(supp, error,
+          showOnScreen: !isUpdatingContent ? true : false));
     }
   }
 

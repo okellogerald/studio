@@ -12,12 +12,7 @@ class CoursesApi {
     final headers = _getHeaders(token);
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
-    log(response.body.toString());
-
     final result = json.decode(response.body);
-
-    log(result.toString());
-
     _handleStatusCodes(result['code']);
 
     final topicList = <Topic>[];
@@ -45,10 +40,8 @@ class CoursesApi {
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-
     _handleStatusCodes(result['code']);
 
-    //log(result.toString());
     final values = <String, List>{};
     final topicList = <Topic>[];
     final lessonList = <Lesson>[];

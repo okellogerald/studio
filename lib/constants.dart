@@ -1,5 +1,5 @@
 class Constants {
-  static const kFontFam = 'gopher';
+  static const kFontFam = 'stratos';
   static const kUserDataBox = 'user_data_box';
   static const kUserData = 'user_data';
 
@@ -59,7 +59,7 @@ var jsonVideoDetails = <String, dynamic>{
           "type": "image/jpeg"
         }
       ],
-      "duration": 605,
+      "duration": 6054,
       "pubdate": 1648544761,
       "description": "",
       "sources": [
@@ -89,8 +89,8 @@ var jsonVideoDetails = <String, dynamic>{
         },
         {
           "file":
-              "https://cdn.jwplayer.com/videos/RUZ303CO-ZHNGpxYd.mp4" /* Constants
-              .video */
+              /* "https://cdn.jwplayer.com/videos/RUZ303CO-ZHNGpxYd.mp4" */  Constants
+              .video 
           ,
           "type": "video/mp4",
           "height": 720,

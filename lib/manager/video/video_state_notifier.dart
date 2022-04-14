@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/manager/video_page/providers.dart';
-import 'package:silla_studio/manager/video_page/video_controls_actions_handler.dart';
+import 'package:silla_studio/manager/video/providers.dart';
+import 'package:silla_studio/manager/video/video_controls_actions_handler.dart';
 import 'package:video_player/video_player.dart';
+
 import 'models/video.dart';
 import 'models/video_state.dart';
 
@@ -42,7 +43,7 @@ class VideoStateNotifier extends StateNotifier<VideoState> {
     await controller.pause();
 
     final videos = ref.read(videosProvider);
-    final index = videos.indexWhere((e) => e.label == currentLabel);
+    final index = videos.indexWhere((e) => e.label == label);
     final video = videos[index];
     final newController = VideoPlayerController.network(video.url);
     try {

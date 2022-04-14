@@ -26,7 +26,7 @@ class AppText extends StatelessWidget {
             TextStyle(
               fontFamily: Constants.kFontFam,
               fontWeight: weight ?? FontWeight.w500,
-              fontSize: size ?? 16.dw,
+              fontSize: size ?? 15.dw,
               color:
                   (color ?? AppColors.onBackground).withOpacity(opacity ?? 1),
             ));

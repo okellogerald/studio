@@ -14,7 +14,6 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   late final OnBoardingPagesBloc bloc;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -25,17 +24,16 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
           bloc: bloc,
-          listener: (_, state) {
+          listener: (context, state) {
             final isSuccess =
                 state.maybeWhen(success: (_) => true, orElse: () => false);
             if (isSuccess) pushAndRemoveUntil(const Homepage());
 
             final error = state.maybeWhen(
                 failed: (_, message) => message, orElse: () => null);
-            if (error != null) _showSnackbar(error);
+            if (error != null) showSnackbar(error, context: context);
           },
           builder: (_, state) {
             return state.when(
@@ -107,8 +105,4 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  _showSnackbar(String message) {
-    final _context = _scaffoldKey.currentContext!;
-    showSnackbar(_context, message);
-  }
 }

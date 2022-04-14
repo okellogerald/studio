@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/manager/video_page/providers.dart';
-import 'package:silla_studio/manager/video_page/video_state_notifier.dart';
+import 'package:silla_studio/manager/video/providers.dart';
+import 'package:silla_studio/manager/video/video_state_notifier.dart';
 import 'package:video_player/video_player.dart';
 import '../../source.dart';
 import 'models/video.dart';
@@ -92,6 +92,10 @@ void initOrientationMode(WidgetRef ref, Orientation orientation) {
 void handleStatusBarVisibility(WidgetRef ref) {
   final orientation = ref.read(orientationModeProvider);
   if (orientation == Orientation.landscape) _handleLandscapeOrientation();
+}
+
+void handleVideoControllerOnPop(WidgetRef ref) {
+  ref.refresh(videoControllerProvider);
 }
 
 _handleLandscapeOrientation() =>

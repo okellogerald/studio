@@ -23,24 +23,26 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-        bloc: bloc,
-        listener: (_, state) {
-          final isSignedIn =
-              state.maybeWhen(success: (_) => true, orElse: () => false);
-          if (isSignedIn) push(const LogInPage());
+    return Scaffold(
+      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
+          bloc: bloc,
+          listener: (context, state) {
+            final isSignedIn =
+                state.maybeWhen(success: (_) => true, orElse: () => false);
+            if (isSignedIn) push(const LogInPage());
 
-          final errorMessage = state.maybeWhen(
-              failed: (_, message) => message, orElse: () => null);
-          if (errorMessage != null) showSnackbar(context, errorMessage);
-        },
-        builder: (_, state) {
-          return state.when(
-              laoding: _buildLoading,
-              content: _buildContent,
-              success: _buildContent,
-              failed: (s, _) => _buildContent(s));
-        });
+            final error = state.maybeWhen(
+                failed: (_, message) => message, orElse: () => null);
+            if (error != null) showSnackbar(error, context: context);
+          },
+          builder: (_, state) {
+            return state.when(
+                laoding: _buildLoading,
+                content: _buildContent,
+                success: _buildContent,
+                failed: (s, _) => _buildContent(s));
+          }),
+    );
   }
 
   Widget _buildLoading(OnBoardingSupplements supp, String? message) {

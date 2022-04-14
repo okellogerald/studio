@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:silla_studio/manager/video_page/models/video.dart';
-import 'package:silla_studio/pages/video_page.dart';
-import '../manager/video_page/providers.dart';
-import '../manager/video_page/video_controls_actions_handler.dart';
+import 'package:silla_studio/manager/video/models/video.dart';
+
+import '../manager/video/providers.dart';
+import '../manager/video/video_controls_actions_handler.dart';
 import '../source.dart';
 import '../utils/utils.dart';
 import 'app_slider.dart';
@@ -27,7 +27,7 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
     final size = ref.watch(videoSizeConfigsProvider);
     return SizedBox(
         width: size.width,
-        height: 50.dh,
+        height: 55.dh,
         child: Stack(alignment: Alignment.topCenter, children: [
           _buildControls(),
           _buildSliderLine(),
@@ -39,7 +39,7 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
     return Positioned(
         top: 6.dh,
         child: Container(
-            height: 50.dh,
+            height: 55.dh,
             width: size.width,
             padding: EdgeInsets.symmetric(horizontal: 10.dw),
             alignment: Alignment.center,
@@ -47,13 +47,14 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                _buildSliderLabels(),
+                _buildPlayPauseButton(),
+                _buildPositionLabels(),
                 _buildOtherVideoControls(),
               ])
             ])));
   }
 
-  _buildSliderLabels() {
+  _buildPositionLabels() {
     final duration = ref.watch(videoControllerProvider).value.duration;
     final position = ref.watch(positionProvider);
     final formattedDuration = Utils.convertFrom(duration.inMilliseconds, true);
@@ -111,5 +112,26 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
           final position = renderBox.localToGlobal(Offset.zero);
           widget.onLabelButtonTap(position);
         });
+  }
+
+  Widget _buildPlayPauseButton() {
+    final playerState = ref.watch(playerStateProvider);
+    return AppIconButton(
+        onPressed: () => _handlePlayPauseButtonTap(playerState),
+        margin: EdgeInsets.only(right: 15.dw),
+        iconThemeData: IconThemeData(size: 25.dw, color: AppColors.onSecondary),
+        icon: playerState.isPlaying
+            ? FontAwesomeIcons.pause
+            : FontAwesomeIcons.play);
+  }
+
+  void _handlePlayPauseButtonTap(PlayerState playerState) {
+    if (playerState.isPlaying) {
+      handleVideoControlsActions(ref, VideoControlAction.pause);
+    } else if (playerState.isPaused) {
+      handleVideoControlsActions(ref, VideoControlAction.resume);
+    } else {
+      handleVideoControlsActions(ref, VideoControlAction.replay);
+    }
   }
 }

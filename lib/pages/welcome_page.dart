@@ -10,7 +10,6 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   late final OnBoardingPagesBloc bloc;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -31,10 +30,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
   _buildBody() {
     return Scaffold(
-      key: _scaffoldKey,
       body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
           bloc: bloc,
-          listener: (_, state) {
+          listener: (context, state) {
             final isSuccess =
                 state.maybeWhen(success: (_) => true, orElse: () => false);
 
@@ -42,7 +40,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
             final error = state.maybeWhen(
                 failed: (_, message) => message, orElse: () => null);
-            if (error != null) _showSnackbar(error);
+            if (error != null) showSnackbar(error, context: context);
           },
           builder: (_, state) {
             return state.when(
@@ -98,10 +96,5 @@ class _WelcomePageState extends State<WelcomePage> {
       textColor: AppColors.onPrimary,
       borderRadius: 30.dw,
     );
-  }
-
-  _showSnackbar(String message) {
-    final _context = _scaffoldKey.currentContext!;
-    showSnackbar(_context, message);
   }
 }

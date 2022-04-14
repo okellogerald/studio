@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../source.dart';
 
 class TopicTile extends StatelessWidget {
@@ -26,11 +28,9 @@ class TopicTile extends StatelessWidget {
             Expanded(
                 child: Align(
                     alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.chevron_right,
-                      size: 20.dw,
-                      color: AppColors.secondary.withOpacity(.7),
-                    ))),
+                    child: Icon(FontAwesomeIcons.angleRight,
+                        size: 20.dw,
+                        color: AppColors.secondary.withOpacity(.6)))),
           ],
         ),
       ),
@@ -52,7 +52,7 @@ class TopicTile extends StatelessWidget {
       children: [
         AppText(topic.title, color: AppColors.primaryVariant),
         SizedBox(height: 8.dh),
-        AppText(subtitle, opacity: .7),
+        AppText(subtitle, opacity: .7, size: 14.dw),
       ],
     );
   }

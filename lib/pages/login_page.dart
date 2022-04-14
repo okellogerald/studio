@@ -9,7 +9,7 @@ class LogInPage extends StatefulWidget {
 
 class _LogInPageState extends State<LogInPage> {
   late final OnBoardingPagesBloc bloc;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _LogInPageState extends State<LogInPage> {
 
           final error = state.maybeWhen(
               failed: (_, message) => message, orElse: () => null);
-          if (error != null) _showSnackbar(error);
+          if (error != null) showSnackbar(error, key: scaffoldKey);
         },
         builder: (_, state) {
           return state.when(
@@ -54,6 +54,7 @@ class _LogInPageState extends State<LogInPage> {
 
   Widget _buildContent(OnBoardingSupplements supp) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: const PageAppBar(title: 'Welcome back to Siila !'),
       body: Padding(
         padding: EdgeInsets.only(top: 40.dh),
@@ -114,10 +115,5 @@ class _LogInPageState extends State<LogInPage> {
         margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),
       ),
     );
-  }
-
-  _showSnackbar(String message) {
-    final _context = _scaffoldKey.currentContext!;
-    showSnackbar(_context, message);
   }
 }

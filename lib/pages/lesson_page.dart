@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
-import 'package:silla_studio/manager/video_page/providers.dart';
+import 'package:silla_studio/manager/video/providers.dart';
+
+import '../manager/video/providers.dart';
 import '../source.dart' hide Consumer;
-import 'video_page.dart';
+import '../widgets/lesson_video_player.dart';
 
 class LessonPage extends StatefulWidget {
   const LessonPage(this.lessonId, this.lessonsIdList, {Key? key})
@@ -46,7 +48,7 @@ class _LessonPageState extends State<LessonPage> {
       final orientation = ref.watch(orientationModeProvider);
       final isLandscape = orientation == Orientation.landscape;
       return Scaffold(
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        body: ListView(children: [
           const LessonVideoPlayer(),
           isLandscape ? Container() : _buildVideoDescription(supp.lesson),
         ]),

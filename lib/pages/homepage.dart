@@ -15,7 +15,6 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   late final HomepageBloc bloc;
   final controller = ScrollController();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -30,25 +29,32 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomepageBloc, HomepageState>(
-        bloc: bloc,
-        listener: (_, state) {
-          final showSnackbarError = state.maybeWhen(
-              failed: (_, __, showOnScreen) => showOnScreen,
-              orElse: () => false);
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Scaffold(
+          body: BlocConsumer<HomepageBloc, HomepageState>(
+              bloc: bloc,
+              listener: (context, state) {
+                final error = state.maybeWhen(
+                    failed: (_, error, __) => error, orElse: () => null);
 
-          if (showSnackbarError) {
-            final message = state.maybeWhen(
-                failed: (_, message, __) => message, orElse: () => null);
-            _showSnackbar(message!);
-          }
-        },
-        builder: (_, state) {
-          return state.when(
-              loading: _buildLoading,
-              content: _buildContent,
-              failed: _buildFailed);
-        });
+                if (error != null) {
+                  final isShownOnScreen = state.maybeWhen(
+                      failed: (_, __, shownOnScreen) => shownOnScreen,
+                      orElse: () => false);
+                  if (!isShownOnScreen) showSnackbar(error, context: context);
+                }
+              },
+              builder: (_, state) {
+                return state.when(
+                    loading: _buildLoading,
+                    content: _buildContent,
+                    failed: _buildFailed);
+              }),
+        ),
+      ),
+    );
   }
 
   Widget _buildLoading(
@@ -58,47 +64,32 @@ class _HomepageState extends State<Homepage> {
           alignment: AlignmentDirectional.bottomCenter,
           children: [_buildContent(supp), const LinearProgressIndicator()]);
     }
-    return Scaffold(body: AppLoadingIndicator(message));
+    return AppLoadingIndicator(message);
   }
 
   Widget _buildFailed(
       HomepageSupplements supp, String message, bool showOnScreen) {
-   // if (!showOnScreen) return _buildContent(supp);
-    return Scaffold(
-        body: FailedStateWidget(message,
-            tryAgainCallback: bloc.init,
-            title: 'Failed to load your information'));
+    if (!showOnScreen) return _buildContent(supp);
+    return FailedStateWidget(message,
+        tryAgainCallback: bloc.init, title: 'Failed to load your information');
   }
 
   Widget _buildContent(HomepageSupplements supp) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          body: RefreshIndicator(
-            onRefresh: bloc.refresh,
-            child: Column(
-              children: [
-                _buildHeader(supp.userData),
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    controller: controller,
-                    padding: EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
-                    children: [
-                      _buildGeneralInfo(supp.generalInfo),
-                      _buildContinueLesson(supp.lesson),
-                      _buildTopics(supp.userData['grade'], supp.topicList),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+    return RefreshIndicator(
+        onRefresh: bloc.refresh,
+        child: Column(children: [
+          _buildHeader(supp.userData),
+          Expanded(
+              child: ListView(
+                  shrinkWrap: true,
+                  controller: controller,
+                  padding: EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
+                  children: [
+                _buildGeneralInfo(supp.generalInfo),
+                _buildContinueLesson(supp.lesson),
+                _buildTopics(supp.userData['grade'], supp.topicList),
+              ]))
+        ]));
   }
 
   _buildHeader(Map userData) {
@@ -184,10 +175,5 @@ class _HomepageState extends State<Homepage> {
   _navigateToProfilePage() {
     Navigator.push(
         context, MaterialPageRoute(builder: (_) => const ProfilePage()));
-  }
-
-  _showSnackbar(String message) {
-    final _context = _scaffoldKey.currentContext!;
-    showSnackbar(_context, message);
   }
 }

@@ -1,9 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/manager/video_page/models/video_details.dart';
-import 'package:silla_studio/manager/video_page/providers.dart';
-import 'package:silla_studio/manager/video_page/video_state_notifier.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:silla_studio/manager/video/providers.dart';
+import 'package:silla_studio/manager/video/video_state_notifier.dart';
+import 'package:silla_studio/utils/utils.dart';
+import 'package:silla_studio/widgets/app_image.dart';
 import 'package:silla_studio/widgets/video_player_overlay.dart';
 import 'package:video_player/video_player.dart';
+import '../manager/video/models/video_details.dart';
+import '../manager/video/video_controls_actions_handler.dart';
 import '../source.dart';
 
 class LessonVideoPlayer extends ConsumerStatefulWidget {
@@ -21,7 +25,6 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
     videoDetails = VideoDetails.fromJson(jsonVideoDetails['playlist'][0]);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       ref.read(videosProvider.state).state = videoDetails.videos;
-      ref.read(videoStateNotifierProvider.notifier).init();
     });
     super.initState();
   }
@@ -30,12 +33,48 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
   Widget build(BuildContext context) {
     final videoState = ref.watch(videoStateNotifierProvider);
 
-    return videoState.when(
-      initial: () => Container(),
-      loading: _buildLoading,
-      content: _buildVideoPlayer,
-      error: _buildError,
+    return WillPopScope(
+      onWillPop: () async {
+        handleVideoControllerOnPop(ref);
+        return true;
+      },
+      child: videoState.when(
+        initial: _buildInitial,
+        loading: _buildLoading,
+        content: _buildVideoPlayer,
+        error: _buildError,
+      ),
     );
+  }
+
+  Widget _buildInitial() {
+    final videoLength = Utils.convertFrom(videoDetails.duration * 1000);
+    return Stack(alignment: Alignment.bottomCenter, children: [
+      AppImage(
+          imageUrl: videoDetails.image,
+          height: 220.dh,
+          width: ScreenSizeConfig.getFullWidth),
+      Container(
+        height: 40.dh,
+        width: ScreenSizeConfig.getFullWidth,
+        padding: EdgeInsets.symmetric(horizontal: 15.dw),
+        color: AppColors.secondary,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AppText(videoLength, color: AppColors.onSecondary),
+            AppTextButton(
+                text: 'Play',
+                height: 30.dh,
+                padding: EdgeInsets.symmetric(horizontal: 30.dw),
+                onPressed: ref.read(videoStateNotifierProvider.notifier).init,
+                textColor: AppColors.primary,
+                borderRadius: 15.dw,
+                backgroundColor: AppColors.onSecondary),
+          ],
+        ),
+      ),
+    ]);
   }
 
   Widget _buildLoading(String? message) {

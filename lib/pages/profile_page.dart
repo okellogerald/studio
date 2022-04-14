@@ -105,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _buildOtherDetails() {
     return _buildListView([
-      _buildButton('Terms & Conditions', Icons.gavel),
+      _buildButton('Terms & Conditions', FontAwesomeIcons.fileContract),
       _buildButton('About Us', FontAwesomeIcons.circleInfo),
       _buildButton('Log Out', FontAwesomeIcons.arrowRightFromBracket,
           onPressed: bloc.logOut, isLogOut: true),
@@ -124,8 +124,8 @@ class _ProfilePageState extends State<ProfilePage> {
           title: AppText(title,
               color: isLogOut ? AppColors.error : AppColors.onBackground,
               weight: FontWeight.normal),
-          trailing: Icon(Icons.chevron_right,
-              size: 20.dw, color: AppColors.secondary.withOpacity(.85)),
+          trailing: Icon(FontAwesomeIcons.angleRight,
+              size: 20.dw, color: AppColors.secondary.withOpacity(.6)),
         ));
   }
 }
