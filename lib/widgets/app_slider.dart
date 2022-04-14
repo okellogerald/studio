@@ -101,10 +101,10 @@ class AppSliderPainter extends CustomPainter {
     final dy = size.height / 2;
 
     final startingPoint = Offset(size.width * .008, dy);
-    final endingPointUnbuffered = Offset(size.width, dy);
-    final endingPointBuffered = Offset(xBuffered, dy);
-    final endingPointPlayed = Offset(xTapped, dy);
-    final circleOffset = Offset(xTapped, dy);
+    final endingPointUnbuffered = Offset(size.width * .992, dy);
+    final endingPointBuffered = Offset(xBuffered * .992, dy);
+    final endingPointPlayed = Offset(xTapped * .992, dy);
+    final circleOffset = Offset(xTapped * .992, dy);
 
     canvas.drawLine(startingPoint, endingPointUnbuffered, unbufferedPaint);
     canvas.drawLine(startingPoint, endingPointBuffered, bufferedPaint);

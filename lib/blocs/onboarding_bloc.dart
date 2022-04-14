@@ -112,7 +112,7 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
         message: 'sending email with reset password link ...'));
 
     try {
-      await service.sendEmailForVerification(supp.user.email);
+      await service.sendPasswordResetEmail(supp.user.email);
       //condition for reseting vs logging-in
       supp = supp.copyWith(password: '');
       emit(OnBoardingPagesState.success(supp));

@@ -35,6 +35,8 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           elevation: 2,
         ),
+        bottomAppBarTheme:
+            const BottomAppBarTheme(elevation: 0, color: AppColors.background),
         tabBarTheme: TabBarTheme(
             labelColor: AppColors.primary,
             labelStyle: const TextStyle(

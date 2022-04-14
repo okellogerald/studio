@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive/hive.dart';
 import '../source.dart';
 
 class LessonsService extends ChangeNotifier {
@@ -11,13 +12,23 @@ class LessonsService extends ChangeNotifier {
   var _lesson = Lesson.empty();
   Lesson get getUpdatedLesson => _lesson;
 
-  Future<void> init() async {
+  ///makes sure the token used is always valid
+  Future<void> refreshToken() async {
     final token = await _auth.currentUser?.getIdToken();
-    if (token != null) _token = token;
-  }
+    if (token != null){
+      _token = token;
+      return;
+    }
+    final user = Hive.box(Constants.kUserDataBox).get(Constants.kUserData);
 
-  ///makes sure the _token used is valid
-  Future refreshToken() async => await init();
+    try {
+      final credential = await _auth.signInWithEmailAndPassword(
+          email: user['email'], password: user['password']);
+      _token = await credential.user!.getIdToken();
+    } catch (error) {
+      handleError(error);
+    }
+  }
 
   Future<Lesson> getLesson(String id) async {
     await refreshToken();

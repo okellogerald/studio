@@ -2,18 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/video_page/models/video_details.dart';
 import 'package:silla_studio/manager/video_page/providers.dart';
 import 'package:silla_studio/manager/video_page/video_state_notifier.dart';
-import 'package:silla_studio/widgets/video_overlay.dart';
+import 'package:silla_studio/widgets/video_player_overlay.dart';
 import 'package:video_player/video_player.dart';
 import '../source.dart';
 
-class VideoPage extends ConsumerStatefulWidget {
-  const VideoPage({Key? key}) : super(key: key);
+class LessonVideoPlayer extends ConsumerStatefulWidget {
+  const LessonVideoPlayer({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<VideoPage> createState() => _VideoPageState();
+  ConsumerState<LessonVideoPlayer> createState() => _LessonVideoPlayerState();
 }
 
-class _VideoPageState extends ConsumerState<VideoPage> {
+class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
   late VideoDetails videoDetails;
 
   @override
@@ -30,19 +30,21 @@ class _VideoPageState extends ConsumerState<VideoPage> {
   Widget build(BuildContext context) {
     final videoState = ref.watch(videoStateNotifierProvider);
 
-    return SafeArea(
-        child: Scaffold(
-            body: videoState.when(
+    return videoState.when(
       initial: () => Container(),
       loading: _buildLoading,
-      content: () => _buildVideoPlayer(),
+      content: _buildVideoPlayer,
       error: _buildError,
-    )));
+    );
   }
 
   Widget _buildLoading(String? message) {
-    return AspectRatio(
-        aspectRatio: 1.78,
+    final size = ref.watch(videoSizeConfigsProvider);
+
+    return Center(
+      child: SizedBox(
+        height: size.height,
+        width: size.width,
         child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -52,25 +54,35 @@ class _VideoPageState extends ConsumerState<VideoPage> {
                 padding:
                     EdgeInsets.symmetric(horizontal: 20.dw, vertical: 15.dw),
                 color: Colors.white,
-                child: AppLoadingIndicator(message))));
+                child: AppLoadingIndicator(message))),
+      ),
+    );
   }
 
   Widget _buildError(String message) {
-    return AspectRatio(
-        aspectRatio: 1.78,
+    final size = ref.watch(videoSizeConfigsProvider);
+
+    return Center(
+      child: SizedBox(
+        height: size.height,
+        width: size.width,
         child: Container(
             color: Colors.white,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(horizontal: 15.dw),
             child: AppText(message,
-                color: AppColors.error, alignment: TextAlign.center)));
+                color: AppColors.error, alignment: TextAlign.center)),
+      ),
+    );
   }
 
   Widget _buildVideoPlayer() {
     final controller = ref.watch(videoControllerProvider);
+    final size = ref.watch(videoSizeConfigsProvider);
     return Center(
-        child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
+        child: SizedBox(
+            height: size.height,
+            width: size.width,
             child: Stack(alignment: Alignment.bottomCenter, children: [
               VideoPlayer(controller),
               VideoPlayerOverlay(videoDetails.title)

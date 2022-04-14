@@ -19,11 +19,14 @@ class UserData with _$UserData {
 
   String get getFormattedDateOfBirth => DateFormatter.convertToDMY(dateOfBirth);
 
-  static Map<String, dynamic> toJson(Map json) {
+  ///When user data has been saved locally, when they trying to get home content
+  ///from the api requires recent login.
+  static Map<String, dynamic> toJson(Map json, String password) {
     return {
       'name': json['name'],
       'email': json['email'],
       'course': json['course']['title'],
+      'password': password,
       'grade': json['grade']['title']
     };
   }

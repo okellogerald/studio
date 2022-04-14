@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'pages/video_page.dart';
 import 'source.dart';
 
 class MyApp extends StatelessWidget {
@@ -19,8 +18,7 @@ class MyApp extends StatelessWidget {
           navigatorKey: navigatorKey,
           theme: AppTheme.themeData(),
           debugShowCheckedModeBanner: false,
-          home:
-              const VideoPage() /* noAccountYet ? const LandingPage() : const Homepage() */,
+          home: noAccountYet ? const LandingPage() : const Homepage(),
         ),
       ),
     );

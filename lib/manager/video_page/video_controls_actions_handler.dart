@@ -42,9 +42,11 @@ void handleVideoControlsActions(WidgetRef ref, VideoControlAction action,
       SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
       ref.read(orientationModeProvider.state).state = Orientation.portrait;
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     } else {
       SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
       ref.read(orientationModeProvider.state).state = Orientation.landscape;
     }
   }
@@ -82,5 +84,16 @@ void disposeTimer() => _timer.cancel();
 void initOrientationMode(WidgetRef ref, Orientation orientation) {
   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
     ref.read(orientationModeProvider.state).state = orientation;
+    if (orientation == Orientation.landscape) _handleLandscapeOrientation();
   });
 }
+
+///if orientation is [landscape], the status bar is hidden.
+void handleStatusBarVisibility(WidgetRef ref) {
+  final orientation = ref.read(orientationModeProvider);
+  if (orientation == Orientation.landscape) _handleLandscapeOrientation();
+}
+
+_handleLandscapeOrientation() =>
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive,
+        overlays: [SystemUiOverlay.top]);

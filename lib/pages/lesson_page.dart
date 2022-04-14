@@ -1,4 +1,6 @@
-import '../source.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
+import 'package:silla_studio/manager/video_page/providers.dart';
+import '../source.dart' hide Consumer;
 import 'video_page.dart';
 
 class LessonPage extends StatefulWidget {
@@ -40,32 +42,17 @@ class _LessonPageState extends State<LessonPage> {
   }
 
   Widget _buildContent(LessonPageSupplements supp) {
-    return Scaffold(
-      appBar: AppBar(backgroundColor: AppColors.primaryVariant),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildVideoImage(),
-          _buildVideoDescription(supp.lesson),
-        ],
-      ),
-      bottomNavigationBar: _buildBottomNavBar(supp),
-    );
-  }
-
-  _buildVideoImage() {
-    return Container(
-      height: 240.dh,
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(Constants.kDefaultImage), fit: BoxFit.fill)),
-      child: AppTextButton(
-          text: 'Play',
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const VideoPage()));
-          }),
-    );
+    return Consumer(builder: (context, ref, child) {
+      final orientation = ref.watch(orientationModeProvider);
+      final isLandscape = orientation == Orientation.landscape;
+      return Scaffold(
+        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const LessonVideoPlayer(),
+          isLandscape ? Container() : _buildVideoDescription(supp.lesson),
+        ]),
+        bottomNavigationBar: _buildBottomNavBar(supp, ref),
+      );
+    });
   }
 
   _buildVideoDescription(Lesson lesson) {
@@ -104,21 +91,24 @@ class _LessonPageState extends State<LessonPage> {
     );
   }
 
-  _buildBottomNavBar(LessonPageSupplements supp) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border(
-              top: BorderSide(color: Colors.grey.withOpacity(.15), width: 2))),
-      height: 70.dh,
-      padding: EdgeInsets.symmetric(horizontal: 19.dw),
-      child: Row(
-        children: [
-          _buildPrevButton(supp.isFirst),
-          _buildMarkStatusButton(supp.lesson),
-          _buildNextButton(supp.isLast),
-        ],
-      ),
-    );
+  _buildBottomNavBar(LessonPageSupplements supp, WidgetRef ref) {
+    final orientation = ref.watch(orientationModeProvider);
+    return orientation == Orientation.landscape
+        ? Container(height: .0001)
+        : BottomAppBar(
+            elevation: 10,
+            child: Container(
+              height: 70.dh,
+              padding: EdgeInsets.symmetric(horizontal: 19.dw),
+              child: Row(
+                children: [
+                  _buildPrevButton(supp.isFirst),
+                  _buildMarkStatusButton(supp.lesson),
+                  _buildNextButton(supp.isLast),
+                ],
+              ),
+            ),
+          );
   }
 
   _buildMarkStatusButton(Lesson lesson) {

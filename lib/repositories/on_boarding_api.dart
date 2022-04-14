@@ -48,7 +48,7 @@ class OnBoardingApi {
     final response =
         await http.post(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-     log(result.toString());
+    log(result.toString());
     _handleStatusCodes(result['code']);
     return result;
   }

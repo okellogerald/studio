@@ -19,37 +19,33 @@ class _LogInPageState extends State<LogInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-          bloc: bloc,
-          listener: (_, state) {
-            final isSuccessful =
-                state.maybeWhen(success: (_) => true, orElse: () => false);
+    return BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
+        bloc: bloc,
+        listener: (_, state) {
+          final isSuccessful =
+              state.maybeWhen(success: (_) => true, orElse: () => false);
 
-            final password = state.supplements.password;
-            final email = state.supplements.user.email;
+          final password = state.supplements.password;
+          final email = state.supplements.user.email;
 
-            final isSignedIn =
-                isSuccessful && password.isEmpty && email.isEmpty;
-            final isReseting =
-                isSuccessful && password.isEmpty && email.isNotEmpty;
-                
-            if (isSignedIn) pushAndRemoveUntil(const Homepage());
-            if (isReseting) push(const PasswordResetPage());
+          final isSignedIn = isSuccessful && password.isEmpty && email.isEmpty;
+          final isReseting =
+              isSuccessful && password.isEmpty && email.isNotEmpty;
 
-            final error = state.maybeWhen(
-                failed: (_, message) => message, orElse: () => null);
-            if (error != null) _showSnackbar(error);
-          },
-          builder: (_, state) {
-            return state.when(
-                laoding: _buildLoading,
-                content: _buildContent,
-                success: _buildContent,
-                failed: (s, _) => _buildContent(s));
-          }),
-    );
+          if (isSignedIn) pushAndRemoveUntil(const Homepage());
+          if (isReseting) push(const PasswordResetPage());
+
+          final error = state.maybeWhen(
+              failed: (_, message) => message, orElse: () => null);
+          if (error != null) _showSnackbar(error);
+        },
+        builder: (_, state) {
+          return state.when(
+              laoding: _buildLoading,
+              content: _buildContent,
+              success: _buildContent,
+              failed: (s, _) => _buildContent(s));
+        });
   }
 
   Widget _buildLoading(OnBoardingSupplements supp, String? message) {
@@ -84,7 +80,7 @@ class _LogInPageState extends State<LogInPage> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildGetStartedButton(),
+      bottomNavigationBar: _buildLogInButton(),
     );
   }
 
@@ -105,16 +101,18 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 
-  _buildGetStartedButton() {
-    return AppTextButton(
-      onPressed: bloc.logIn,
-      text: 'LOG IN',
-      textColor: AppColors.onPrimary,
-      backgroundColor: AppColors.primary,
-      height: 50.dh,
-      width: 200.dw,
-      borderRadius: 30.dw,
-      margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),
+  _buildLogInButton() {
+    return BottomAppBar(
+      child: AppTextButton(
+        onPressed: bloc.logIn,
+        text: 'LOG IN',
+        textColor: AppColors.onPrimary,
+        backgroundColor: AppColors.primary,
+        height: 50.dh,
+        width: 200.dw,
+        borderRadius: 30.dw,
+        margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),
+      ),
     );
   }
 

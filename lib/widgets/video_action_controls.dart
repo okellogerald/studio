@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video_page/models/video.dart';
-
+import 'package:silla_studio/pages/video_page.dart';
 import '../manager/video_page/providers.dart';
 import '../manager/video_page/video_controls_actions_handler.dart';
 import '../source.dart';
@@ -8,7 +9,10 @@ import '../utils/utils.dart';
 import 'app_slider.dart';
 
 class VideoActionControls extends ConsumerStatefulWidget {
-  const VideoActionControls({Key? key}) : super(key: key);
+  const VideoActionControls({Key? key, required this.onLabelButtonTap})
+      : super(key: key);
+
+  final ValueChanged<Offset> onLabelButtonTap;
 
   @override
   ConsumerState<VideoActionControls> createState() =>
@@ -16,34 +20,35 @@ class VideoActionControls extends ConsumerStatefulWidget {
 }
 
 class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
+  final labelButtonKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
+    final size = ref.watch(videoSizeConfigsProvider);
     return SizedBox(
-      width: ScreenSizeConfig.getFullWidth,
-      height: 60.dh,
-      child: Stack(alignment: Alignment.topCenter, children: [
-        _buildControls(),
-        _buildSliderLine(),
-      ]),
-    );
+        width: size.width,
+        height: 50.dh,
+        child: Stack(alignment: Alignment.topCenter, children: [
+          _buildControls(),
+          _buildSliderLine(),
+        ]));
   }
 
   _buildControls() {
+    final size = ref.watch(videoSizeConfigsProvider);
     return Positioned(
         top: 6.dh,
         child: Container(
             height: 50.dh,
-            width: 400.dw,
-            margin: EdgeInsets.fromLTRB(6.dw, 0, 6.dw, 6.dh),
+            width: size.width,
             padding: EdgeInsets.symmetric(horizontal: 10.dw),
             alignment: Alignment.center,
-            color: Colors.white,
+            color: AppColors.secondary,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 _buildSliderLabels(),
-                _buildPlayerStateIconButton(),
-                _buildOtherVideoControls()
+                _buildOtherVideoControls(),
               ])
             ])));
   }
@@ -54,47 +59,21 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
     final formattedDuration = Utils.convertFrom(duration.inMilliseconds, true);
     final formattedPosition = Utils.convertFrom(position, true);
 
-    return Expanded(
-        child: Container(
-            alignment: Alignment.centerLeft,
-            child: AppText('$formattedPosition / $formattedDuration',
-                size: 14.dw)));
-  }
-
-  Widget _buildPlayerStateIconButton() {
-    final playerState = ref.watch(playerStateProvider);
-    return Expanded(
-      child: Container(
-        alignment: Alignment.center,
-        child: AppMaterialButton(
-            onPressed: () {
-              if (playerState.isPlaying) {
-                handleVideoControlsActions(ref, VideoControlAction.pause);
-              }
-              if (playerState.isPaused) {
-                handleVideoControlsActions(ref, VideoControlAction.resume);
-              }
-              if (playerState.isEnd) {
-                handleVideoControlsActions(ref, VideoControlAction.replay);
-              }
-            },
-            height: 38.dh,
-            width: 50.dw,
-            backgroundColor: AppColors.secondary,
-            child: Icon(playerState.isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 22.dw, color: AppColors.accent)),
-      ),
-    );
+    return Container(
+        alignment: Alignment.centerLeft,
+        child: AppText('$formattedPosition / $formattedDuration',
+            size: 14.dw, color: AppColors.onSecondary));
   }
 
   _buildSliderLine() {
     final duration = ref.watch(videoControllerProvider).value.duration;
     final position = ref.watch(positionProvider);
+    final size = ref.watch(videoSizeConfigsProvider);
     return AppSlider(
         currentValue: position,
         bufferedValue: 4545,
         duration: duration.inMilliseconds,
-        sliderWidth: 380.dw,
+        sliderWidth: size.width,
         onValueChanged: (position) => handleVideoControlsActions(
             ref, VideoControlAction.changePosition,
             position: position));
@@ -109,23 +88,28 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
           onPressed: () => handleVideoControlsActions(
               ref, VideoControlAction.changeOrientation),
           icon: orientation == Orientation.portrait
-              ? EvaIcons.expand
-              : EvaIcons.cast,
-          margin: EdgeInsets.only(left: 10.dw),
-          iconThemeData: IconThemeData(size: 18.dw, color: AppColors.secondary))
+              ? FontAwesomeIcons.expand
+              : FontAwesomeIcons.compress,
+          margin: EdgeInsets.only(left: 25.dw, right: 5.dw),
+          iconThemeData:
+              IconThemeData(size: 18.dw, color: AppColors.onSecondary))
     ]));
   }
 
   _buildVideoQualityLabel() {
     final label = ref.watch(qualityLabelProvider);
-    return DropdownButton<QualityLabel>(
-        value: label,
-        items: qualityLabels
-            .map((e) => DropdownMenuItem<QualityLabel>(
-                value: e, child: AppText(e.labelName, size: 14.dw)))
-            .toList(),
-        onChanged: (label) => handleVideoControlsActions(
-            ref, VideoControlAction.changeQualityLabel,
-            label: label));
+    return AppTextButton(
+        key: labelButtonKey,
+        text: label.labelName,
+        padding: EdgeInsets.symmetric(horizontal: 10.dw, vertical: 5.dh),
+        borderRadius: 5.dw,
+        backgroundColor: AppColors.onSecondary,
+        textStyle: TextStyle(color: AppColors.onBackground, fontSize: 14.dw),
+        onPressed: () {
+          final renderBox =
+              labelButtonKey.currentContext!.findRenderObject() as RenderBox;
+          final position = renderBox.localToGlobal(Offset.zero);
+          widget.onLabelButtonTap(position);
+        });
   }
 }

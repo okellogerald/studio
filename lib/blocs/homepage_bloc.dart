@@ -14,9 +14,13 @@ class HomepageBloc extends Cubit<HomepageState> {
     var supp = state.supplements;
     emit(HomepageState.loading(supp, isUpdatingContent: isUpdatingContent));
 
+    log('in here');
+
     try {
       final values = await coursesService.getHomeContent();
       final userData = userService.getUserData;
+      log('user data');
+      log(userData.toString());
       supp = supp.copyWith(
           lesson: values['lessons'],
           topicList: values['topics'],

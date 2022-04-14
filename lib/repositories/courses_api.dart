@@ -3,7 +3,7 @@ import 'package:silla_studio/secret.dart';
 import '../source.dart';
 import 'package:http/http.dart' as http;
 
-const timeLimit = Duration(seconds: 5);
+const timeLimit = Duration(seconds: 20);
 
 class CoursesApi {
   static Future<Map<String, dynamic>> getUserCourseOverview(
@@ -12,7 +12,11 @@ class CoursesApi {
     final headers = _getHeaders(token);
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
+    log(response.body.toString());
+
     final result = json.decode(response.body);
+
+    log(result.toString());
 
     _handleStatusCodes(result['code']);
 

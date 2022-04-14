@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../source.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -60,7 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
               _buildTitle(userData['name']),
               SizedBox(height: 20.dh),
               _buildAccountDetails(),
-              SizedBox(height: 20.dh),
+              const AppDivider(
+                  height: 2,
+                  color: AppColors.secondary,
+                  margin: EdgeInsets.zero),
               _buildOtherDetails(),
             ],
           ),
@@ -79,64 +84,48 @@ class _ProfilePageState extends State<ProfilePage> {
         ));
   }
 
-  _holdingContainer({required Widget child}) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.dw),
-          color: AppColors.background,
-          border: Border.all(width: 2, color: AppColors.surface)),
-      margin: EdgeInsets.symmetric(horizontal: 15.dw),
-      child: child,
-    );
-  }
-
   _buildListView(List<Widget> children) {
-    return _holdingContainer(
-      child: ListView.separated(
-        itemBuilder: (_, index) => children[index],
-        separatorBuilder: (_, __) => AppDivider(
-            margin: EdgeInsets.zero, color: AppColors.divider.shade300),
-        itemCount: children.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-      ),
+    return ListView.separated(
+      padding: EdgeInsets.zero,
+      itemBuilder: (_, index) => children[index],
+      separatorBuilder: (_, __) => AppDivider(
+          margin: EdgeInsets.zero, color: AppColors.divider.shade300),
+      itemCount: children.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
     );
   }
 
   _buildAccountDetails() {
     return _buildListView([
-      _buildButton('Change Courses & Grade'),
-      _buildButton('Subscription'),
+      _buildButton('Change Courses & Grade', FontAwesomeIcons.video),
+      _buildButton('Subscription', FontAwesomeIcons.bookmark),
     ]);
   }
 
   _buildOtherDetails() {
     return _buildListView([
-      _buildButton('Terms & Conditions'),
-      _buildButton('About Us'),
-      _buildButton('Log Out', onPressed: bloc.logOut, isLogOut: true),
+      _buildButton('Terms & Conditions', Icons.gavel),
+      _buildButton('About Us', FontAwesomeIcons.circleInfo),
+      _buildButton('Log Out', FontAwesomeIcons.arrowRightFromBracket,
+          onPressed: bloc.logOut, isLogOut: true),
     ]);
   }
 
-  _buildButton(String title, {VoidCallback? onPressed, bool isLogOut = false}) {
+  _buildButton(String title, IconData icon,
+      {VoidCallback? onPressed, bool isLogOut = false}) {
     return AppMaterialButton(
         onPressed: onPressed ?? () {},
         isFilled: false,
-        height: 60.dh,
-        child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15.dw),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppText(title,
-                    color: isLogOut ? AppColors.error : AppColors.onBackground,
-                    weight: FontWeight.normal),
-                isLogOut
-                    ? Container()
-                    : Icon(Icons.chevron_right,
-                        size: 20.dw,
-                        color: AppColors.secondary.withOpacity(.85))
-              ],
-            )));
+        height: 45.dh,
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 15.dw),
+          leading: Icon(icon, size: 20.dw),
+          title: AppText(title,
+              color: isLogOut ? AppColors.error : AppColors.onBackground,
+              weight: FontWeight.normal),
+          trailing: Icon(Icons.chevron_right,
+              size: 20.dw, color: AppColors.secondary.withOpacity(.85)),
+        ));
   }
 }

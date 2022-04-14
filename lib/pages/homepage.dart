@@ -63,7 +63,7 @@ class _HomepageState extends State<Homepage> {
 
   Widget _buildFailed(
       HomepageSupplements supp, String message, bool showOnScreen) {
-    if (!showOnScreen) return _buildContent(supp);
+   // if (!showOnScreen) return _buildContent(supp);
     return Scaffold(
         body: FailedStateWidget(message,
             tryAgainCallback: bloc.init,

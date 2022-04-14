@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:silla_studio/source.dart' hide Provider;
 import 'package:video_player/video_player.dart';
+
 import 'models/video.dart';
 
 enum PlayerState { playing, paused, end }
@@ -26,3 +27,18 @@ final playerStateProvider =
     StateProvider<PlayerState>((ref) => PlayerState.playing);
 
 final positionProvider = StateProvider<int>((ref) => 0);
+
+final videoSizeConfigsProvider = Provider<Size>((ref) {
+  final orientation = ref.watch(orientationModeProvider);
+  final label = ref.watch(qualityLabelProvider);
+  final videos = ref.read(videosProvider);
+  final video = videos.where((element) => element.label == label).first;
+
+  final screenSize = Size(ScreenSizeConfig.sWidth, ScreenSizeConfig.sHeight);
+
+  if (orientation == Orientation.portrait) {
+    return Size(screenSize.width, screenSize.width / video.aspectRatio);
+  } else {
+    return Size(screenSize.width * video.aspectRatio, screenSize.width);
+  }
+});

@@ -88,8 +88,10 @@ var jsonVideoDetails = <String, dynamic>{
           "framerate": 24
         },
         {
-          "file": /* "https://cdn.jwplayer.com/videos/RUZ303CO-ZHNGpxYd.mp4" */ Constants
-              .video,
+          "file":
+              "https://cdn.jwplayer.com/videos/RUZ303CO-ZHNGpxYd.mp4" /* Constants
+              .video */
+          ,
           "type": "video/mp4",
           "height": 720,
           "width": 1280,
