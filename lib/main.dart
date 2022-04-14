@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'app.dart';
 import 'source.dart';
 
-//todo: handling on pop
+//todo: handling videocontroller state on pop
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
