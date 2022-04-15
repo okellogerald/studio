@@ -18,11 +18,10 @@ class LessonsService extends ChangeNotifier {
 
   Future<void> updateLessonStatus(String status, Lesson lesson) async {
     final token = await getToken(_auth).catchError(handleError);
-    _lesson = lesson;
     final newStatus =
         await CoursesApi.updateLessonStatus(status, lesson.id, token)
             .catchError(handleError);
-    _lesson = _lesson.copyWithNewStatus(newStatus);
+    _lesson = lesson.copyWithNewStatus(newStatus);
     notifyListeners();
   }
 }

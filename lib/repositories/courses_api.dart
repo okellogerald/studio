@@ -1,5 +1,4 @@
 import 'package:silla_studio/secret.dart';
-
 import '../source.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,8 +15,6 @@ class CoursesApi {
     _handleStatusCodes(result['code']);
 
     final topicList = <Topic>[];
-    final values = <String, dynamic>{};
-
     for (var item in result['data']) {
       topicList.add(Topic.fromJson(item));
     }
@@ -27,10 +24,10 @@ class CoursesApi {
         completedLessons: result['info']['completedLessonsCount'],
         lessonsCount: result['info']['lessonsCount']);
 
+    final values = <String, dynamic>{};
     values['lessons'] = continueLesson;
     values['topics'] = topicList;
     values['generalInfo'] = generalInfo;
-
     return values;
   }
 
@@ -52,10 +49,8 @@ class CoursesApi {
         lessonList.add(Lesson.fromJson(lesson));
       }
     }
-
     values['topics'] = topicList;
     values['lessons'] = lessonList;
-
     return values;
   }
 
@@ -65,10 +60,7 @@ class CoursesApi {
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-
     _handleStatusCodes(result['code']);
-
-    //log(response.body.toString());
     return Lesson.fromJson(result['data']);
   }
 
@@ -78,10 +70,7 @@ class CoursesApi {
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-
     _handleStatusCodes(result['code']);
-
-    //log(result.toString());
     return result['data'];
   }
 
@@ -96,8 +85,7 @@ class CoursesApi {
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
-
-    //log(result.toString());
+    log(result.toString());
     return result['data']['completionStatus'];
   }
 
@@ -109,9 +97,6 @@ class CoursesApi {
     final result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
-
-    //log(result.toString());
-
     final generalInfo = GeneralInfo(
         completedLessons: result['info']['completedLessonsCount'],
         lessonsCount: result['info']['lessonsCount']);

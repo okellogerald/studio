@@ -16,7 +16,6 @@ class UserService {
       final credential = await _auth.createUserWithEmailAndPassword(
           email: user.email, password: password);
       final token = await credential.user!.getIdToken(true);
-      // log('Token is $token');
       final result = await OnBoardingApi.createUser(user, password, token);
       final _userData = UserData.toJson(result['data'], password);
       await _box.put(Constants.kUserData, json.encode(_userData));
@@ -30,7 +29,6 @@ class UserService {
       final credential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       final token = await credential.user!.getIdToken(true);
-      //  log('Token is $token');
       final result = await OnBoardingApi.logInUser(token);
       final _userData = UserData.toJson(result['data'], password);
       await _box.put(Constants.kUserData, json.encode(_userData));

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_state_notifier.dart';
+import 'package:silla_studio/widgets/video_action_controls.dart';
 import 'package:video_player/video_player.dart';
 import '../../source.dart';
 import 'models/video.dart';
@@ -39,15 +40,15 @@ void handleVideoControlsActions(WidgetRef ref, VideoControlAction action,
   if (action == VideoControlAction.changeOrientation) {
     final orientation = ref.read(orientationModeProvider);
     if (orientation == Orientation.landscape) {
+      ref.read(orientationModeProvider.state).state = Orientation.portrait;
       SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-      ref.read(orientationModeProvider.state).state = Orientation.portrait;
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     } else {
+      ref.read(orientationModeProvider.state).state = Orientation.landscape;
       SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-      ref.read(orientationModeProvider.state).state = Orientation.landscape;
     }
   }
   if (action == VideoControlAction.changeQualityLabel) {
@@ -96,6 +97,7 @@ void handleStatusBarVisibility(WidgetRef ref) {
 
 void handleVideoControllerOnPop(WidgetRef ref) {
   ref.refresh(videoControllerProvider);
+  handleVideoControlsActions(ref, VideoControlAction.changeOrientation);
 }
 
 _handleLandscapeOrientation() =>
