@@ -41,7 +41,7 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        overlayEntry.remove();
+        if (overlayEntry.mounted) overlayEntry.remove();
         return true;
       },
       child: AnimatedBuilder(
@@ -110,7 +110,6 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
   labelsOverlayEntry() {
     final orientation = ref.watch(orientationModeProvider);
     final isPortrait = orientation == Orientation.portrait;
-    log(isPortrait.toString());
 
     return OverlayEntry(
         builder: (_) => GestureDetector(

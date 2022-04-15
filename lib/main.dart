@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'app.dart';
 import 'source.dart';
 
-//todo: handling videocontroller state on pop
+//todo: handling errors after disposing the video player on pop on the app slider
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

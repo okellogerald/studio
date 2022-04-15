@@ -15,7 +15,9 @@ class VideoStateNotifier extends StateNotifier<VideoState> {
 
   final StateNotifierProviderRef ref;
 
-  Future<void> init() async {
+  void init() => state = const VideoState.initial();
+
+  Future<void> play() async {
     state = const VideoState.loading('Initializing...');
     final currentLabel = ref.read(qualityLabelProvider);
     final videos = ref.read(videosProvider);

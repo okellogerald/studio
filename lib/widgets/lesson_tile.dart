@@ -1,8 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:silla_studio/manager/video/providers.dart';
+import 'package:silla_studio/manager/video/video_controls_actions_handler.dart';
 
 import '../source.dart';
 
-class LessonTile extends StatelessWidget {
+class LessonTile extends ConsumerWidget {
   const LessonTile(this.lesson, this.lessonsIdList, {Key? key})
       : super(key: key);
 
@@ -10,7 +13,7 @@ class LessonTile extends StatelessWidget {
   final List<String> lessonsIdList;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isLearning = lesson.type == LessonType.learn;
     final subtitle =
         '${lesson.topicName} - ' + (isLearning ? 'LEARN' : 'PRACTICE');
@@ -18,7 +21,12 @@ class LessonTile extends StatelessWidget {
     return AppMaterialButton(
       onPressed: lesson.isPaid
           ? () {}
-          : () => push(LessonPage(lesson.id, lessonsIdList)),
+          : () async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => LessonPage(lesson.id, lessonsIdList)));
+              log('I have popped to the previois screen with the value');
+              handleVideoControllerOnPop(ref);
+            },
       backgroundColor: AppColors.surface,
       child: Container(
         height: 100.dh,

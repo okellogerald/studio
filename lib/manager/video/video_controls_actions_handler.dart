@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_state_notifier.dart';
-import 'package:silla_studio/widgets/video_action_controls.dart';
 import 'package:video_player/video_player.dart';
 import '../../source.dart';
 import 'models/video.dart';
@@ -95,9 +94,18 @@ void handleStatusBarVisibility(WidgetRef ref) {
   if (orientation == Orientation.landscape) _handleLandscapeOrientation();
 }
 
-void handleVideoControllerOnPop(WidgetRef ref) {
-  ref.refresh(videoControllerProvider);
-  handleVideoControlsActions(ref, VideoControlAction.changeOrientation);
+void handleVideoControllerOnPop(WidgetRef ref) async {
+  final controller = ref.read(videoControllerProvider);
+  await controller.dispose();
+  ref.read(videoControllerProvider.state).state =
+      VideoPlayerController.network('');
+  final orientation = ref.read(orientationModeProvider);
+  if (orientation == Orientation.landscape) {
+    ref.read(orientationModeProvider.state).state = Orientation.portrait;
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
 }
 
 _handleLandscapeOrientation() =>

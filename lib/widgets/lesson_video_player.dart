@@ -6,7 +6,6 @@ import 'package:silla_studio/widgets/app_image.dart';
 import 'package:silla_studio/widgets/video_player_overlay.dart';
 import 'package:video_player/video_player.dart';
 import '../manager/video/models/video_details.dart';
-import '../manager/video/video_controls_actions_handler.dart';
 import '../source.dart';
 
 class LessonVideoPlayer extends ConsumerStatefulWidget {
@@ -24,6 +23,7 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
     videoDetails = VideoDetails.fromJson(jsonVideoDetails['playlist'][0]);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       ref.read(videosProvider.state).state = videoDetails.videos;
+      ref.read(videoStateNotifierProvider.notifier).init();
     });
     super.initState();
   }
@@ -32,17 +32,13 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
   Widget build(BuildContext context) {
     final videoState = ref.watch(videoStateNotifierProvider);
 
-    return WillPopScope(
-      onWillPop: () async {
-        handleVideoControllerOnPop(ref);
-        return true;
-      },
-      child: videoState.when(
-        initial: _buildInitial,
-        loading: _buildLoading,
-        content: _buildVideoPlayer,
-        error: _buildError,
-      ),
+    log(videoState.toString());
+
+    return videoState.when(
+      initial: _buildInitial,
+      loading: _buildLoading,
+      content: _buildVideoPlayer,
+      error: _buildError,
     );
   }
 
@@ -66,7 +62,7 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
                 text: 'Play',
                 height: 30.dh,
                 padding: EdgeInsets.symmetric(horizontal: 30.dw),
-                onPressed: ref.read(videoStateNotifierProvider.notifier).init,
+                onPressed: ref.read(videoStateNotifierProvider.notifier).play,
                 textColor: AppColors.primary,
                 borderRadius: 15.dw,
                 backgroundColor: AppColors.onSecondary),

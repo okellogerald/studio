@@ -52,4 +52,8 @@ flutter:
 
     - family: stratos
       fonts:
-        - asset: assets/fonts/Regular.ttf
+        - asset: assets/fonts/regular.ttf
+
+    - family: market
+      fonts:
+        - asset: assets/fonts/MarketSans.ttf
