@@ -32,8 +32,6 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
   Widget build(BuildContext context) {
     final videoState = ref.watch(videoStateNotifierProvider);
 
-    log(videoState.toString());
-
     return videoState.when(
       initial: _buildInitial,
       loading: _buildLoading,

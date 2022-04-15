@@ -36,7 +36,10 @@ class LessonPageBloc extends Cubit<LessonPageState> {
     emit(LessonPageState.loading(supp,
         message: 'marking ${lesson.title} as $status'));
     try {
+      log('updating status');
+      log(status);
       await service.updateLessonStatus(status, lesson);
+      log('done');
     } on ApiError catch (_) {
       emit(LessonPageState.failed(supp, _.message));
     }

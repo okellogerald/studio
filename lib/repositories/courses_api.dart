@@ -83,9 +83,10 @@ class CoursesApi {
         .post(Uri.parse(url), headers: headers, body: data)
         .timeout(timeLimit);
     final result = json.decode(response.body);
+    log(result.toString());
 
     _handleStatusCodes(result['code']);
-    log(result.toString());
+
     return result['data']['completionStatus'];
   }
 
