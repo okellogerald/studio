@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/repositories/source.dart';
+
 import '../../models/course.dart';
 
 final coursesProvider = StateProvider<List<Course>>((ref) => []);

@@ -3,6 +3,7 @@ import 'package:silla_studio/manager/token.dart';
 import 'package:silla_studio/manager/video/models/video_details.dart';
 import 'package:silla_studio/secret.dart';
 import '../manager/courses/models/course_overview.dart';
+import '../manager/courses/models/topic_data.dart';
 import '../source.dart' hide Provider;
 import 'package:http/http.dart' as http;
 
@@ -31,7 +32,11 @@ class CoursesRepositoryImpl {
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
+    log(result.toString());
+
     _handleStatusCodes(result['code']);
+
+    log(result.toString());
 
     final topics = List.from(result['data']).map((e) => Topic.fromJson(e));
     final currentLesson = Lesson.fromJson(result['info']['continueLesson']);
@@ -45,7 +50,7 @@ class CoursesRepositoryImpl {
         topicList: topics.toList());
   }
 
-  Future<List<Lesson>> getTopicLessons(String topicId) async {
+  Future<TopicData> getTopicLessons(String topicId) async {
     final url = root + 'topic/$topicId';
     final headers = await _getHeaders();
 
@@ -57,13 +62,15 @@ class CoursesRepositoryImpl {
     final topicList = <Topic>[];
     final lessonList = <Lesson>[];
 
+    log(result.toString());
+
     for (var topic in result['data']) {
       topicList.add(Topic.fromJson(topic));
       for (var lesson in topic['lessons']) {
         lessonList.add(Lesson.fromJson(lesson));
       }
     }
-    return lessonList;
+    return TopicData(subtopics: topicList, lessons: lessonList);
   }
 
   Future<Lesson> getLesson(String id) async {
@@ -121,7 +128,7 @@ class CoursesRepositoryImpl {
   }
 
   Future<Map<String, String>> _getHeaders() async {
-    final token = ref
+    final token = await ref
         .read(tokenProvider.future)
         .timeout(timeLimit)
         .catchError((error) => throw error);

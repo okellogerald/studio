@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:silla_studio/manager/token.dart';
 import 'package:silla_studio/secret.dart';
-import '../../source.dart' hide Provider;
-import 'package:http/http.dart' as http;
 
+import '../../source.dart' hide Provider;
 import 'models/user.dart';
 
 final userRepositoryProvider = Provider((ref) => UserRepositoryImpl(ref));
@@ -11,19 +11,6 @@ final userRepositoryProvider = Provider((ref) => UserRepositoryImpl(ref));
 class UserRepositoryImpl {
   final ProviderRef ref;
   const UserRepositoryImpl(this.ref);
-
-  Future<List<Course>> getAllCourses() async {
-    const url = root + 'signup/';
-    final response = await http.get(Uri.parse(url)).timeout(timeLimit);
-    final result = json.decode(response.body);
-    _handleStatusCodes(result['code']);
-    final results = result['data']['courses'];
-    final courseList = <Course>[];
-    for (Map<String, dynamic> e in results) {
-      courseList.add(Course.fromJson(e));
-    }
-    return courseList;
-  }
 
   Future<Map<String, dynamic>> createUser(User user, String password) async {
     const url = root + 'signup/';
@@ -55,6 +42,19 @@ class UserRepositoryImpl {
     final result = json.decode(response.body);
     _handleStatusCodes(result['code']);
     return result['data'];
+  }
+
+  Future<List<Course>> getAllCourses() async {
+    const url = root + 'signup/';
+    final response = await http.get(Uri.parse(url)).timeout(timeLimit);
+    final result = json.decode(response.body);
+    _handleStatusCodes(result['code']);
+    final results = result['data']['courses'];
+    final courseList = <Course>[];
+    for (Map<String, dynamic> e in results) {
+      courseList.add(Course.fromJson(e));
+    }
+    return courseList;
   }
 
   void _handleStatusCodes(int statusCode) {

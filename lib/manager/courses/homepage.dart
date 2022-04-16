@@ -19,7 +19,7 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
       final overview = await courseRepository.getUserCourseOverview();
       state = HomepageState.content(overview);
     } catch (error) {
-      throw getErrorMessage(error);
+      state = HomepageState.failed(getErrorMessage(error));
     }
   }
 

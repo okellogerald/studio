@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:silla_studio/manager/courses/topic_page.dart';
+import '../manager/courses/models/topic_data.dart';
+import '../manager/user_action.dart';
 import '../source.dart';
 
 class TopicPage extends ConsumerStatefulWidget {
@@ -17,8 +19,17 @@ class _TopicPageState extends ConsumerState<TopicPage>
   final scrollController = ScrollController();
 
   @override
+  void initState() {
+    tabController = TabController(length: 5, vsync: this, initialIndex: 0);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      handleUserAction(ref, UserAction.viewTopic);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final lessonsProvider = ref.read(topicLessonsProvider(widget.topic.id));
+    final lessonsProvider = ref.watch(topicLessonsProvider(widget.topic.id));
 
     return Container(
       color: Colors.white,
@@ -40,9 +51,10 @@ class _TopicPageState extends ConsumerState<TopicPage>
         scrollController: scrollController);
   }
 
-  Widget _buildContent(List<Lesson> lessons) {
-    final idList = ref.read(subTopicsIdsProvider(lessons));
-    final filteredLessons = ref.watch(filteredLessonsProvider(lessons));
+  Widget _buildContent(TopicData data) {
+    final idList = ref.watch(subTopicsIdsProvider(data.lessons));
+  //  log(idList.toString());
+    final filteredLessons = ref.watch(filteredLessonsProvider(data.lessons));
     if (filteredLessons.isEmpty) return _buildEmptyState();
     return Column(
       children: [
@@ -79,8 +91,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),
             itemCount: lessons.length,
-            itemBuilder: (context, index) =>
-                LessonTile(lessons[index]),
+            itemBuilder: (context, index) => LessonTile(lessons[index]),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,

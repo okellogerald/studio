@@ -72,6 +72,6 @@ class Lesson with _$Lesson {
 
   @override
   String toString() {
-    return 'Lesson(id: $id, title: $title, body: $body)';
+    return 'Lesson(id: $id, title: $title, topicId: $topicId)';
   }
 }

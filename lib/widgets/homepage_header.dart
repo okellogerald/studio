@@ -76,10 +76,4 @@ class _HomepageHeaderState extends State<HomepageHeader> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
 }

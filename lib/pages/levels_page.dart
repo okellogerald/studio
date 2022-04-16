@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../manager/onboarding/user_details_providers.dart';
 import '../manager/pages.dart';
 import '../source.dart' hide Consumer;

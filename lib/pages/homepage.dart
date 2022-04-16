@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:silla_studio/manager/onboarding/user_details_providers.dart';
 import '../manager/courses/homepage.dart';
 import '../manager/courses/models/course_overview.dart';
+import '../manager/user_action.dart';
 import '../source.dart';
 
 class Homepage extends ConsumerStatefulWidget {
@@ -20,43 +21,50 @@ class _HomepageState extends ConsumerState<Homepage> {
   final controller = ScrollController();
 
   @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      handleUserAction(ref, UserAction.viewHomepage);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final homepageNotifier = ref.watch(homepageNotifierProvider);
 
-    return homepageNotifier.when(
-        loading: (message) => AppLoadingIndicator(message),
-        content: _buildContent,
-        failed: (message) => FailedStateWidget(message));
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Scaffold(
+          body: WillPopScope(
+            onWillPop: () => showExitAppDialog(context),
+            child: homepageNotifier.when(
+                loading: (message) => AppLoadingIndicator(message),
+                content: _buildContent,
+                failed: (message) => FailedStateWidget(message)),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildContent(CourseOverview overview, bool isUpdating) {
     final user = ref.watch(signedInUserDataProvider);
-    return WillPopScope(
-      onWillPop: () => showExitAppDialog(context),
-      child: Container(
-        color: Colors.white,
-        child: SafeArea(
-          child: Scaffold(
-              body: RefreshIndicator(
-                  onRefresh:
-                      ref.read(homepageNotifierProvider.notifier).refresh,
-                  child: Column(children: [
-                    _buildHeader(),
-                    Expanded(
-                        child: ListView(
-                            shrinkWrap: true,
-                            controller: controller,
-                            padding:
-                                EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
-                            children: [
-                          _buildGeneralInfo(overview.generalInfo),
-                          _buildContinueLesson(overview.currentLesson),
-                          _buildTopics(user['grade'], overview.topicList),
-                        ]))
-                  ]))),
-        ),
-      ),
-    );
+    return RefreshIndicator(
+        onRefresh: ref.read(homepageNotifierProvider.notifier).refresh,
+        child: Column(children: [
+          _buildHeader(),
+          Expanded(
+              child: ListView(
+                  shrinkWrap: true,
+                  controller: controller,
+                  padding: EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
+                  children: [
+                _buildGeneralInfo(overview.generalInfo),
+                _buildContinueLesson(overview.currentLesson),
+                _buildTopics(user['grade'], overview.topicList),
+              ]))
+        ]));
   }
 
   _buildHeader() {
@@ -135,5 +143,11 @@ class _HomepageState extends ConsumerState<Homepage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

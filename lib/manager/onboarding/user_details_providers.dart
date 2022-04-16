@@ -17,7 +17,7 @@ final userValidationErrorsProvider =
 
 final signedInUserDataProvider = Provider<Map<String, dynamic>>((ref) {
   final jsonUser = _box.get(kUserData) as String?;
-  if (jsonUser == null) throw 'User-data is not suppossed to be null';
+  if (jsonUser == null) throw 'User-data is not supposed to be null';
   return json.decode(jsonUser);
 });
 

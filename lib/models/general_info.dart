@@ -8,7 +8,7 @@ class GeneralInfo {
   });
 
   factory GeneralInfo.empty() =>
-      GeneralInfo(completedLessons: 0, lessonsCount: 0);
+      GeneralInfo(completedLessons: 0, lessonsCount: 1);
 
   int get remainingClasses => lessonsCount - completedLessons;
 

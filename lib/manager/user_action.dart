@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:silla_studio/manager/courses/homepage.dart';
 import 'package:silla_studio/manager/pages.dart';
 import '../utils/validation_logic.dart';
 import 'onboarding/user_details_providers.dart';
@@ -40,8 +41,10 @@ final userActionProvider =
 ///the request.
 void handleUserAction(WidgetRef ref, UserAction userAction) async {
   ref.read(userActionProvider.state).state = userAction;
-  
+
   final userNotifier = ref.read(userNotifierProvider.notifier);
+  final homepageNotifier = ref.read(homepageNotifierProvider.notifier);
+
   final errors = <String, String?>{};
   final user = ref.read(userDetailsProvider);
   final password = ref.read(passwordProvider);
@@ -82,6 +85,7 @@ void handleUserAction(WidgetRef ref, UserAction userAction) async {
     if (userAction.isSendingPasswordResetLink) {
       await userNotifier.sendPasswordResetEmail();
     }
+    if (userAction == UserAction.viewHomepage) await homepageNotifier.init();
   }
   return;
 }
