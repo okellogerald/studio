@@ -43,10 +43,7 @@ class LessonTile extends ConsumerWidget {
     );
   }
 
-  _buildImage(String completionStatus) {
-    final isComplete = completionStatus == Status.completed;
-    final isPending = completionStatus == Status.pending;
-
+  _buildImage(Status status) {
     return SizedBox(
       height: 80.dh,
       width: 100.dw,
@@ -54,13 +51,15 @@ class LessonTile extends ConsumerWidget {
         alignment: AlignmentDirectional.bottomEnd,
         children: [
           AppImage(
-              imageUrl: lesson.thumbnailUrl ?? Constants.kDefaultImage,
+              imageUrl: lesson.thumbnailUrl.isEmpty
+                  ? defaultImage
+                  : lesson.thumbnailUrl,
               width: 100.dw,
               radius: 8.dw,
               height: 80.dh),
-          isComplete
+          status.isComplete
               ? const CheckMark()
-              : isPending
+              : status.isPending
                   ? const Icon(Icons.pause_circle, color: AppColors.primary)
                   : Container()
         ],

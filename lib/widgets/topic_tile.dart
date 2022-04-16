@@ -24,7 +24,7 @@ class TopicTile extends StatelessWidget {
         child: Row(
           children: [
             AppImage(
-                imageUrl: topic.thumbnailUrl ?? Constants.kDefaultImage,
+                imageUrl: topic.thumbnailUrl ?? defaultImage2,
                 width: 100.dw,
                 radius: 8.dw,
                 height: 80.dh),

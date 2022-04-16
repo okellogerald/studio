@@ -1,41 +1,53 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:silla_studio/manager/token.dart';
 import 'package:silla_studio/manager/video/models/video_details.dart';
 import 'package:silla_studio/secret.dart';
-import '../source.dart';
+import '../manager/courses/models/course_overview.dart';
+import '../source.dart' hide Provider;
 import 'package:http/http.dart' as http;
 
 const timeLimit = Duration(seconds: 20);
 
-class CoursesApi {
-  static Future<Map<String, dynamic>> getUserCourseOverview(
-      String token) async {
+final coursesRepositoryProvider = Provider((ref) => CoursesRepositoryImpl(ref));
+
+class CoursesRepositoryImpl {
+  final ProviderRef ref;
+  const CoursesRepositoryImpl(this.ref);
+
+  Future<List<Course>> getAllCourses() async {
+    const url = root + 'signup/';
+    final response = await http.get(Uri.parse(url)).timeout(timeLimit);
+    final result = json.decode(response.body);
+    _handleStatusCodes(result['code']);
+    final results = result['data']['courses'];
+    final courses = List.from(results).map((e) => Course.fromJson(e));
+    return courses.toList();
+  }
+
+  Future<CourseOverview> getUserCourseOverview() async {
     const url = root + 'home';
-    final headers = _getHeaders(token);
+    final headers = await _getHeaders();
 
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
     _handleStatusCodes(result['code']);
 
-    final topicList = <Topic>[];
-    for (var item in result['data']) {
-      topicList.add(Topic.fromJson(item));
-    }
-
-    final continueLesson = Lesson.fromJson(result['info']['continueLesson']);
+    final topics = List.from(result['data']).map((e) => Topic.fromJson(e));
+    final currentLesson = Lesson.fromJson(result['info']['continueLesson']);
     final generalInfo = GeneralInfo(
         completedLessons: result['info']['completedLessonsCount'],
         lessonsCount: result['info']['lessonsCount']);
 
-    final values = <String, dynamic>{};
-    values['lessons'] = continueLesson;
-    values['topics'] = topicList;
-    values['generalInfo'] = generalInfo;
-    return values;
+    return CourseOverview(
+        currentLesson: currentLesson,
+        generalInfo: generalInfo,
+        topicList: topics.toList());
   }
 
-  static Future<Map<String, dynamic>> getTopic(String id, String token) async {
+  Future<Map<String, dynamic>> getTopic(String id) async {
     final url = root + 'topic/$id';
-    final headers = _getHeaders(token);
+    final headers = await _getHeaders();
 
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
@@ -57,42 +69,32 @@ class CoursesApi {
     return values;
   }
 
-  static Future<Lesson> getLesson(String id, String token) async {
+  Future<Lesson> getLesson(String id) async {
     final url = root + 'lesson/$id';
-    final headers = _getHeaders(token);
+    final headers = await _getHeaders();
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
     _handleStatusCodes(result['code']);
-    return Lesson.fromJson(result['data']);
+    final videoDetails =
+        await _getVideoDetails(result['mediaID']).timeout(timeLimit);
+    return Lesson.fromJson(result['data'], videoDetails);
   }
 
-  static Future<VideoDetails> getVideoDetails(String mediaId) async {
+  Future<VideoDetails> _getVideoDetails(String mediaId) async {
     final url = Uri.parse('https://cdn.jwplayer.com/v2/media/$mediaId');
     final headers = {'Accept': 'application/json; charset=utf-8'};
     final response = await http.get(url, headers: headers);
     _handleStatusCodes(response.statusCode);
     final result = json.decode(response.body);
-    log(result.toString());
     return VideoDetails.fromJson(result['playlist'][0]);
   }
 
-  static Future<Map<String, dynamic>> getProfile(String token) async {
-    const url = root + 'profile';
-    final headers = _getHeaders(token);
-    final response =
-        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
-    final result = json.decode(response.body);
-    _handleStatusCodes(result['code']);
-    return result['data'];
-  }
-
-  static Future<String> updateLessonStatus(
-      String newStatus, String lessonId, String token) async {
+  Future<String> updateLessonStatus(String newStatus, String lessonId) async {
     final url = Uri.parse(root + 'lesson/$lessonId/status');
     final data = json.encode({'completionStatus': newStatus});
     log(data.toString());
-    final headers = _getHeaders(token);
+    final headers = await _getHeaders();
     final response =
         await http.post(url, headers: headers, body: data).timeout(timeLimit);
     final result = json.decode(response.body);
@@ -101,9 +103,9 @@ class CoursesApi {
     return result['data']['completionStatus'];
   }
 
-  static Future<GeneralInfo> getGeneralInfo(String token) async {
+  Future<GeneralInfo> getGeneralInfo() async {
     const url = root + 'home';
-    final headers = _getHeaders(token);
+    final headers = await _getHeaders();
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
@@ -115,13 +117,17 @@ class CoursesApi {
     return generalInfo;
   }
 
-  static void _handleStatusCodes(int statusCode) {
+  void _handleStatusCodes(int statusCode) {
     if (statusCode == 200) return;
     if (statusCode == 701) throw ApiError.expiredToken();
     throw ApiError.unknown();
   }
 
-  static Map<String, String> _getHeaders(String token) {
+  Future<Map<String, String>> _getHeaders() async {
+    final token = ref
+        .read(tokenProvider.future)
+        .timeout(timeLimit)
+        .catchError((error) => throw error);
     return {"Authorization": 'Bearer $token'};
   }
 }

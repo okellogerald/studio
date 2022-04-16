@@ -1,14 +1,15 @@
-class Constants {
-  static const kFontFam = 'stratos';
-  static const kUserDataBox = 'user_data_box';
-  static const kUserData = 'user_data';
+const kFontFam = 'stratos';
+const kUserDataBox = 'user_data_box';
+const kUserData = 'user_data';
 
-  static const kDefaultImage =
-      'https://images.pexels.com/photos/933054/pexels-photo-933054.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+const defaultImage =
+    'https://images.pexels.com/photos/3949699/pexels-photo-3949699.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
 
-  static const video =
-      'https://mzdcrckdvywjtgjxlogb.supabase.co/storage/v1/object/public/user.images/y2mate.com - We Dont Talk About Bruno From Encanto_360p.mp4';
-}
+const defaultImage2 =
+    'https://images.pexels.com/photos/933054/pexels-photo-933054.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+
+const video =
+    'https://mzdcrckdvywjtgjxlogb.supabase.co/storage/v1/object/public/user.images/y2mate.com - We Dont Talk About Bruno From Encanto_360p.mp4';
 
 var jsonVideoDetails = <String, dynamic>{
   "title": "Ep-23 Importance Of Music And Sound",
@@ -89,9 +90,8 @@ var jsonVideoDetails = <String, dynamic>{
         },
         {
           "file":
-              /* "https://cdn.jwplayer.com/videos/RUZ303CO-ZHNGpxYd.mp4" */  Constants
-              .video 
-          ,
+              /* "https://cdn.jwplayer.com/videos/RUZ303CO-ZHNGpxYd.mp4" */
+              video,
           "type": "video/mp4",
           "height": 720,
           "width": 1280,

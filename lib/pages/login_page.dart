@@ -1,24 +1,26 @@
-import '../manager/user/user_actions.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../manager/pages.dart';
+import '../manager/user_action.dart';
 import '../source.dart';
 
-class LogInPage extends StatefulWidget {
+class LogInPage extends ConsumerStatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
 
   @override
-  State<LogInPage> createState() => _LogInPageState();
+  ConsumerState<LogInPage> createState() => _LogInPageState();
 }
 
-class _LogInPageState extends State<LogInPage> {
-  late final OnBoardingPagesBloc bloc;
+class _LogInPageState extends ConsumerState<LogInPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final currentPage = Pages.logInPage;
+  final currentPage = Pages.login_page;
+
 
   @override
   void initState() {
-    bloc = Provider.of<OnBoardingPagesBloc>(context, listen: false);
-    bloc.init(currentPage);
+    handleStateOnInit(ref, currentPage);
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class _LogInPageState extends State<LogInPage> {
           listenWhen: (_, current) => current.page == currentPage,
           buildWhen: (_, current) => current.page == currentPage,
           builder: (_, state) {
-             log('building in the $currentPage');
+            log('building in the $currentPage');
             return state.when(
                 laoding: _buildLoading,
                 content: _buildContent,

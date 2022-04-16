@@ -4,7 +4,7 @@ class AppTheme {
   static ThemeData themeData() {
     return ThemeData(
         scaffoldBackgroundColor: AppColors.background,
-        fontFamily: Constants.kFontFam,
+        fontFamily: kFontFam,
         primaryColor: AppColors.primary,
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: AppColors.primary,
@@ -13,8 +13,8 @@ class AppTheme {
         ),
         snackBarTheme: const SnackBarThemeData(
             backgroundColor: AppColors.error,
-            contentTextStyle: TextStyle(
-                color: AppColors.onError, fontFamily: Constants.kFontFam)),
+            contentTextStyle:
+                TextStyle(color: AppColors.onError, fontFamily: kFontFam)),
         appBarTheme: const AppBarTheme(
             backgroundColor: AppColors.background,
             elevation: 0,
@@ -22,7 +22,7 @@ class AppTheme {
             titleTextStyle: TextStyle(
                 color: AppColors.secondary,
                 fontSize: 24,
-                fontFamily: Constants.kFontFam,
+                fontFamily: kFontFam,
                 fontWeight: FontWeight.bold)),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: AppColors.background, circularTrackColor: AppColors.primary),
@@ -41,11 +41,11 @@ class AppTheme {
             labelColor: AppColors.primary,
             labelStyle: const TextStyle(
                 fontSize: 18,
-                fontFamily: Constants.kFontFam,
+                fontFamily: kFontFam,
                 fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(
                 fontSize: 18,
-                fontFamily: Constants.kFontFam,
+                fontFamily: kFontFam,
                 fontWeight: FontWeight.w500),
             labelPadding: const EdgeInsets.all(10),
             indicatorSize: TabBarIndicatorSize.tab,

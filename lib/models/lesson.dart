@@ -1,34 +1,56 @@
+import '../manager/video/models/video_details.dart';
 import '../source.dart';
+
+part 'lesson.freezed.dart';
 
 enum LessonType { practice, learn }
 
-class Lesson {
-  final String id, title, videoTime, topicId, topicName, completionStatus;
-  String? thumbnailUrl, mediaId, description, body;
-  final LessonType type;
-  final bool isPaid, isPublished;
+enum Status { completed, pending, incomplete }
 
-  Lesson(
-      {required this.id,
-      required this.body,
-      required this.title,
-      required this.thumbnailUrl,
-      required this.videoTime,
-      required this.topicId,
-      required this.topicName,
-      required this.type,
-      required this.isPaid,
-      required this.completionStatus,
-      required this.description,
-      required this.mediaId,
-      required this.isPublished});
+extension StatusExtension on Status {
+  bool get isComplete => this == Status.completed;
+  bool get isPending => this == Status.pending;
+  bool get isIncomplete => this == Status.incomplete;
 
-  factory Lesson.fromJson(Map<String, dynamic> json) {
+  String get value {
+    switch (this) {
+      case Status.completed:
+        return 'completed';
+      case Status.incomplete:
+        return 'incomplete';
+      case Status.pending:
+        return 'pending';
+      default:
+    }
+    throw 'no matching the status keywords';
+  }
+}
+
+@freezed
+class Lesson with _$Lesson {
+  const Lesson._();
+
+  const factory Lesson(
+      {@Default('') String id,
+      @Default('') String title,
+      @Default('') String topicId,
+      @Default('') String topicName,
+      @Default(Status.completed) Status completionStatus,
+      @Default('') String description,
+      @Default('') String body,
+      @Default('') String thumbnailUrl,
+      @Default(LessonType.learn) LessonType type,
+      @Default(true) bool isPaid,
+      @Default(true) bool isPublished,
+      @Default(VideoDetails()) VideoDetails videoDetails}) = _Lesson;
+
+  factory Lesson.fromJson(Map<String, dynamic> json,
+      [VideoDetails? videoDetails]) {
+    final status = json['completionStatus'];
     return Lesson(
         id: json['id'],
         title: json['title'],
         thumbnailUrl: json['thumbnailUrl'] ?? defaultImage,
-        videoTime: json['videoTime'],
         topicId: json['topic']['id'],
         topicName: json['topic']['title'],
         type: json['lessonType'] == 'learn'
@@ -36,51 +58,20 @@ class Lesson {
             : LessonType.practice,
         isPaid: json['isPaid'] ?? false,
         isPublished: json['publishedStatus'] == 'published',
-        mediaId: json['mediaID'] ?? '',
+        videoDetails: videoDetails ?? const VideoDetails(),
         description: json['description'] ?? '',
-        completionStatus: json['completionStatus'] ?? '',
+        completionStatus: status == Status.completed.value
+            ? Status.completed
+            : status == Status.incomplete
+                ? Status.incomplete
+                : Status.pending,
         body: json['body'] ?? '');
-  }
-
-  factory Lesson.empty() => Lesson(
-      id: '',
-      title: '',
-      thumbnailUrl: '',
-      videoTime: '',
-      body: '',
-      topicId: '',
-      topicName: '',
-      mediaId: '',
-      completionStatus: '',
-      description: '',
-      type: LessonType.learn,
-      isPaid: false,
-      isPublished: false);
-
-  Lesson copyWithNewStatus(String newStatus) {
-    return Lesson(
-        id: id,
-        body: body,
-        title: title,
-        thumbnailUrl: thumbnailUrl,
-        videoTime: videoTime,
-        topicId: topicId,
-        topicName: topicName,
-        type: type,
-        isPaid: isPaid,
-        completionStatus: newStatus,
-        description: description,
-        mediaId: mediaId,
-        isPublished: isPublished);
   }
 
   bool get isComplete => completionStatus == Status.completed;
 
-  static const defaultImage =
-      'https://images.pexels.com/photos/3949699/pexels-photo-3949699.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
-
   @override
   String toString() {
-    return 'Lesson(id: $id, title: $title, body: $body, mediaId: $mediaId)';
+    return 'Lesson(id: $id, title: $title, body: $body)';
   }
 }

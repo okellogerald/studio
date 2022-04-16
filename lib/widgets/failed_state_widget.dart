@@ -1,19 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import '../manager/user/user_actions.dart';
+import 'package:silla_studio/manager/user_action.dart';
 import '../source.dart' hide Consumer;
 
 class FailedStateWidget extends StatelessWidget {
-  const FailedStateWidget(this.message, {required this.tryAgainCallback, key})
-      : super(key: key);
+  const FailedStateWidget(this.message, {key}) : super(key: key);
   final String? message;
-  final VoidCallback tryAgainCallback;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Consumer(builder: (context, ref, child) {
-        final failureMessage = getUserActionFailureMessage(ref);
+        final failureMessage = getUserActionFailureTitle(ref);
         return Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 15.dw, vertical: 30.dh),
@@ -28,7 +26,10 @@ class FailedStateWidget extends StatelessWidget {
                   ? Container()
                   : AppText(message!, opacity: .7, size: 14.dw),
               AppTextButton(
-                  onPressed: () => tryAgainCallback(),
+                  onPressed: () {
+                    final userAction = ref.read(userActionProvider);
+                    handleUserAction(ref, userAction);
+                  },
                   textColor: AppColors.onPrimary,
                   text: 'TRY AGAIN',
                   backgroundColor: AppColors.primary,

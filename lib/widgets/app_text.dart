@@ -24,7 +24,7 @@ class AppText extends StatelessWidget {
         textAlign: alignment ?? TextAlign.start,
         style: style ??
             TextStyle(
-              fontFamily: Constants.kFontFam,
+              fontFamily: kFontFam,
               fontWeight: weight ?? FontWeight.w500,
               fontSize: size ?? 15.dw,
               color:

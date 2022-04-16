@@ -1,10 +1,18 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:silla_studio/manager/token.dart';
 import 'package:silla_studio/secret.dart';
-
-import '../source.dart';
+import '../../source.dart' hide Provider;
 import 'package:http/http.dart' as http;
 
-class OnBoardingApi {
-  static Future<List<Course>> getAllCategories() async {
+import 'models/user.dart';
+
+final userRepositoryProvider = Provider((ref) => UserRepositoryImpl(ref));
+
+class UserRepositoryImpl {
+  final ProviderRef ref;
+  const UserRepositoryImpl(this.ref);
+
+  Future<List<Course>> getAllCourses() async {
     const url = root + 'signup/';
     final response = await http.get(Uri.parse(url)).timeout(timeLimit);
     final result = json.decode(response.body);
@@ -17,30 +25,21 @@ class OnBoardingApi {
     return courseList;
   }
 
-  static Future<Map<String, dynamic>> createUser(
-      UserData userData, String password, String token) async {
+  Future<Map<String, dynamic>> createUser(User user, String password) async {
     const url = root + 'signup/';
-    final body = {
-      'gender': userData.gender!.toLowerCase(),
-      'dob': userData.dateOfBirth.millisecondsSinceEpoch,
-      'name': userData.name,
-      'level': userData.level,
-      'courseID': userData.courseId,
-      'gradeID': userData.gradeId,
-    };
-    final headers = _getHeaders(token);
+    final body = user.toJson();
+    final headers = await _getHeaders();
     final response = await http
         .post(Uri.parse(url), headers: headers, body: json.encode(body))
         .timeout(timeLimit);
     final result = json.decode(response.body);
-    // log(result.toString());
     _handleStatusCodes(result['code']);
     return result;
   }
 
-  static Future<Map<String, dynamic>> logInUser(String token) async {
+  Future<Map<String, dynamic>> logInUser() async {
     const url = root + 'login/';
-    final headers = _getHeaders(token);
+    final headers = await _getHeaders();
     final response =
         await http.post(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
@@ -48,14 +47,28 @@ class OnBoardingApi {
     return result;
   }
 
-  static void _handleStatusCodes(int statusCode) {
+  Future<Map<String, dynamic>> getProfile() async {
+    const url = root + 'profile';
+    final headers = await _getHeaders();
+    final response =
+        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
+    final result = json.decode(response.body);
+    _handleStatusCodes(result['code']);
+    return result['data'];
+  }
+
+  void _handleStatusCodes(int statusCode) {
     if (statusCode == 200) return;
     if (statusCode == 701) throw ApiError.expiredToken();
     throw ApiError.unknown();
   }
 
-  static Map<String, String> _getHeaders(String token) {
+  Future<Map<String, String>> _getHeaders() async {
     final _headers = Map<String, String>.from(headers);
+    final token = await ref
+        .read(tokenProvider.future)
+        .timeout(timeLimit)
+        .catchError((e) => throw (e));
     _headers["Authorization"] = 'Bearer $token';
     return _headers;
   }

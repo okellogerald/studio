@@ -6,7 +6,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   static final noAccountYet =
-      Hive.box(Constants.kUserDataBox).get(Constants.kUserData) == null;
+      Hive.box(kUserDataBox).get(kUserData) == null;
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'user_data.dart';
+part of 'user.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,10 +15,10 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$UserDataTearOff {
-  const _$UserDataTearOff();
+class _$UserTearOff {
+  const _$UserTearOff();
 
-  _UserData call(
+  _User call(
       {required DateTime dateOfBirth,
       String email = '',
       String name = '',
@@ -26,7 +26,7 @@ class _$UserDataTearOff {
       int courseId = 0,
       String level = '',
       int gradeId = 0}) {
-    return _UserData(
+    return _User(
       dateOfBirth: dateOfBirth,
       email: email,
       name: name,
@@ -39,10 +39,10 @@ class _$UserDataTearOff {
 }
 
 /// @nodoc
-const $UserData = _$UserDataTearOff();
+const $User = _$UserTearOff();
 
 /// @nodoc
-mixin _$UserData {
+mixin _$User {
   DateTime get dateOfBirth => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
@@ -52,14 +52,13 @@ mixin _$UserData {
   int get gradeId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $UserDataCopyWith<UserData> get copyWith =>
-      throw _privateConstructorUsedError;
+  $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserDataCopyWith<$Res> {
-  factory $UserDataCopyWith(UserData value, $Res Function(UserData) then) =
-      _$UserDataCopyWithImpl<$Res>;
+abstract class $UserCopyWith<$Res> {
+  factory $UserCopyWith(User value, $Res Function(User) then) =
+      _$UserCopyWithImpl<$Res>;
   $Res call(
       {DateTime dateOfBirth,
       String email,
@@ -71,12 +70,12 @@ abstract class $UserDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserDataCopyWithImpl<$Res> implements $UserDataCopyWith<$Res> {
-  _$UserDataCopyWithImpl(this._value, this._then);
+class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
+  _$UserCopyWithImpl(this._value, this._then);
 
-  final UserData _value;
+  final User _value;
   // ignore: unused_field
-  final $Res Function(UserData) _then;
+  final $Res Function(User) _then;
 
   @override
   $Res call({
@@ -122,9 +121,9 @@ class _$UserDataCopyWithImpl<$Res> implements $UserDataCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$UserDataCopyWith<$Res> implements $UserDataCopyWith<$Res> {
-  factory _$UserDataCopyWith(_UserData value, $Res Function(_UserData) then) =
-      __$UserDataCopyWithImpl<$Res>;
+abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
+  factory _$UserCopyWith(_User value, $Res Function(_User) then) =
+      __$UserCopyWithImpl<$Res>;
   @override
   $Res call(
       {DateTime dateOfBirth,
@@ -137,13 +136,13 @@ abstract class _$UserDataCopyWith<$Res> implements $UserDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$UserDataCopyWithImpl<$Res> extends _$UserDataCopyWithImpl<$Res>
-    implements _$UserDataCopyWith<$Res> {
-  __$UserDataCopyWithImpl(_UserData _value, $Res Function(_UserData) _then)
-      : super(_value, (v) => _then(v as _UserData));
+class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
+    implements _$UserCopyWith<$Res> {
+  __$UserCopyWithImpl(_User _value, $Res Function(_User) _then)
+      : super(_value, (v) => _then(v as _User));
 
   @override
-  _UserData get _value => super._value as _UserData;
+  _User get _value => super._value as _User;
 
   @override
   $Res call({
@@ -155,7 +154,7 @@ class __$UserDataCopyWithImpl<$Res> extends _$UserDataCopyWithImpl<$Res>
     Object? level = freezed,
     Object? gradeId = freezed,
   }) {
-    return _then(_UserData(
+    return _then(_User(
       dateOfBirth: dateOfBirth == freezed
           ? _value.dateOfBirth
           : dateOfBirth // ignore: cast_nullable_to_non_nullable
@@ -190,8 +189,8 @@ class __$UserDataCopyWithImpl<$Res> extends _$UserDataCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserData extends _UserData {
-  const _$_UserData(
+class _$_User extends _User {
+  const _$_User(
       {required this.dateOfBirth,
       this.email = '',
       this.name = '',
@@ -223,14 +222,14 @@ class _$_UserData extends _UserData {
 
   @override
   String toString() {
-    return 'UserData(dateOfBirth: $dateOfBirth, email: $email, name: $name, gender: $gender, courseId: $courseId, level: $level, gradeId: $gradeId)';
+    return 'User(dateOfBirth: $dateOfBirth, email: $email, name: $name, gender: $gender, courseId: $courseId, level: $level, gradeId: $gradeId)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _UserData &&
+            other is _User &&
             const DeepCollectionEquality()
                 .equals(other.dateOfBirth, dateOfBirth) &&
             const DeepCollectionEquality().equals(other.email, email) &&
@@ -254,20 +253,20 @@ class _$_UserData extends _UserData {
 
   @JsonKey(ignore: true)
   @override
-  _$UserDataCopyWith<_UserData> get copyWith =>
-      __$UserDataCopyWithImpl<_UserData>(this, _$identity);
+  _$UserCopyWith<_User> get copyWith =>
+      __$UserCopyWithImpl<_User>(this, _$identity);
 }
 
-abstract class _UserData extends UserData {
-  const factory _UserData(
+abstract class _User extends User {
+  const factory _User(
       {required DateTime dateOfBirth,
       String email,
       String name,
       String? gender,
       int courseId,
       String level,
-      int gradeId}) = _$_UserData;
-  const _UserData._() : super._();
+      int gradeId}) = _$_User;
+  const _User._() : super._();
 
   @override
   DateTime get dateOfBirth;
@@ -285,6 +284,5 @@ abstract class _UserData extends UserData {
   int get gradeId;
   @override
   @JsonKey(ignore: true)
-  _$UserDataCopyWith<_UserData> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$UserCopyWith<_User> get copyWith => throw _privateConstructorUsedError;
 }

@@ -1,67 +1,58 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/pages/levels_page.dart';
-import '../errors/app_error.dart';
-import '../manager/user/user_actions.dart';
-import '../source.dart';
+import '../manager/onboarding/courses_provider.dart';
+import '../manager/onboarding/models/user_state.dart';
+import '../manager/onboarding/user_details_providers.dart';
+import '../manager/onboarding/user_notifier.dart';
+import '../manager/user_onboarding/pages_provider.dart';
+import '../manager/user_action.dart';
+import '../source.dart' hide Provider;
 
 class CoursesPage extends ConsumerStatefulWidget {
   const CoursesPage({Key? key}) : super(key: key);
-
-  static navigateTo(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => const CoursesPage()));
-  }
 
   @override
   ConsumerState<CoursesPage> createState() => _CoursesPageState();
 }
 
 class _CoursesPageState extends ConsumerState<CoursesPage> {
-  late final OnBoardingPagesBloc bloc;
   final scrollController = ScrollController();
-  final currentPage = Pages.coursesPage;
+  final currentPage = Pages.courses_page;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    bloc = Provider.of<OnBoardingPagesBloc>(context, listen: false);
-    bloc.init(currentPage);
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.read(userActionProvider.state).state = UserActivity.coursesView;
-    });
+    handleStateOnInit(ref, currentPage);
     super.initState();
+  }
+
+  void handleFailedState(String message) {
+    final action = ref.read(userActionProvider);
+    if (action.haveErrorShownBySnackBar) {
+      showSnackbar(message, key: scaffoldKey);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userNotifierProvider);
+
+    ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
+      if (ref.read(pagesProvider) != currentPage) return;
+      next!.maybeWhen(failed: handleFailedState, orElse: () {});
+    });
+
     return Scaffold(
-      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-        listener: (context, state) {
-          final error = state.maybeWhen(
-              failed: (_, __, error) => error, orElse: () => null);
-          if (error != null && error.isShownViaSnackBar) {
-            showSnackbar(error.message, context: context);
-          }
-        },
-        listenWhen: (_, current) => current.page == currentPage,
-        buildWhen: (_, current) => current.page == currentPage,
-        builder: (_, state) {
-          log('building in the $currentPage');
-          return state.when(
-              laoding: _buildLoading,
-              content: _buildContent,
-              success: _buildContent,
-              failed: _buildFailed);
-        },
-      ),
-    );
+        body: WillPopScope(
+      onWillPop: () => handleStateOnPop(ref, Pages.courses_page),
+      child: userState.maybeWhen(
+          loading: (message) => AppLoadingIndicator(message),
+          failed: (message) => FailedStateWidget(message),
+          orElse: _buildContent),
+    ));
   }
 
-  Widget _buildLoading(
-      Pages page, OnBoardingSupplements supp, String? message) {
-    return Scaffold(body: AppLoadingIndicator(message));
-  }
-
-  Widget _buildContent(Pages page, OnBoardingSupplements supp) {
+  Widget _buildContent() {
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -72,7 +63,7 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
                   title: 'Choose Courses',
                   subtitle: 'What would you like to learn ?',
                   scrollController: scrollController),
-              _buildCourses(supp),
+              _buildCourses(),
             ],
           ),
         ),
@@ -80,14 +71,14 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
     );
   }
 
-  Widget _buildCourses(OnBoardingSupplements supp) {
+  Widget _buildCourses() {
+    final courseTypes = ref.read(coursesTypesProvider);
+
     return Expanded(
       child: ListView(
           controller: scrollController,
           padding: EdgeInsets.only(bottom: 20.dh),
-          children: supp.courseTypes.map((e) {
-            final courseList =
-                supp.courseList.where((course) => course.type == e).toList();
+          children: courseTypes.map((type) {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.dw),
               child: Column(
@@ -95,10 +86,10 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: 40.dh),
-                    child: AppText(e.toUpperCase(), size: 20.dw),
+                    child: AppText(type.toUpperCase(), size: 20.dw),
                   ),
                   SizedBox(height: 10.dh),
-                  _buildClassesGrid(courseList, supp)
+                  _buildClassesGrid(type)
                 ],
               ),
             );
@@ -106,15 +97,18 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
     );
   }
 
-  _buildClassesGrid(List<Course> courseList, OnBoardingSupplements supp) {
+  _buildClassesGrid(String type) {
+    final user = ref.watch(userDetailsProvider);
+    final courseList = ref.read(coursesProvider);
+    final courses = courseList.where((course) => course.type == type).toList();
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 10.dw,
       mainAxisSpacing: 10.dh,
-      children: courseList.map((course) {
-        final isSelected = supp.user.courseId == course.id;
+      children: courses.map((course) {
+        final isSelected = user.courseId == course.id;
 
         return AppMaterialButton(
             onPressed:
@@ -151,7 +145,7 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
   }
 
   void _onCoursePressed(Course course) {
-    bloc.updateAttributes(
+    updateUserDetails(ref,
         courseId: course.id, gradeId: course.gradeList.first.id);
 
     if (course.levelList.isEmpty) {
@@ -159,12 +153,5 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
       return;
     }
     push(LevelsPage(course.levelList));
-  }
-
-  Widget _buildFailed(Pages page, OnBoardingSupplements supp, AppError error) {
-    if (error.isShownViaSnackBar) return _buildContent(page, supp);
-    return Scaffold(
-        body: FailedStateWidget(error.message,
-            tryAgainCallback: () => bloc.init(currentPage)));
   }
 }

@@ -1,5 +1,5 @@
-export 'on_boarding_api.dart';
-export 'courses_api.dart';
+export '../manager/onboarding/user_repository_provider.dart';
+export 'courses_repository_provider.dart';
 export 'dart:convert';
 
 
