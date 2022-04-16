@@ -31,10 +31,10 @@ class _$ProfilePageStateTearOff {
     );
   }
 
-  _Failed failed(Map<String, dynamic> userData, String message) {
+  _Failed failed(Map<String, dynamic> userData, AppError error) {
     return _Failed(
       userData,
-      message,
+      error,
     );
   }
 
@@ -57,7 +57,7 @@ mixin _$ProfilePageState {
     required TResult Function(Map<String, dynamic> userData, String? message)
         loading,
     required TResult Function(Map<String, dynamic> userData) content,
-    required TResult Function(Map<String, dynamic> userData, String message)
+    required TResult Function(Map<String, dynamic> userData, AppError error)
         failed,
     required TResult Function(Map<String, dynamic> userData) success,
   }) =>
@@ -66,7 +66,7 @@ mixin _$ProfilePageState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
   }) =>
       throw _privateConstructorUsedError;
@@ -74,7 +74,7 @@ mixin _$ProfilePageState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
     required TResult orElse(),
   }) =>
@@ -217,7 +217,7 @@ class _$_Loading implements _Loading {
     required TResult Function(Map<String, dynamic> userData, String? message)
         loading,
     required TResult Function(Map<String, dynamic> userData) content,
-    required TResult Function(Map<String, dynamic> userData, String message)
+    required TResult Function(Map<String, dynamic> userData, AppError error)
         failed,
     required TResult Function(Map<String, dynamic> userData) success,
   }) {
@@ -229,7 +229,7 @@ class _$_Loading implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
   }) {
     return loading?.call(userData, message);
@@ -240,7 +240,7 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
     required TResult orElse(),
   }) {
@@ -368,7 +368,7 @@ class _$_Content implements _Content {
     required TResult Function(Map<String, dynamic> userData, String? message)
         loading,
     required TResult Function(Map<String, dynamic> userData) content,
-    required TResult Function(Map<String, dynamic> userData, String message)
+    required TResult Function(Map<String, dynamic> userData, AppError error)
         failed,
     required TResult Function(Map<String, dynamic> userData) success,
   }) {
@@ -380,7 +380,7 @@ class _$_Content implements _Content {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
   }) {
     return content?.call(userData);
@@ -391,7 +391,7 @@ class _$_Content implements _Content {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
     required TResult orElse(),
   }) {
@@ -456,7 +456,7 @@ abstract class _$FailedCopyWith<$Res>
   factory _$FailedCopyWith(_Failed value, $Res Function(_Failed) then) =
       __$FailedCopyWithImpl<$Res>;
   @override
-  $Res call({Map<String, dynamic> userData, String message});
+  $Res call({Map<String, dynamic> userData, AppError error});
 }
 
 /// @nodoc
@@ -471,17 +471,17 @@ class __$FailedCopyWithImpl<$Res> extends _$ProfilePageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userData = freezed,
-    Object? message = freezed,
+    Object? error = freezed,
   }) {
     return _then(_Failed(
       userData == freezed
           ? _value.userData
           : userData // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
-      message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -489,16 +489,16 @@ class __$FailedCopyWithImpl<$Res> extends _$ProfilePageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Failed implements _Failed {
-  const _$_Failed(this.userData, this.message);
+  const _$_Failed(this.userData, this.error);
 
   @override
   final Map<String, dynamic> userData;
   @override
-  final String message;
+  final AppError error;
 
   @override
   String toString() {
-    return 'ProfilePageState.failed(userData: $userData, message: $message)';
+    return 'ProfilePageState.failed(userData: $userData, error: $error)';
   }
 
   @override
@@ -507,14 +507,14 @@ class _$_Failed implements _Failed {
         (other.runtimeType == runtimeType &&
             other is _Failed &&
             const DeepCollectionEquality().equals(other.userData, userData) &&
-            const DeepCollectionEquality().equals(other.message, message));
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(userData),
-      const DeepCollectionEquality().hash(message));
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -527,11 +527,11 @@ class _$_Failed implements _Failed {
     required TResult Function(Map<String, dynamic> userData, String? message)
         loading,
     required TResult Function(Map<String, dynamic> userData) content,
-    required TResult Function(Map<String, dynamic> userData, String message)
+    required TResult Function(Map<String, dynamic> userData, AppError error)
         failed,
     required TResult Function(Map<String, dynamic> userData) success,
   }) {
-    return failed(userData, message);
+    return failed(userData, error);
   }
 
   @override
@@ -539,10 +539,10 @@ class _$_Failed implements _Failed {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
   }) {
-    return failed?.call(userData, message);
+    return failed?.call(userData, error);
   }
 
   @override
@@ -550,12 +550,12 @@ class _$_Failed implements _Failed {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
     required TResult orElse(),
   }) {
     if (failed != null) {
-      return failed(userData, message);
+      return failed(userData, error);
     }
     return orElse();
   }
@@ -599,12 +599,12 @@ class _$_Failed implements _Failed {
 }
 
 abstract class _Failed implements ProfilePageState {
-  const factory _Failed(Map<String, dynamic> userData, String message) =
+  const factory _Failed(Map<String, dynamic> userData, AppError error) =
       _$_Failed;
 
   @override
   Map<String, dynamic> get userData;
-  String get message;
+  AppError get error;
   @override
   @JsonKey(ignore: true)
   _$FailedCopyWith<_Failed> get copyWith => throw _privateConstructorUsedError;
@@ -677,7 +677,7 @@ class _$_Success implements _Success {
     required TResult Function(Map<String, dynamic> userData, String? message)
         loading,
     required TResult Function(Map<String, dynamic> userData) content,
-    required TResult Function(Map<String, dynamic> userData, String message)
+    required TResult Function(Map<String, dynamic> userData, AppError error)
         failed,
     required TResult Function(Map<String, dynamic> userData) success,
   }) {
@@ -689,7 +689,7 @@ class _$_Success implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
   }) {
     return success?.call(userData);
@@ -700,7 +700,7 @@ class _$_Success implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, dynamic> userData, String? message)? loading,
     TResult Function(Map<String, dynamic> userData)? content,
-    TResult Function(Map<String, dynamic> userData, String message)? failed,
+    TResult Function(Map<String, dynamic> userData, AppError error)? failed,
     TResult Function(Map<String, dynamic> userData)? success,
     required TResult orElse(),
   }) {

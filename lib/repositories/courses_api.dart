@@ -1,3 +1,4 @@
+import 'package:silla_studio/manager/video/models/video_details.dart';
 import 'package:silla_studio/secret.dart';
 import '../source.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +10,7 @@ class CoursesApi {
       String token) async {
     const url = root + 'home';
     final headers = _getHeaders(token);
+
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
@@ -34,6 +36,7 @@ class CoursesApi {
   static Future<Map<String, dynamic>> getTopic(String id, String token) async {
     final url = root + 'topic/$id';
     final headers = _getHeaders(token);
+
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
@@ -64,6 +67,16 @@ class CoursesApi {
     return Lesson.fromJson(result['data']);
   }
 
+  static Future<VideoDetails> getVideoDetails(String mediaId) async {
+    final url = Uri.parse('https://cdn.jwplayer.com/v2/media/$mediaId');
+    final headers = {'Accept': 'application/json; charset=utf-8'};
+    final response = await http.get(url, headers: headers);
+    _handleStatusCodes(response.statusCode);
+    final result = json.decode(response.body);
+    log(result.toString());
+    return VideoDetails.fromJson(result['playlist'][0]);
+  }
+
   static Future<Map<String, dynamic>> getProfile(String token) async {
     const url = root + 'profile';
     final headers = _getHeaders(token);
@@ -76,17 +89,15 @@ class CoursesApi {
 
   static Future<String> updateLessonStatus(
       String newStatus, String lessonId, String token) async {
-    final url = root + 'lesson/$lessonId/status';
+    final url = Uri.parse(root + 'lesson/$lessonId/status');
     final data = json.encode({'completionStatus': newStatus});
+    log(data.toString());
     final headers = _getHeaders(token);
-    final response = await http
-        .post(Uri.parse(url), headers: headers, body: data)
-        .timeout(timeLimit);
+    final response =
+        await http.post(url, headers: headers, body: data).timeout(timeLimit);
     final result = json.decode(response.body);
     log(result.toString());
-
     _handleStatusCodes(result['code']);
-
     return result['data']['completionStatus'];
   }
 
@@ -96,8 +107,8 @@ class CoursesApi {
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-
     _handleStatusCodes(result['code']);
+
     final generalInfo = GeneralInfo(
         completedLessons: result['info']['completedLessonsCount'],
         lessonsCount: result['info']['lessonsCount']);

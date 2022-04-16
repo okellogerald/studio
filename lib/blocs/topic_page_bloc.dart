@@ -1,3 +1,4 @@
+import '../errors/app_error.dart';
 import '../source.dart';
 
 class TopicPageBloc extends Cubit<TopicPageState> {
@@ -12,6 +13,7 @@ class TopicPageBloc extends Cubit<TopicPageState> {
   void init(Topic topic) async {
     var supp = state.supplements;
     emit(TopicPageState.loading(supp));
+
     try {
       final values = await service.getTopic(topic.id);
       supp = supp.copyWith(
@@ -20,7 +22,7 @@ class TopicPageBloc extends Cubit<TopicPageState> {
           completedCount: topic.completedLessons);
       emit(TopicPageState.content(supp));
     } on ApiError catch (_) {
-      emit(TopicPageState.failed(supp, _.message));
+      emit(TopicPageState.failed(supp, AppError.onBody(_.message)));
     }
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:silla_studio/widgets/app_snackbar.dart';
 
+import '../widgets/exit_app_dialod.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void push(Widget nextPage) async => await navigatorKey.currentState
@@ -29,3 +31,13 @@ void showSnackbar(String message,
 
 void _showSnackBarCallback(BuildContext context, String message) =>
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(message));
+
+Future<bool> showExitAppDialog(BuildContext context) async {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return const ExitAppDialog();
+      });
+
+  return true;
+}

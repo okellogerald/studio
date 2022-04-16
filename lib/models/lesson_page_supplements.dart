@@ -1,3 +1,4 @@
+import '../manager/video/models/video_details.dart';
 import '../source.dart';
 
 part 'lesson_page_supplements.freezed.dart';
@@ -10,11 +11,13 @@ class LessonPageSupplements with _$LessonPageSupplements {
       {required Lesson lesson,
       required List<String> lessonsIdList,
       required int currentIndex,
+      required VideoDetails videoDetails,
       required int lessonsLength}) = _LessonPageSupplements;
 
   factory LessonPageSupplements.empty() => LessonPageSupplements(
       lesson: Lesson.empty(),
       currentIndex: 0,
+      videoDetails: const VideoDetails(),
       lessonsLength: 0,
       lessonsIdList: []);
 

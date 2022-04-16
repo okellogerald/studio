@@ -4,7 +4,7 @@ enum LessonType { practice, learn }
 
 class Lesson {
   final String id, title, videoTime, topicId, topicName, completionStatus;
-  String? thumbnailUrl, videoUrl, description, body;
+  String? thumbnailUrl, mediaId, description, body;
   final LessonType type;
   final bool isPaid, isPublished;
 
@@ -20,7 +20,7 @@ class Lesson {
       required this.isPaid,
       required this.completionStatus,
       required this.description,
-      required this.videoUrl,
+      required this.mediaId,
       required this.isPublished});
 
   factory Lesson.fromJson(Map<String, dynamic> json) {
@@ -36,7 +36,7 @@ class Lesson {
             : LessonType.practice,
         isPaid: json['isPaid'] ?? false,
         isPublished: json['publishedStatus'] == 'published',
-        videoUrl: json['videoURL'] ?? '',
+        mediaId: json['mediaID'] ?? '',
         description: json['description'] ?? '',
         completionStatus: json['completionStatus'] ?? '',
         body: json['body'] ?? '');
@@ -50,7 +50,7 @@ class Lesson {
       body: '',
       topicId: '',
       topicName: '',
-      videoUrl: '',
+      mediaId: '',
       completionStatus: '',
       description: '',
       type: LessonType.learn,
@@ -70,7 +70,7 @@ class Lesson {
         isPaid: isPaid,
         completionStatus: newStatus,
         description: description,
-        videoUrl: videoUrl,
+        mediaId: mediaId,
         isPublished: isPublished);
   }
 
@@ -81,6 +81,6 @@ class Lesson {
 
   @override
   String toString() {
-    return 'Lesson(id: $id, title: $title, thumbnailUrl: $thumbnailUrl, videoTime: $videoTime, topicId: $topicId, topicName: $topicName, type: $type, isPaid: $isPaid, isPublished: $isPublished)';
+    return 'Lesson(id: $id, title: $title, body: $body, mediaId: $mediaId)';
   }
 }

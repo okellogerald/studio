@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:silla_studio/constants.dart';
 
+//! will use this later
 final tokenProvider =
     FutureProvider.family<String, FirebaseAuth>((ref, auth) async {
   final token = await auth.currentUser?.getIdToken();

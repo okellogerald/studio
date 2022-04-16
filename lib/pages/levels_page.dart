@@ -1,3 +1,4 @@
+import '../manager/user/user_actions.dart';
 import '../source.dart';
 
 class LevelsPage extends StatefulWidget {
@@ -11,10 +12,12 @@ class LevelsPage extends StatefulWidget {
 
 class _LevelsPageState extends State<LevelsPage> {
   late final OnBoardingPagesBloc bloc;
+  final currentPage = Pages.levelsPage;
 
   @override
   void initState() {
     bloc = Provider.of<OnBoardingPagesBloc>(context, listen: false);
+    bloc.init(currentPage);
     super.initState();
   }
 
@@ -28,20 +31,23 @@ class _LevelsPageState extends State<LevelsPage> {
 
   _buildBody() {
     return BlocBuilder<OnBoardingPagesBloc, OnBoardingPagesState>(
+        buildWhen: (_, current) => current.page == currentPage,
         builder: (_, state) {
-      return state.when(
-          laoding: _buildLoading,
-          content: _buildContent,
-          success: _buildContent,
-          failed: (s, _) => _buildContent(s));
-    });
+           log('building in the $currentPage');
+          return state.when(
+              laoding: _buildLoading,
+              content: _buildContent,
+              success: _buildContent,
+              failed: (_, s, __) => _buildContent(_, s));
+        });
   }
 
-  Widget _buildLoading(OnBoardingSupplements supp, String? message) {
+  Widget _buildLoading(
+      Pages page, OnBoardingSupplements supp, String? message) {
     return Scaffold(body: AppLoadingIndicator(message));
   }
 
-  Widget _buildContent(OnBoardingSupplements supp) {
+  Widget _buildContent(Pages page, OnBoardingSupplements supp) {
     return Column(
         children: widget.levels.map((e) {
       final isSelected = e == supp.user.level;

@@ -33,12 +33,10 @@ class _$HomepageStateTearOff {
     );
   }
 
-  _Failed failed(HomepageSupplements supplements, String messaage,
-      {bool showOnScreen = false}) {
+  _Failed failed(HomepageSupplements supplements, AppError error) {
     return _Failed(
       supplements,
-      messaage,
-      showOnScreen: showOnScreen,
+      error,
     );
   }
 }
@@ -56,8 +54,7 @@ mixin _$HomepageState {
             bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
-    required TResult Function(
-            HomepageSupplements supplements, String messaage, bool showOnScreen)
+    required TResult Function(HomepageSupplements supplements, AppError error)
         failed,
   }) =>
       throw _privateConstructorUsedError;
@@ -67,9 +64,7 @@ mixin _$HomepageState {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -78,9 +73,7 @@ mixin _$HomepageState {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -247,8 +240,7 @@ class _$_Loading implements _Loading {
             bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
-    required TResult Function(
-            HomepageSupplements supplements, String messaage, bool showOnScreen)
+    required TResult Function(HomepageSupplements supplements, AppError error)
         failed,
   }) {
     return loading(supplements, message, isUpdatingContent);
@@ -261,9 +253,7 @@ class _$_Loading implements _Loading {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
   }) {
     return loading?.call(supplements, message, isUpdatingContent);
   }
@@ -275,9 +265,7 @@ class _$_Loading implements _Loading {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -406,8 +394,7 @@ class _$_Content implements _Content {
             bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
-    required TResult Function(
-            HomepageSupplements supplements, String messaage, bool showOnScreen)
+    required TResult Function(HomepageSupplements supplements, AppError error)
         failed,
   }) {
     return content(supplements);
@@ -420,9 +407,7 @@ class _$_Content implements _Content {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
   }) {
     return content?.call(supplements);
   }
@@ -434,9 +419,7 @@ class _$_Content implements _Content {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (content != null) {
@@ -496,8 +479,7 @@ abstract class _$FailedCopyWith<$Res> implements $HomepageStateCopyWith<$Res> {
   factory _$FailedCopyWith(_Failed value, $Res Function(_Failed) then) =
       __$FailedCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {HomepageSupplements supplements, String messaage, bool showOnScreen});
+  $Res call({HomepageSupplements supplements, AppError error});
 
   @override
   $HomepageSupplementsCopyWith<$Res> get supplements;
@@ -515,22 +497,17 @@ class __$FailedCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? supplements = freezed,
-    Object? messaage = freezed,
-    Object? showOnScreen = freezed,
+    Object? error = freezed,
   }) {
     return _then(_Failed(
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
               as HomepageSupplements,
-      messaage == freezed
-          ? _value.messaage
-          : messaage // ignore: cast_nullable_to_non_nullable
-              as String,
-      showOnScreen: showOnScreen == freezed
-          ? _value.showOnScreen
-          : showOnScreen // ignore: cast_nullable_to_non_nullable
-              as bool,
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -538,19 +515,16 @@ class __$FailedCopyWithImpl<$Res> extends _$HomepageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Failed implements _Failed {
-  const _$_Failed(this.supplements, this.messaage, {this.showOnScreen = false});
+  const _$_Failed(this.supplements, this.error);
 
   @override
   final HomepageSupplements supplements;
   @override
-  final String messaage;
-  @JsonKey()
-  @override
-  final bool showOnScreen;
+  final AppError error;
 
   @override
   String toString() {
-    return 'HomepageState.failed(supplements: $supplements, messaage: $messaage, showOnScreen: $showOnScreen)';
+    return 'HomepageState.failed(supplements: $supplements, error: $error)';
   }
 
   @override
@@ -560,17 +534,14 @@ class _$_Failed implements _Failed {
             other is _Failed &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements) &&
-            const DeepCollectionEquality().equals(other.messaage, messaage) &&
-            const DeepCollectionEquality()
-                .equals(other.showOnScreen, showOnScreen));
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(supplements),
-      const DeepCollectionEquality().hash(messaage),
-      const DeepCollectionEquality().hash(showOnScreen));
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -584,11 +555,10 @@ class _$_Failed implements _Failed {
             bool isUpdatingContent)
         loading,
     required TResult Function(HomepageSupplements supplements) content,
-    required TResult Function(
-            HomepageSupplements supplements, String messaage, bool showOnScreen)
+    required TResult Function(HomepageSupplements supplements, AppError error)
         failed,
   }) {
-    return failed(supplements, messaage, showOnScreen);
+    return failed(supplements, error);
   }
 
   @override
@@ -598,11 +568,9 @@ class _$_Failed implements _Failed {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
   }) {
-    return failed?.call(supplements, messaage, showOnScreen);
+    return failed?.call(supplements, error);
   }
 
   @override
@@ -612,13 +580,11 @@ class _$_Failed implements _Failed {
             bool isUpdatingContent)?
         loading,
     TResult Function(HomepageSupplements supplements)? content,
-    TResult Function(HomepageSupplements supplements, String messaage,
-            bool showOnScreen)?
-        failed,
+    TResult Function(HomepageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (failed != null) {
-      return failed(supplements, messaage, showOnScreen);
+      return failed(supplements, error);
     }
     return orElse();
   }
@@ -659,13 +625,12 @@ class _$_Failed implements _Failed {
 }
 
 abstract class _Failed implements HomepageState {
-  const factory _Failed(HomepageSupplements supplements, String messaage,
-      {bool showOnScreen}) = _$_Failed;
+  const factory _Failed(HomepageSupplements supplements, AppError error) =
+      _$_Failed;
 
   @override
   HomepageSupplements get supplements;
-  String get messaage;
-  bool get showOnScreen;
+  AppError get error;
   @override
   @JsonKey(ignore: true)
   _$FailedCopyWith<_Failed> get copyWith => throw _privateConstructorUsedError;

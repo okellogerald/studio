@@ -1,7 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:silla_studio/pages/levels_page.dart';
+import '../errors/app_error.dart';
+import '../manager/user/user_actions.dart';
 import '../source.dart';
 
-class CoursesPage extends StatefulWidget {
+class CoursesPage extends ConsumerStatefulWidget {
   const CoursesPage({Key? key}) : super(key: key);
 
   static navigateTo(BuildContext context) {
@@ -10,39 +13,55 @@ class CoursesPage extends StatefulWidget {
   }
 
   @override
-  State<CoursesPage> createState() => _CoursesPageState();
+  ConsumerState<CoursesPage> createState() => _CoursesPageState();
 }
 
-class _CoursesPageState extends State<CoursesPage> {
+class _CoursesPageState extends ConsumerState<CoursesPage> {
   late final OnBoardingPagesBloc bloc;
   final scrollController = ScrollController();
+  final currentPage = Pages.coursesPage;
 
   @override
   void initState() {
     bloc = Provider.of<OnBoardingPagesBloc>(context, listen: false);
-    bloc.initCoursesPageState();
+    bloc.init(currentPage);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(userActionProvider.state).state = UserActivity.coursesView;
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-      listener: (_, state) {},
-      builder: (_, state) {
-        return state.when(
-            laoding: _buildLoading,
-            content: _buildContent,
-            success: _buildContent,
-            failed: _buildFailed);
-      },
+    return Scaffold(
+      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
+        listener: (context, state) {
+          final error = state.maybeWhen(
+              failed: (_, __, error) => error, orElse: () => null);
+          if (error != null && error.isShownViaSnackBar) {
+            showSnackbar(error.message, context: context);
+          }
+        },
+        listenWhen: (_, current) => current.page == currentPage,
+        buildWhen: (_, current) => current.page == currentPage,
+        builder: (_, state) {
+          log('building in the $currentPage');
+          return state.when(
+              laoding: _buildLoading,
+              content: _buildContent,
+              success: _buildContent,
+              failed: _buildFailed);
+        },
+      ),
     );
   }
 
-  Widget _buildLoading(OnBoardingSupplements supp, String? message) {
+  Widget _buildLoading(
+      Pages page, OnBoardingSupplements supp, String? message) {
     return Scaffold(body: AppLoadingIndicator(message));
   }
 
-  Widget _buildContent(OnBoardingSupplements supp) {
+  Widget _buildContent(Pages page, OnBoardingSupplements supp) {
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -50,10 +69,9 @@ class _CoursesPageState extends State<CoursesPage> {
           body: Column(
             children: [
               PageAnimatedAppBar(
-                title: 'Choose Courses',
-                subtitle: 'What would you like to learn ?',
-                scrollController: scrollController,
-              ),
+                  title: 'Choose Courses',
+                  subtitle: 'What would you like to learn ?',
+                  scrollController: scrollController),
               _buildCourses(supp),
             ],
           ),
@@ -101,9 +119,7 @@ class _CoursesPageState extends State<CoursesPage> {
         return AppMaterialButton(
             onPressed:
                 course.isPublished ? () => _onCoursePressed(course) : () {},
-            backgroundColor: course.isPublished
-                ? AppColors.primary.withOpacity(.2)
-                : AppColors.surface,
+            backgroundColor: AppColors.surface,
             borderRadius: 10.dw,
             child: Container(
                 width: double.infinity,
@@ -145,10 +161,10 @@ class _CoursesPageState extends State<CoursesPage> {
     push(LevelsPage(course.levelList));
   }
 
-  Widget _buildFailed(OnBoardingSupplements supp, String message) {
+  Widget _buildFailed(Pages page, OnBoardingSupplements supp, AppError error) {
+    if (error.isShownViaSnackBar) return _buildContent(page, supp);
     return Scaffold(
-        body: FailedStateWidget(message,
-            tryAgainCallback: bloc.initCoursesPageState,
-            title: 'Failed to load courses'));
+        body: FailedStateWidget(error.message,
+            tryAgainCallback: () => bloc.init(currentPage)));
   }
 }

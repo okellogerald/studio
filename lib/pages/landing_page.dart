@@ -5,17 +5,20 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildLogo(),
-          _buildValueProposition(),
-          _buildActions(),
-        ],
-      ),
-    ));
+    return WillPopScope(
+      onWillPop: () => showExitAppDialog(context),
+      child: Scaffold(
+          body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildLogo(),
+            _buildValueProposition(),
+            _buildActions(),
+          ],
+        ),
+      )),
+    );
   }
 
   _buildLogo() {

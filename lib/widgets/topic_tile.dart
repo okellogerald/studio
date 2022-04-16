@@ -1,6 +1,7 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../source.dart';
+import 'app_image.dart';
 
 class TopicTile extends StatelessWidget {
   const TopicTile(this.topic, {Key? key}) : super(key: key);
@@ -22,7 +23,11 @@ class TopicTile extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(8.dw))),
         child: Row(
           children: [
-            _buildImage(),
+            AppImage(
+                imageUrl: topic.thumbnailUrl ?? Constants.kDefaultImage,
+                width: 100.dw,
+                radius: 8.dw,
+                height: 80.dh),
             SizedBox(width: 20.dw),
             _buildTitle(subtitle),
             Expanded(
@@ -34,14 +39,6 @@ class TopicTile extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  _buildImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(8.dw)),
-      child: Image.network(topic.thumbnailUrl ?? Constants.kDefaultImage,
-          width: 100.dw, height: 80.dh, fit: BoxFit.cover),
     );
   }
 

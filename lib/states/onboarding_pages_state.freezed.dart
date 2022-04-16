@@ -18,29 +18,35 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$OnBoardingPagesStateTearOff {
   const _$OnBoardingPagesStateTearOff();
 
-  _Loading laoding(OnBoardingSupplements supplements, {String? message}) {
+  _Loading laoding(Pages page, OnBoardingSupplements supplements,
+      {String? message}) {
     return _Loading(
+      page,
       supplements,
       message: message,
     );
   }
 
-  _Content content(OnBoardingSupplements supplements) {
+  _Content content(Pages page, OnBoardingSupplements supplements) {
     return _Content(
+      page,
       supplements,
     );
   }
 
-  _Success success(OnBoardingSupplements supplements) {
+  _Success success(Pages page, OnBoardingSupplements supplements) {
     return _Success(
+      page,
       supplements,
     );
   }
 
-  _Failed failed(OnBoardingSupplements supplements, String message) {
+  _Failed failed(
+      Pages page, OnBoardingSupplements supplements, AppError error) {
     return _Failed(
+      page,
       supplements,
-      message,
+      error,
     );
   }
 }
@@ -50,35 +56,45 @@ const $OnBoardingPagesState = _$OnBoardingPagesStateTearOff();
 
 /// @nodoc
 mixin _$OnBoardingPagesState {
+  Pages get page => throw _privateConstructorUsedError;
   OnBoardingSupplements get supplements => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            OnBoardingSupplements supplements, String? message)
+            Pages page, OnBoardingSupplements supplements, String? message)
         laoding,
-    required TResult Function(OnBoardingSupplements supplements) content,
-    required TResult Function(OnBoardingSupplements supplements) success,
-    required TResult Function(OnBoardingSupplements supplements, String message)
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        content,
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        success,
+    required TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)
         failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -118,7 +134,7 @@ abstract class $OnBoardingPagesStateCopyWith<$Res> {
   factory $OnBoardingPagesStateCopyWith(OnBoardingPagesState value,
           $Res Function(OnBoardingPagesState) then) =
       _$OnBoardingPagesStateCopyWithImpl<$Res>;
-  $Res call({OnBoardingSupplements supplements});
+  $Res call({Pages page, OnBoardingSupplements supplements});
 
   $OnBoardingSupplementsCopyWith<$Res> get supplements;
 }
@@ -134,9 +150,14 @@ class _$OnBoardingPagesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? page = freezed,
     Object? supplements = freezed,
   }) {
     return _then(_value.copyWith(
+      page: page == freezed
+          ? _value.page
+          : page // ignore: cast_nullable_to_non_nullable
+              as Pages,
       supplements: supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
@@ -158,7 +179,7 @@ abstract class _$LoadingCopyWith<$Res>
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
       __$LoadingCopyWithImpl<$Res>;
   @override
-  $Res call({OnBoardingSupplements supplements, String? message});
+  $Res call({Pages page, OnBoardingSupplements supplements, String? message});
 
   @override
   $OnBoardingSupplementsCopyWith<$Res> get supplements;
@@ -176,10 +197,15 @@ class __$LoadingCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? page = freezed,
     Object? supplements = freezed,
     Object? message = freezed,
   }) {
     return _then(_Loading(
+      page == freezed
+          ? _value.page
+          : page // ignore: cast_nullable_to_non_nullable
+              as Pages,
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
@@ -195,8 +221,10 @@ class __$LoadingCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loading implements _Loading {
-  const _$_Loading(this.supplements, {this.message});
+  const _$_Loading(this.page, this.supplements, {this.message});
 
+  @override
+  final Pages page;
   @override
   final OnBoardingSupplements supplements;
   @override
@@ -204,7 +232,7 @@ class _$_Loading implements _Loading {
 
   @override
   String toString() {
-    return 'OnBoardingPagesState.laoding(supplements: $supplements, message: $message)';
+    return 'OnBoardingPagesState.laoding(page: $page, supplements: $supplements, message: $message)';
   }
 
   @override
@@ -212,6 +240,7 @@ class _$_Loading implements _Loading {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loading &&
+            const DeepCollectionEquality().equals(other.page, page) &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements) &&
             const DeepCollectionEquality().equals(other.message, message));
@@ -220,6 +249,7 @@ class _$_Loading implements _Loading {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(page),
       const DeepCollectionEquality().hash(supplements),
       const DeepCollectionEquality().hash(message));
 
@@ -232,40 +262,49 @@ class _$_Loading implements _Loading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            OnBoardingSupplements supplements, String? message)
+            Pages page, OnBoardingSupplements supplements, String? message)
         laoding,
-    required TResult Function(OnBoardingSupplements supplements) content,
-    required TResult Function(OnBoardingSupplements supplements) success,
-    required TResult Function(OnBoardingSupplements supplements, String message)
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        content,
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        success,
+    required TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)
         failed,
   }) {
-    return laoding(supplements, message);
+    return laoding(page, supplements, message);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
   }) {
-    return laoding?.call(supplements, message);
+    return laoding?.call(page, supplements, message);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
     required TResult orElse(),
   }) {
     if (laoding != null) {
-      return laoding(supplements, message);
+      return laoding(page, supplements, message);
     }
     return orElse();
   }
@@ -309,9 +348,11 @@ class _$_Loading implements _Loading {
 }
 
 abstract class _Loading implements OnBoardingPagesState {
-  const factory _Loading(OnBoardingSupplements supplements, {String? message}) =
-      _$_Loading;
+  const factory _Loading(Pages page, OnBoardingSupplements supplements,
+      {String? message}) = _$_Loading;
 
+  @override
+  Pages get page;
   @override
   OnBoardingSupplements get supplements;
   String? get message;
@@ -327,7 +368,7 @@ abstract class _$ContentCopyWith<$Res>
   factory _$ContentCopyWith(_Content value, $Res Function(_Content) then) =
       __$ContentCopyWithImpl<$Res>;
   @override
-  $Res call({OnBoardingSupplements supplements});
+  $Res call({Pages page, OnBoardingSupplements supplements});
 
   @override
   $OnBoardingSupplementsCopyWith<$Res> get supplements;
@@ -345,9 +386,14 @@ class __$ContentCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? page = freezed,
     Object? supplements = freezed,
   }) {
     return _then(_Content(
+      page == freezed
+          ? _value.page
+          : page // ignore: cast_nullable_to_non_nullable
+              as Pages,
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
@@ -359,14 +405,16 @@ class __$ContentCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Content implements _Content {
-  const _$_Content(this.supplements);
+  const _$_Content(this.page, this.supplements);
 
+  @override
+  final Pages page;
   @override
   final OnBoardingSupplements supplements;
 
   @override
   String toString() {
-    return 'OnBoardingPagesState.content(supplements: $supplements)';
+    return 'OnBoardingPagesState.content(page: $page, supplements: $supplements)';
   }
 
   @override
@@ -374,13 +422,16 @@ class _$_Content implements _Content {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Content &&
+            const DeepCollectionEquality().equals(other.page, page) &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(supplements));
+      runtimeType,
+      const DeepCollectionEquality().hash(page),
+      const DeepCollectionEquality().hash(supplements));
 
   @JsonKey(ignore: true)
   @override
@@ -391,40 +442,49 @@ class _$_Content implements _Content {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            OnBoardingSupplements supplements, String? message)
+            Pages page, OnBoardingSupplements supplements, String? message)
         laoding,
-    required TResult Function(OnBoardingSupplements supplements) content,
-    required TResult Function(OnBoardingSupplements supplements) success,
-    required TResult Function(OnBoardingSupplements supplements, String message)
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        content,
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        success,
+    required TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)
         failed,
   }) {
-    return content(supplements);
+    return content(page, supplements);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
   }) {
-    return content?.call(supplements);
+    return content?.call(page, supplements);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
     required TResult orElse(),
   }) {
     if (content != null) {
-      return content(supplements);
+      return content(page, supplements);
     }
     return orElse();
   }
@@ -468,8 +528,11 @@ class _$_Content implements _Content {
 }
 
 abstract class _Content implements OnBoardingPagesState {
-  const factory _Content(OnBoardingSupplements supplements) = _$_Content;
+  const factory _Content(Pages page, OnBoardingSupplements supplements) =
+      _$_Content;
 
+  @override
+  Pages get page;
   @override
   OnBoardingSupplements get supplements;
   @override
@@ -484,7 +547,7 @@ abstract class _$SuccessCopyWith<$Res>
   factory _$SuccessCopyWith(_Success value, $Res Function(_Success) then) =
       __$SuccessCopyWithImpl<$Res>;
   @override
-  $Res call({OnBoardingSupplements supplements});
+  $Res call({Pages page, OnBoardingSupplements supplements});
 
   @override
   $OnBoardingSupplementsCopyWith<$Res> get supplements;
@@ -502,9 +565,14 @@ class __$SuccessCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? page = freezed,
     Object? supplements = freezed,
   }) {
     return _then(_Success(
+      page == freezed
+          ? _value.page
+          : page // ignore: cast_nullable_to_non_nullable
+              as Pages,
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
@@ -516,14 +584,16 @@ class __$SuccessCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Success implements _Success {
-  const _$_Success(this.supplements);
+  const _$_Success(this.page, this.supplements);
 
+  @override
+  final Pages page;
   @override
   final OnBoardingSupplements supplements;
 
   @override
   String toString() {
-    return 'OnBoardingPagesState.success(supplements: $supplements)';
+    return 'OnBoardingPagesState.success(page: $page, supplements: $supplements)';
   }
 
   @override
@@ -531,13 +601,16 @@ class _$_Success implements _Success {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Success &&
+            const DeepCollectionEquality().equals(other.page, page) &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(supplements));
+      runtimeType,
+      const DeepCollectionEquality().hash(page),
+      const DeepCollectionEquality().hash(supplements));
 
   @JsonKey(ignore: true)
   @override
@@ -548,40 +621,49 @@ class _$_Success implements _Success {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            OnBoardingSupplements supplements, String? message)
+            Pages page, OnBoardingSupplements supplements, String? message)
         laoding,
-    required TResult Function(OnBoardingSupplements supplements) content,
-    required TResult Function(OnBoardingSupplements supplements) success,
-    required TResult Function(OnBoardingSupplements supplements, String message)
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        content,
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        success,
+    required TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)
         failed,
   }) {
-    return success(supplements);
+    return success(page, supplements);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
   }) {
-    return success?.call(supplements);
+    return success?.call(page, supplements);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success(supplements);
+      return success(page, supplements);
     }
     return orElse();
   }
@@ -625,8 +707,11 @@ class _$_Success implements _Success {
 }
 
 abstract class _Success implements OnBoardingPagesState {
-  const factory _Success(OnBoardingSupplements supplements) = _$_Success;
+  const factory _Success(Pages page, OnBoardingSupplements supplements) =
+      _$_Success;
 
+  @override
+  Pages get page;
   @override
   OnBoardingSupplements get supplements;
   @override
@@ -641,7 +726,7 @@ abstract class _$FailedCopyWith<$Res>
   factory _$FailedCopyWith(_Failed value, $Res Function(_Failed) then) =
       __$FailedCopyWithImpl<$Res>;
   @override
-  $Res call({OnBoardingSupplements supplements, String message});
+  $Res call({Pages page, OnBoardingSupplements supplements, AppError error});
 
   @override
   $OnBoardingSupplementsCopyWith<$Res> get supplements;
@@ -659,18 +744,23 @@ class __$FailedCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? page = freezed,
     Object? supplements = freezed,
-    Object? message = freezed,
+    Object? error = freezed,
   }) {
     return _then(_Failed(
+      page == freezed
+          ? _value.page
+          : page // ignore: cast_nullable_to_non_nullable
+              as Pages,
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
               as OnBoardingSupplements,
-      message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -678,16 +768,18 @@ class __$FailedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Failed implements _Failed {
-  const _$_Failed(this.supplements, this.message);
+  const _$_Failed(this.page, this.supplements, this.error);
 
+  @override
+  final Pages page;
   @override
   final OnBoardingSupplements supplements;
   @override
-  final String message;
+  final AppError error;
 
   @override
   String toString() {
-    return 'OnBoardingPagesState.failed(supplements: $supplements, message: $message)';
+    return 'OnBoardingPagesState.failed(page: $page, supplements: $supplements, error: $error)';
   }
 
   @override
@@ -695,16 +787,18 @@ class _$_Failed implements _Failed {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Failed &&
+            const DeepCollectionEquality().equals(other.page, page) &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements) &&
-            const DeepCollectionEquality().equals(other.message, message));
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(page),
       const DeepCollectionEquality().hash(supplements),
-      const DeepCollectionEquality().hash(message));
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -715,40 +809,49 @@ class _$_Failed implements _Failed {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            OnBoardingSupplements supplements, String? message)
+            Pages page, OnBoardingSupplements supplements, String? message)
         laoding,
-    required TResult Function(OnBoardingSupplements supplements) content,
-    required TResult Function(OnBoardingSupplements supplements) success,
-    required TResult Function(OnBoardingSupplements supplements, String message)
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        content,
+    required TResult Function(Pages page, OnBoardingSupplements supplements)
+        success,
+    required TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)
         failed,
   }) {
-    return failed(supplements, message);
+    return failed(page, supplements, error);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
   }) {
-    return failed?.call(supplements, message);
+    return failed?.call(page, supplements, error);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(OnBoardingSupplements supplements, String? message)?
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, String? message)?
         laoding,
-    TResult Function(OnBoardingSupplements supplements)? content,
-    TResult Function(OnBoardingSupplements supplements)? success,
-    TResult Function(OnBoardingSupplements supplements, String message)? failed,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? content,
+    TResult Function(Pages page, OnBoardingSupplements supplements)? success,
+    TResult Function(
+            Pages page, OnBoardingSupplements supplements, AppError error)?
+        failed,
     required TResult orElse(),
   }) {
     if (failed != null) {
-      return failed(supplements, message);
+      return failed(page, supplements, error);
     }
     return orElse();
   }
@@ -792,12 +895,15 @@ class _$_Failed implements _Failed {
 }
 
 abstract class _Failed implements OnBoardingPagesState {
-  const factory _Failed(OnBoardingSupplements supplements, String message) =
+  const factory _Failed(
+          Pages page, OnBoardingSupplements supplements, AppError error) =
       _$_Failed;
 
   @override
+  Pages get page;
+  @override
   OnBoardingSupplements get supplements;
-  String get message;
+  AppError get error;
   @override
   @JsonKey(ignore: true)
   _$FailedCopyWith<_Failed> get copyWith => throw _privateConstructorUsedError;

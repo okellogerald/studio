@@ -1,3 +1,5 @@
+import 'package:silla_studio/errors/app_error.dart';
+
 import '../source.dart';
 
 class Status {
@@ -20,14 +22,16 @@ class LessonPageBloc extends Cubit<LessonPageState> {
     try {
       final lesson = await service.getLesson(lessonId);
       final currentLessonIndex = lessonsIdList.indexOf(lessonId);
+      final videoDetails = await service.getVideoData(lesson.mediaId);
       supp = supp.copyWith(
           lesson: lesson,
           lessonsIdList: lessonsIdList,
           currentIndex: currentLessonIndex,
+          videoDetails: videoDetails,
           lessonsLength: lessonsIdList.length);
       emit(LessonPageState.content(supp));
     } on ApiError catch (_) {
-      emit(LessonPageState.failed(supp, _.message));
+      emit(LessonPageState.failed(supp, AppError(_.message)));
     }
   }
 
@@ -41,7 +45,7 @@ class LessonPageBloc extends Cubit<LessonPageState> {
       await service.updateLessonStatus(status, lesson);
       log('done');
     } on ApiError catch (_) {
-      emit(LessonPageState.failed(supp, _.message));
+      emit(LessonPageState.failed(supp, AppError(_.message)));
     }
   }
 
@@ -57,7 +61,7 @@ class LessonPageBloc extends Cubit<LessonPageState> {
       supp = supp.copyWith(lesson: lesson, currentIndex: currentIndex + 1);
       emit(LessonPageState.content(supp));
     } on ApiError catch (_) {
-      emit(LessonPageState.failed(supp, _.message));
+      emit(LessonPageState.failed(supp, AppError(_.message)));
     }
   }
 
@@ -73,7 +77,7 @@ class LessonPageBloc extends Cubit<LessonPageState> {
       supp = supp.copyWith(lesson: lesson, currentIndex: currentIndex - 1);
       emit(LessonPageState.content(supp));
     } on ApiError catch (_) {
-      emit(LessonPageState.failed(supp, _.message));
+      emit(LessonPageState.failed(supp, AppError(_.message)));
     }
   }
 

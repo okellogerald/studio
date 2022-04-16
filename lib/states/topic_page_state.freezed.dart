@@ -31,10 +31,10 @@ class _$TopicPageStateTearOff {
     );
   }
 
-  _Failed failed(TopicPageSupplements supplements, String message) {
+  _Failed failed(TopicPageSupplements supplements, AppError error) {
     return _Failed(
       supplements,
-      message,
+      error,
     );
   }
 }
@@ -51,7 +51,7 @@ mixin _$TopicPageState {
     required TResult Function(TopicPageSupplements supplements, String? message)
         loading,
     required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(TopicPageSupplements supplements, AppError error)
         failed,
   }) =>
       throw _privateConstructorUsedError;
@@ -60,7 +60,7 @@ mixin _$TopicPageState {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -68,7 +68,7 @@ mixin _$TopicPageState {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -220,7 +220,7 @@ class _$_Loading implements _Loading {
     required TResult Function(TopicPageSupplements supplements, String? message)
         loading,
     required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(TopicPageSupplements supplements, AppError error)
         failed,
   }) {
     return loading(supplements, message);
@@ -232,7 +232,7 @@ class _$_Loading implements _Loading {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
   }) {
     return loading?.call(supplements, message);
   }
@@ -243,7 +243,7 @@ class _$_Loading implements _Loading {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -371,7 +371,7 @@ class _$_Content implements _Content {
     required TResult Function(TopicPageSupplements supplements, String? message)
         loading,
     required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(TopicPageSupplements supplements, AppError error)
         failed,
   }) {
     return content(supplements);
@@ -383,7 +383,7 @@ class _$_Content implements _Content {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
   }) {
     return content?.call(supplements);
   }
@@ -394,7 +394,7 @@ class _$_Content implements _Content {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (content != null) {
@@ -454,7 +454,7 @@ abstract class _$FailedCopyWith<$Res> implements $TopicPageStateCopyWith<$Res> {
   factory _$FailedCopyWith(_Failed value, $Res Function(_Failed) then) =
       __$FailedCopyWithImpl<$Res>;
   @override
-  $Res call({TopicPageSupplements supplements, String message});
+  $Res call({TopicPageSupplements supplements, AppError error});
 
   @override
   $TopicPageSupplementsCopyWith<$Res> get supplements;
@@ -472,17 +472,17 @@ class __$FailedCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? supplements = freezed,
-    Object? message = freezed,
+    Object? error = freezed,
   }) {
     return _then(_Failed(
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
               as TopicPageSupplements,
-      message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -490,16 +490,16 @@ class __$FailedCopyWithImpl<$Res> extends _$TopicPageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Failed implements _Failed {
-  const _$_Failed(this.supplements, this.message);
+  const _$_Failed(this.supplements, this.error);
 
   @override
   final TopicPageSupplements supplements;
   @override
-  final String message;
+  final AppError error;
 
   @override
   String toString() {
-    return 'TopicPageState.failed(supplements: $supplements, message: $message)';
+    return 'TopicPageState.failed(supplements: $supplements, error: $error)';
   }
 
   @override
@@ -509,14 +509,14 @@ class _$_Failed implements _Failed {
             other is _Failed &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements) &&
-            const DeepCollectionEquality().equals(other.message, message));
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(supplements),
-      const DeepCollectionEquality().hash(message));
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -529,10 +529,10 @@ class _$_Failed implements _Failed {
     required TResult Function(TopicPageSupplements supplements, String? message)
         loading,
     required TResult Function(TopicPageSupplements supplements) content,
-    required TResult Function(TopicPageSupplements supplements, String message)
+    required TResult Function(TopicPageSupplements supplements, AppError error)
         failed,
   }) {
-    return failed(supplements, message);
+    return failed(supplements, error);
   }
 
   @override
@@ -541,9 +541,9 @@ class _$_Failed implements _Failed {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
   }) {
-    return failed?.call(supplements, message);
+    return failed?.call(supplements, error);
   }
 
   @override
@@ -552,11 +552,11 @@ class _$_Failed implements _Failed {
     TResult Function(TopicPageSupplements supplements, String? message)?
         loading,
     TResult Function(TopicPageSupplements supplements)? content,
-    TResult Function(TopicPageSupplements supplements, String message)? failed,
+    TResult Function(TopicPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (failed != null) {
-      return failed(supplements, message);
+      return failed(supplements, error);
     }
     return orElse();
   }
@@ -597,12 +597,12 @@ class _$_Failed implements _Failed {
 }
 
 abstract class _Failed implements TopicPageState {
-  const factory _Failed(TopicPageSupplements supplements, String message) =
+  const factory _Failed(TopicPageSupplements supplements, AppError error) =
       _$_Failed;
 
   @override
   TopicPageSupplements get supplements;
-  String get message;
+  AppError get error;
   @override
   @JsonKey(ignore: true)
   _$FailedCopyWith<_Failed> get copyWith => throw _privateConstructorUsedError;

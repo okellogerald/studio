@@ -8,15 +8,12 @@ class OnBoardingApi {
     const url = root + 'signup/';
     final response = await http.get(Uri.parse(url)).timeout(timeLimit);
     final result = json.decode(response.body);
-
     _handleStatusCodes(result['code']);
-
     final results = result['data']['courses'];
     final courseList = <Course>[];
     for (Map<String, dynamic> e in results) {
       courseList.add(Course.fromJson(e));
     }
-
     return courseList;
   }
 
@@ -31,7 +28,6 @@ class OnBoardingApi {
       'courseID': userData.courseId,
       'gradeID': userData.gradeId,
     };
-
     final headers = _getHeaders(token);
     final response = await http
         .post(Uri.parse(url), headers: headers, body: json.encode(body))
@@ -48,7 +44,6 @@ class OnBoardingApi {
     final response =
         await http.post(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-    log(result.toString());
     _handleStatusCodes(result['code']);
     return result;
   }

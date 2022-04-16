@@ -31,10 +31,10 @@ class _$LessonPageStateTearOff {
     );
   }
 
-  _Failed failed(LessonPageSupplements supplements, String? message) {
+  _Failed failed(LessonPageSupplements supplements, AppError error) {
     return _Failed(
       supplements,
-      message,
+      error,
     );
   }
 }
@@ -52,8 +52,7 @@ mixin _$LessonPageState {
             LessonPageSupplements supplements, String? message)
         loading,
     required TResult Function(LessonPageSupplements supplements) content,
-    required TResult Function(
-            LessonPageSupplements supplements, String? message)
+    required TResult Function(LessonPageSupplements supplements, AppError error)
         failed,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,8 +61,7 @@ mixin _$LessonPageState {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -71,8 +69,7 @@ mixin _$LessonPageState {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -225,8 +222,7 @@ class _$_Loading implements _Loading {
             LessonPageSupplements supplements, String? message)
         loading,
     required TResult Function(LessonPageSupplements supplements) content,
-    required TResult Function(
-            LessonPageSupplements supplements, String? message)
+    required TResult Function(LessonPageSupplements supplements, AppError error)
         failed,
   }) {
     return loading(supplements, message);
@@ -238,8 +234,7 @@ class _$_Loading implements _Loading {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
   }) {
     return loading?.call(supplements, message);
   }
@@ -250,8 +245,7 @@ class _$_Loading implements _Loading {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -380,8 +374,7 @@ class _$_Content implements _Content {
             LessonPageSupplements supplements, String? message)
         loading,
     required TResult Function(LessonPageSupplements supplements) content,
-    required TResult Function(
-            LessonPageSupplements supplements, String? message)
+    required TResult Function(LessonPageSupplements supplements, AppError error)
         failed,
   }) {
     return content(supplements);
@@ -393,8 +386,7 @@ class _$_Content implements _Content {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
   }) {
     return content?.call(supplements);
   }
@@ -405,8 +397,7 @@ class _$_Content implements _Content {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (content != null) {
@@ -467,7 +458,7 @@ abstract class _$FailedCopyWith<$Res>
   factory _$FailedCopyWith(_Failed value, $Res Function(_Failed) then) =
       __$FailedCopyWithImpl<$Res>;
   @override
-  $Res call({LessonPageSupplements supplements, String? message});
+  $Res call({LessonPageSupplements supplements, AppError error});
 
   @override
   $LessonPageSupplementsCopyWith<$Res> get supplements;
@@ -485,17 +476,17 @@ class __$FailedCopyWithImpl<$Res> extends _$LessonPageStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? supplements = freezed,
-    Object? message = freezed,
+    Object? error = freezed,
   }) {
     return _then(_Failed(
       supplements == freezed
           ? _value.supplements
           : supplements // ignore: cast_nullable_to_non_nullable
               as LessonPageSupplements,
-      message == freezed
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String?,
+      error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -503,16 +494,16 @@ class __$FailedCopyWithImpl<$Res> extends _$LessonPageStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Failed implements _Failed {
-  const _$_Failed(this.supplements, this.message);
+  const _$_Failed(this.supplements, this.error);
 
   @override
   final LessonPageSupplements supplements;
   @override
-  final String? message;
+  final AppError error;
 
   @override
   String toString() {
-    return 'LessonPageState.failed(supplements: $supplements, message: $message)';
+    return 'LessonPageState.failed(supplements: $supplements, error: $error)';
   }
 
   @override
@@ -522,14 +513,14 @@ class _$_Failed implements _Failed {
             other is _Failed &&
             const DeepCollectionEquality()
                 .equals(other.supplements, supplements) &&
-            const DeepCollectionEquality().equals(other.message, message));
+            const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(supplements),
-      const DeepCollectionEquality().hash(message));
+      const DeepCollectionEquality().hash(error));
 
   @JsonKey(ignore: true)
   @override
@@ -543,11 +534,10 @@ class _$_Failed implements _Failed {
             LessonPageSupplements supplements, String? message)
         loading,
     required TResult Function(LessonPageSupplements supplements) content,
-    required TResult Function(
-            LessonPageSupplements supplements, String? message)
+    required TResult Function(LessonPageSupplements supplements, AppError error)
         failed,
   }) {
-    return failed(supplements, message);
+    return failed(supplements, error);
   }
 
   @override
@@ -556,10 +546,9 @@ class _$_Failed implements _Failed {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
   }) {
-    return failed?.call(supplements, message);
+    return failed?.call(supplements, error);
   }
 
   @override
@@ -568,12 +557,11 @@ class _$_Failed implements _Failed {
     TResult Function(LessonPageSupplements supplements, String? message)?
         loading,
     TResult Function(LessonPageSupplements supplements)? content,
-    TResult Function(LessonPageSupplements supplements, String? message)?
-        failed,
+    TResult Function(LessonPageSupplements supplements, AppError error)? failed,
     required TResult orElse(),
   }) {
     if (failed != null) {
-      return failed(supplements, message);
+      return failed(supplements, error);
     }
     return orElse();
   }
@@ -614,12 +602,12 @@ class _$_Failed implements _Failed {
 }
 
 abstract class _Failed implements LessonPageState {
-  const factory _Failed(LessonPageSupplements supplements, String? message) =
+  const factory _Failed(LessonPageSupplements supplements, AppError error) =
       _$_Failed;
 
   @override
   LessonPageSupplements get supplements;
-  String? get message;
+  AppError get error;
   @override
   @JsonKey(ignore: true)
   _$FailedCopyWith<_Failed> get copyWith => throw _privateConstructorUsedError;

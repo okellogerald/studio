@@ -1,15 +1,19 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
+
+import '../errors/app_error.dart';
+import '../manager/user/user_actions.dart';
 import '../source.dart';
 
-class TopicPage extends StatefulWidget {
+class TopicPage extends ConsumerStatefulWidget {
   const TopicPage({Key? key, required this.topic}) : super(key: key);
 
   final Topic topic;
 
   @override
-  State<TopicPage> createState() => _TopicPageState();
+  ConsumerState<TopicPage> createState() => _TopicPageState();
 }
 
-class _TopicPageState extends State<TopicPage>
+class _TopicPageState extends ConsumerState<TopicPage>
     with SingleTickerProviderStateMixin {
   late final TopicPageBloc bloc;
   late final TabController tabController;
@@ -21,6 +25,9 @@ class _TopicPageState extends State<TopicPage>
     final coursesService = Provider.of<CoursesService>(context, listen: false);
     final lessonsService = Provider.of<LessonsService>(context, listen: false);
     bloc = TopicPageBloc(coursesService, lessonsService);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(userActionProvider.state).state = UserActivity.topicLessonsView;
+    });
     bloc.init(widget.topic);
     super.initState();
   }
@@ -31,21 +38,21 @@ class _TopicPageState extends State<TopicPage>
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
-          body: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: BlocBuilder<TopicPageBloc, TopicPageState>(
-                    bloc: bloc,
-                    builder: (_, state) {
-                      return state.when(
-                          loading: _buildLoading,
-                          content: _buildContent,
-                          failed: _buildFailed);
-                    }),
-              ),
-            ],
-          ),
+          body: BlocConsumer<TopicPageBloc, TopicPageState>(
+              bloc: bloc,
+              listener: (context, state) {
+                final error = state.maybeWhen(
+                    failed: (_, error) => error, orElse: () => null);
+                if (error != null && error.isShownViaSnackBar) {
+                  showSnackbar(error.message);
+                }
+              },
+              builder: (_, state) {
+                return state.when(
+                    loading: _buildLoading,
+                    content: _buildContent,
+                    failed: _buildFailed);
+              }),
         ),
       ),
     );
@@ -77,17 +84,25 @@ class _TopicPageState extends State<TopicPage>
     final idList = supp.getTopicsIdList;
     final lessonList = _getLessons(supp.lessons, supp.filterType);
     if (lessonList.isEmpty) return _buildEmptyState();
-    return ListView.builder(
-      padding: EdgeInsets.only(top: 20.dh),
-      itemBuilder: (context, i) {
-        final topicId = idList[i];
-        final lessons = lessonList.where((e) => e.topicId == topicId).toList();
-        if (lessons.isEmpty) return Container();
-        return _buildLessons(lessons, supp);
-      },
-      itemCount: idList.length,
-      shrinkWrap: true,
-      controller: scrollController,
+    return Column(
+      children: [
+        _buildHeader(),
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.only(top: 20.dh),
+            itemBuilder: (context, i) {
+              final topicId = idList[i];
+              final lessons =
+                  lessonList.where((e) => e.topicId == topicId).toList();
+              if (lessons.isEmpty) return Container();
+              return _buildLessons(lessons, supp);
+            },
+            itemCount: idList.length,
+            shrinkWrap: true,
+            controller: scrollController,
+          ),
+        ),
+      ],
     );
   }
 
@@ -136,10 +151,10 @@ class _TopicPageState extends State<TopicPage>
     );
   }
 
-  Widget _buildFailed(TopicPageSupplements supp, String message) {
+  Widget _buildFailed(TopicPageSupplements supp, AppError error) {
+    if (error.isShownViaSnackBar) return _buildContent(supp);
     return Scaffold(
-        body: FailedStateWidget(message,
-            tryAgainCallback: () => bloc.init(widget.topic),
-            title: 'Failed to load the topic'));
+        body: FailedStateWidget(error.message,
+            tryAgainCallback: () => bloc.init(widget.topic)));
   }
 }

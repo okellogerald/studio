@@ -1,3 +1,4 @@
+import '../errors/app_error.dart';
 import '../source.dart';
 
 part 'homepage_state.freezed.dart';
@@ -6,7 +7,7 @@ part 'homepage_state.freezed.dart';
 class HomepageState with _$HomepageState {
   const factory HomepageState.loading(HomepageSupplements supplements,{ String? message, @Default(false) bool isUpdatingContent}) = _Loading;
   const factory HomepageState.content(HomepageSupplements supplements) = _Content;
-  const factory HomepageState.failed(HomepageSupplements supplements, String messaage, {@Default(false) bool showOnScreen}) = _Failed;
+  const factory HomepageState.failed(HomepageSupplements supplements,  AppError error) = _Failed;
 
   factory HomepageState.initial() => HomepageState.content(HomepageSupplements.empty());
 }

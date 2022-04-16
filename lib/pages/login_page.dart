@@ -1,3 +1,4 @@
+import '../manager/user/user_actions.dart';
 import '../source.dart';
 
 class LogInPage extends StatefulWidget {
@@ -10,49 +11,60 @@ class LogInPage extends StatefulWidget {
 class _LogInPageState extends State<LogInPage> {
   late final OnBoardingPagesBloc bloc;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final currentPage = Pages.logInPage;
 
   @override
   void initState() {
     bloc = Provider.of<OnBoardingPagesBloc>(context, listen: false);
+    bloc.init(currentPage);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-        bloc: bloc,
-        listener: (_, state) {
-          final isSuccessful =
-              state.maybeWhen(success: (_) => true, orElse: () => false);
+    return Scaffold(
+      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
+          bloc: bloc,
+          listener: (context, state) {
+            final isSuccessful =
+                state.maybeWhen(success: (_, __) => true, orElse: () => false);
 
-          final password = state.supplements.password;
-          final email = state.supplements.user.email;
+            final password = state.supplements.password;
+            final email = state.supplements.user.email;
 
-          final isSignedIn = isSuccessful && password.isEmpty && email.isEmpty;
-          final isReseting =
-              isSuccessful && password.isEmpty && email.isNotEmpty;
+            final isSignedIn =
+                isSuccessful && password.isEmpty && email.isEmpty;
+            final isReseting =
+                isSuccessful && password.isEmpty && email.isNotEmpty;
 
-          if (isSignedIn) pushAndRemoveUntil(const Homepage());
-          if (isReseting) push(const PasswordResetPage());
+            if (isSignedIn) pushAndRemoveUntil(const Homepage());
+            if (isReseting) push(const PasswordResetPage());
 
-          final error = state.maybeWhen(
-              failed: (_, message) => message, orElse: () => null);
-          if (error != null) showSnackbar(error, key: scaffoldKey);
-        },
-        builder: (_, state) {
-          return state.when(
-              laoding: _buildLoading,
-              content: _buildContent,
-              success: _buildContent,
-              failed: (s, _) => _buildContent(s));
-        });
+            final error = state.maybeWhen(
+                failed: (_, __, error) => error, orElse: () => null);
+            if (error != null && error.isShownViaSnackBar) {
+              showSnackbar(error.message, context: context);
+            }
+          },
+          listenWhen: (_, current) => current.page == currentPage,
+          buildWhen: (_, current) => current.page == currentPage,
+          builder: (_, state) {
+             log('building in the $currentPage');
+            return state.when(
+                laoding: _buildLoading,
+                content: _buildContent,
+                success: _buildContent,
+                failed: (_, s, __) => _buildContent(_, s));
+          }),
+    );
   }
 
-  Widget _buildLoading(OnBoardingSupplements supp, String? message) {
+  Widget _buildLoading(
+      Pages page, OnBoardingSupplements supp, String? message) {
     return Scaffold(body: AppLoadingIndicator(message));
   }
 
-  Widget _buildContent(OnBoardingSupplements supp) {
+  Widget _buildContent(Pages page, OnBoardingSupplements supp) {
     return Scaffold(
       key: scaffoldKey,
       appBar: const PageAppBar(title: 'Welcome back to Siila !'),

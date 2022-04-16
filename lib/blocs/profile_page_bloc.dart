@@ -1,3 +1,5 @@
+import 'package:silla_studio/errors/app_error.dart';
+
 import '../source.dart';
 
 class ProfilePageBloc extends Cubit<ProfilePageState> {
@@ -15,7 +17,7 @@ class ProfilePageBloc extends Cubit<ProfilePageState> {
       userData = await coursesService.getProfileData();
       emit(ProfilePageState.content(userData));
     } on ApiError catch (e) {
-      emit(ProfilePageState.failed(userData, e.message));
+      emit(ProfilePageState.failed(userData, AppError.onBody(e.message)));
     }
   }
 
@@ -27,7 +29,7 @@ class ProfilePageBloc extends Cubit<ProfilePageState> {
       await userService.logOutUser();
       emit(ProfilePageState.success(userData));
     } on ApiError catch (e) {
-      emit(ProfilePageState.failed(userData, e.message));
+      emit(ProfilePageState.failed(userData, AppError(e.message)));
     }
   }
 }

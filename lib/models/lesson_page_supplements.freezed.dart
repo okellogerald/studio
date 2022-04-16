@@ -22,11 +22,13 @@ class _$LessonPageSupplementsTearOff {
       {required Lesson lesson,
       required List<String> lessonsIdList,
       required int currentIndex,
+      required VideoDetails videoDetails,
       required int lessonsLength}) {
     return _LessonPageSupplements(
       lesson: lesson,
       lessonsIdList: lessonsIdList,
       currentIndex: currentIndex,
+      videoDetails: videoDetails,
       lessonsLength: lessonsLength,
     );
   }
@@ -40,6 +42,7 @@ mixin _$LessonPageSupplements {
   Lesson get lesson => throw _privateConstructorUsedError;
   List<String> get lessonsIdList => throw _privateConstructorUsedError;
   int get currentIndex => throw _privateConstructorUsedError;
+  VideoDetails get videoDetails => throw _privateConstructorUsedError;
   int get lessonsLength => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -56,6 +59,7 @@ abstract class $LessonPageSupplementsCopyWith<$Res> {
       {Lesson lesson,
       List<String> lessonsIdList,
       int currentIndex,
+      VideoDetails videoDetails,
       int lessonsLength});
 }
 
@@ -73,6 +77,7 @@ class _$LessonPageSupplementsCopyWithImpl<$Res>
     Object? lesson = freezed,
     Object? lessonsIdList = freezed,
     Object? currentIndex = freezed,
+    Object? videoDetails = freezed,
     Object? lessonsLength = freezed,
   }) {
     return _then(_value.copyWith(
@@ -88,6 +93,10 @@ class _$LessonPageSupplementsCopyWithImpl<$Res>
           ? _value.currentIndex
           : currentIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      videoDetails: videoDetails == freezed
+          ? _value.videoDetails
+          : videoDetails // ignore: cast_nullable_to_non_nullable
+              as VideoDetails,
       lessonsLength: lessonsLength == freezed
           ? _value.lessonsLength
           : lessonsLength // ignore: cast_nullable_to_non_nullable
@@ -107,6 +116,7 @@ abstract class _$LessonPageSupplementsCopyWith<$Res>
       {Lesson lesson,
       List<String> lessonsIdList,
       int currentIndex,
+      VideoDetails videoDetails,
       int lessonsLength});
 }
 
@@ -126,6 +136,7 @@ class __$LessonPageSupplementsCopyWithImpl<$Res>
     Object? lesson = freezed,
     Object? lessonsIdList = freezed,
     Object? currentIndex = freezed,
+    Object? videoDetails = freezed,
     Object? lessonsLength = freezed,
   }) {
     return _then(_LessonPageSupplements(
@@ -141,6 +152,10 @@ class __$LessonPageSupplementsCopyWithImpl<$Res>
           ? _value.currentIndex
           : currentIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      videoDetails: videoDetails == freezed
+          ? _value.videoDetails
+          : videoDetails // ignore: cast_nullable_to_non_nullable
+              as VideoDetails,
       lessonsLength: lessonsLength == freezed
           ? _value.lessonsLength
           : lessonsLength // ignore: cast_nullable_to_non_nullable
@@ -156,6 +171,7 @@ class _$_LessonPageSupplements extends _LessonPageSupplements {
       {required this.lesson,
       required this.lessonsIdList,
       required this.currentIndex,
+      required this.videoDetails,
       required this.lessonsLength})
       : super._();
 
@@ -166,11 +182,13 @@ class _$_LessonPageSupplements extends _LessonPageSupplements {
   @override
   final int currentIndex;
   @override
+  final VideoDetails videoDetails;
+  @override
   final int lessonsLength;
 
   @override
   String toString() {
-    return 'LessonPageSupplements(lesson: $lesson, lessonsIdList: $lessonsIdList, currentIndex: $currentIndex, lessonsLength: $lessonsLength)';
+    return 'LessonPageSupplements(lesson: $lesson, lessonsIdList: $lessonsIdList, currentIndex: $currentIndex, videoDetails: $videoDetails, lessonsLength: $lessonsLength)';
   }
 
   @override
@@ -184,6 +202,8 @@ class _$_LessonPageSupplements extends _LessonPageSupplements {
             const DeepCollectionEquality()
                 .equals(other.currentIndex, currentIndex) &&
             const DeepCollectionEquality()
+                .equals(other.videoDetails, videoDetails) &&
+            const DeepCollectionEquality()
                 .equals(other.lessonsLength, lessonsLength));
   }
 
@@ -193,6 +213,7 @@ class _$_LessonPageSupplements extends _LessonPageSupplements {
       const DeepCollectionEquality().hash(lesson),
       const DeepCollectionEquality().hash(lessonsIdList),
       const DeepCollectionEquality().hash(currentIndex),
+      const DeepCollectionEquality().hash(videoDetails),
       const DeepCollectionEquality().hash(lessonsLength));
 
   @JsonKey(ignore: true)
@@ -207,6 +228,7 @@ abstract class _LessonPageSupplements extends LessonPageSupplements {
       {required Lesson lesson,
       required List<String> lessonsIdList,
       required int currentIndex,
+      required VideoDetails videoDetails,
       required int lessonsLength}) = _$_LessonPageSupplements;
   const _LessonPageSupplements._() : super._();
 
@@ -216,6 +238,8 @@ abstract class _LessonPageSupplements extends LessonPageSupplements {
   List<String> get lessonsIdList;
   @override
   int get currentIndex;
+  @override
+  VideoDetails get videoDetails;
   @override
   int get lessonsLength;
   @override

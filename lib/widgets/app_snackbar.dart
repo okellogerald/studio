@@ -6,7 +6,7 @@ class AppSnackBar extends SnackBar {
       : super(
             key: key,
             content: AppText(message,
-                alignment: TextAlign.start,
+                alignment: TextAlign.center,
                 color: AppColors.onError,
                 size: 14.dw));
 

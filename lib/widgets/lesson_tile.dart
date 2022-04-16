@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_controls_actions_handler.dart';
-
+import 'package:silla_studio/widgets/app_image.dart';
 import '../source.dart';
 
 class LessonTile extends ConsumerWidget {
@@ -24,7 +23,6 @@ class LessonTile extends ConsumerWidget {
           : () async {
               await Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => LessonPage(lesson.id, lessonsIdList)));
-              log('I have popped to the previois screen with the value');
               handleVideoControllerOnPop(ref);
             },
       backgroundColor: AppColors.surface,
@@ -55,11 +53,11 @@ class LessonTile extends ConsumerWidget {
       child: Stack(
         alignment: AlignmentDirectional.bottomEnd,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(8.dw)),
-            child: Image.network(lesson.thumbnailUrl ?? Constants.kDefaultImage,
-                width: 100.dw, height: 80.dh, fit: BoxFit.cover),
-          ),
+          AppImage(
+              imageUrl: lesson.thumbnailUrl ?? Constants.kDefaultImage,
+              width: 100.dw,
+              radius: 8.dw,
+              height: 80.dh),
           isComplete
               ? const CheckMark()
               : isPending

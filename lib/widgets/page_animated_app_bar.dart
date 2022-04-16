@@ -98,7 +98,8 @@ class _PageAnimatedAppBarState extends State<PageAnimatedAppBar> {
 
   @override
   void dispose() {
-    widget.scrollController.dispose();
+    //todo dispose this after you have handled well your user-states
+    //widget.scrollController.dispose();
     super.dispose();
   }
 }

@@ -1,3 +1,4 @@
+import '../errors/app_error.dart';
 import '../source.dart';
 
 class HomepageBloc extends Cubit<HomepageState> {
@@ -25,8 +26,8 @@ class HomepageBloc extends Cubit<HomepageState> {
       emit(HomepageState.content(supp));
     } on ApiError catch (_) {
       final error = isUpdatingContent ? 'Failed to update content' : _.message;
-      emit(HomepageState.failed(supp, error,
-          showOnScreen: !isUpdatingContent ? true : false));
+      emit(HomepageState.failed(
+          supp, isUpdatingContent ? AppError(error) : AppError.onBody(error)));
     }
   }
 

@@ -1,6 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
+import 'package:silla_studio/manager/user/user_actions.dart';
+
+import '../errors/app_error.dart';
 import '../source.dart';
 
-class Homepage extends StatefulWidget {
+class Homepage extends ConsumerStatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
   static navigateTo(BuildContext context) {
@@ -9,10 +13,10 @@ class Homepage extends StatefulWidget {
   }
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  ConsumerState<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomepageState extends ConsumerState<Homepage> {
   late final HomepageBloc bloc;
   final controller = ScrollController();
 
@@ -24,34 +28,36 @@ class _HomepageState extends State<Homepage> {
         Provider.of<OnBoardingPagesBloc>(context, listen: false);
     bloc = HomepageBloc(service, onBoardingBloc.service, lessonsService);
     bloc.init();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(userActionProvider.state).state = UserActivity.homepageView;
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Scaffold(
-          body: BlocConsumer<HomepageBloc, HomepageState>(
-              bloc: bloc,
-              listener: (context, state) {
-                final error = state.maybeWhen(
-                    failed: (_, error, __) => error, orElse: () => null);
-
-                if (error != null) {
-                  final isShownOnScreen = state.maybeWhen(
-                      failed: (_, __, shownOnScreen) => shownOnScreen,
-                      orElse: () => false);
-                  if (!isShownOnScreen) showSnackbar(error, context: context);
-                }
-              },
-              builder: (_, state) {
-                return state.when(
-                    loading: _buildLoading,
-                    content: _buildContent,
-                    failed: _buildFailed);
-              }),
+    return WillPopScope(
+      onWillPop: () => showExitAppDialog(context),
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Scaffold(
+            body: BlocConsumer<HomepageBloc, HomepageState>(
+                bloc: bloc,
+                listener: (context, state) {
+                  final error = state.maybeWhen(
+                      failed: (_, error) => error, orElse: () => null);
+                  if (error != null && error.isShownViaSnackBar) {
+                    showSnackbar(error.message, context: context);
+                  }
+                },
+                builder: (_, state) {
+                  return state.when(
+                      loading: _buildLoading,
+                      content: _buildContent,
+                      failed: _buildFailed);
+                }),
+          ),
         ),
       ),
     );
@@ -67,11 +73,10 @@ class _HomepageState extends State<Homepage> {
     return AppLoadingIndicator(message);
   }
 
-  Widget _buildFailed(
-      HomepageSupplements supp, String message, bool showOnScreen) {
-    if (!showOnScreen) return _buildContent(supp);
-    return FailedStateWidget(message,
-        tryAgainCallback: bloc.init, title: 'Failed to load your information');
+  Widget _buildFailed(HomepageSupplements supp, AppError error) {
+    if (error.isShownViaSnackBar) return _buildContent(supp);
+    return FailedStateWidget(error.message,
+        tryAgainCallback: () => bloc.init());
   }
 
   Widget _buildContent(HomepageSupplements supp) {

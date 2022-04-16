@@ -1,3 +1,5 @@
+import '../errors/app_error.dart';
+import '../manager/user/user_actions.dart';
 import '../source.dart';
 
 class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
@@ -5,17 +7,24 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
 
   final UserService service;
 
-  void initCoursesPageState() async {
+  void init(Pages page) {
+    if (page == Pages.coursesPage) return _initCoursesPageState();
+    emit(OnBoardingPagesState.content(page, state.supplements));
+  }
+
+  void _initCoursesPageState() async {
     var supp = state.supplements;
-    emit(OnBoardingPagesState.laoding(supp, message: 'fetching courses ...'));
+    emit(OnBoardingPagesState.laoding(Pages.coursesPage, supp,
+        message: 'fetching courses ...'));
 
     try {
       final courseList = await OnBoardingApi.getAllCategories();
       final courseTypes = _getCourseTypes(courseList);
       supp = supp.copyWith(courseList: courseList, courseTypes: courseTypes);
-      emit(OnBoardingPagesState.content(supp));
+      emit(OnBoardingPagesState.content(state.page, supp));
     } on ApiError catch (_) {
-      emit(OnBoardingPagesState.failed(supp, _.message));
+      emit(OnBoardingPagesState.failed(
+          state.page, supp, AppError.onBody(_.message)));
     }
   }
 
@@ -30,7 +39,7 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
       String? gender,
       DateTime? dateOfBirth}) {
     var supp = state.supplements;
-    emit(OnBoardingPagesState.laoding(supp));
+    emit(OnBoardingPagesState.laoding(state.page, supp));
 
     var user = supp.user;
     user = user.copyWith(
@@ -47,7 +56,7 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
       confirmationPassword: confirmationPassword ?? supp.confirmationPassword,
       user: user,
     );
-    emit(OnBoardingPagesState.content(supp));
+    emit(OnBoardingPagesState.content(state.page, supp));
   }
 
   void saveWelcomeDetails() async {
@@ -57,7 +66,7 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     final hasErrors = InputValidation.checkErrors(supp.errors);
     if (hasErrors) return;
 
-    emit(OnBoardingPagesState.success(supp));
+    emit(OnBoardingPagesState.success(state.page, supp));
   }
 
   void signUp() async {
@@ -67,13 +76,14 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     final hasErrors = InputValidation.checkErrors(supp.errors);
     if (hasErrors) return;
 
-    emit(OnBoardingPagesState.laoding(supp, message: 'creating account ...'));
+    emit(OnBoardingPagesState.laoding(state.page, supp,
+        message: 'creating account ...'));
 
     try {
       await service.signUp(user: supp.user, password: supp.password);
-      emit(OnBoardingPagesState.success(supp));
+      emit(OnBoardingPagesState.success(state.page, supp));
     } on ApiError catch (e) {
-      emit(OnBoardingPagesState.failed(supp, e.message));
+      emit(OnBoardingPagesState.failed(state.page, supp, AppError(e.message)));
     }
   }
 
@@ -84,46 +94,48 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     final hasErrors = InputValidation.checkErrors(supp.errors);
     if (hasErrors) return;
 
-    emit(OnBoardingPagesState.laoding(supp, message: 'logging you in ...'));
+    emit(OnBoardingPagesState.laoding(state.page, supp,
+        message: 'logging you in ...'));
 
     try {
       await service.logIn(email: supp.user.email, password: supp.password);
-      emit(OnBoardingPagesState.success(OnBoardingSupplements.empty()));
+      emit(OnBoardingPagesState.success(
+          state.page, OnBoardingSupplements.empty()));
     } on ApiError catch (e) {
-      emit(OnBoardingPagesState.failed(supp, e.message));
+      emit(OnBoardingPagesState.failed(state.page, supp, AppError(e.message)));
     }
   }
 
   void sendPasswordResetEmail() async {
     var supp = state.supplements;
-    emit(OnBoardingPagesState.laoding(supp));
+    emit(OnBoardingPagesState.laoding(state.page, supp));
 
     final error = InputValidation.validateEmail(supp.user.email);
     if (error != null) {
       supp = supp.copyWith(errors: {'email': 'A valid email id is required'});
-      emit(OnBoardingPagesState.content(supp));
+      emit(OnBoardingPagesState.content(state.page, supp));
       return;
     }
 
     //clearing errors
     supp = supp.copyWith(errors: {});
 
-    emit(OnBoardingPagesState.laoding(supp,
+    emit(OnBoardingPagesState.laoding(state.page, supp,
         message: 'sending email with reset password link ...'));
 
     try {
       await service.sendPasswordResetEmail(supp.user.email);
       //condition for reseting vs logging-in
       supp = supp.copyWith(password: '');
-      emit(OnBoardingPagesState.success(supp));
+      emit(OnBoardingPagesState.success(state.page, supp));
     } on ApiError catch (e) {
-      emit(OnBoardingPagesState.failed(supp, e.message));
+      emit(OnBoardingPagesState.failed(state.page, supp, AppError(e.message)));
     }
   }
 
   _validateSignUpDetails() {
     var supp = state.supplements;
-    emit(OnBoardingPagesState.laoding(supp));
+    emit(OnBoardingPagesState.laoding(state.page, supp));
 
     final errors = <String, String?>{};
 
@@ -138,12 +150,12 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
     }
 
     supp = supp.copyWith(errors: errors);
-    emit(OnBoardingPagesState.content(supp));
+    emit(OnBoardingPagesState.content(state.page, supp));
   }
 
   _validateLogInDetails() {
     var supp = state.supplements;
-    emit(OnBoardingPagesState.laoding(supp));
+    emit(OnBoardingPagesState.laoding(state.page, supp));
 
     final errors = <String, String?>{};
 
@@ -152,19 +164,19 @@ class OnBoardingPagesBloc extends Cubit<OnBoardingPagesState> {
         InputValidation.validateText(supp.password, 'Password');
 
     supp = supp.copyWith(errors: errors);
-    emit(OnBoardingPagesState.content(supp));
+    emit(OnBoardingPagesState.content(state.page, supp));
   }
 
   _validateWelcomeDetails() {
     var supp = state.supplements;
-    emit(OnBoardingPagesState.laoding(supp));
+    emit(OnBoardingPagesState.laoding(state.page, supp));
 
     final errors = <String, String?>{};
 
     errors['name'] = InputValidation.validateText(supp.user.name, 'Name');
     errors['gender'] = InputValidation.validateText(supp.user.gender, 'Gender');
     supp = supp.copyWith(errors: errors);
-    emit(OnBoardingPagesState.content(supp));
+    emit(OnBoardingPagesState.content(state.page, supp));
   }
 
   List<String> _getCourseTypes(List<Course> courseList) {

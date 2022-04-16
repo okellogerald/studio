@@ -9,7 +9,9 @@ import '../manager/video/models/video_details.dart';
 import '../source.dart';
 
 class LessonVideoPlayer extends ConsumerStatefulWidget {
-  const LessonVideoPlayer({Key? key}) : super(key: key);
+  const LessonVideoPlayer(this.videoDetails, {Key? key}) : super(key: key);
+
+  final VideoDetails videoDetails;
 
   @override
   ConsumerState<LessonVideoPlayer> createState() => _LessonVideoPlayerState();
@@ -20,7 +22,7 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
 
   @override
   void initState() {
-    videoDetails = VideoDetails.fromJson(jsonVideoDetails['playlist'][0]);
+    videoDetails = widget.videoDetails;
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       ref.read(videosProvider.state).state = videoDetails.videos;
       ref.read(videoStateNotifierProvider.notifier).init();

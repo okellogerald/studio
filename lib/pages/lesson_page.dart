@@ -1,11 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:silla_studio/manager/video/providers.dart';
 
+import '../errors/app_error.dart';
+import '../manager/user/user_actions.dart';
 import '../manager/video/providers.dart';
 import '../source.dart' hide Consumer;
+import '../widgets/html_parser.dart';
 import '../widgets/lesson_video_player.dart';
 
-class LessonPage extends StatefulWidget {
+class LessonPage extends ConsumerStatefulWidget {
   const LessonPage(this.lessonId, this.lessonsIdList, {Key? key})
       : super(key: key);
 
@@ -13,10 +16,10 @@ class LessonPage extends StatefulWidget {
   final List<String> lessonsIdList;
 
   @override
-  State<LessonPage> createState() => _LessonPageState();
+  ConsumerState<LessonPage> createState() => _LessonPageState();
 }
 
-class _LessonPageState extends State<LessonPage> {
+class _LessonPageState extends ConsumerState<LessonPage> {
   late final LessonPageBloc bloc;
 
   @override
@@ -24,23 +27,44 @@ class _LessonPageState extends State<LessonPage> {
     final service = Provider.of<LessonsService>(context, listen: false);
     bloc = LessonPageBloc(service);
     bloc.init(widget.lessonId, widget.lessonsIdList);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(userActionProvider.state).state = UserActivity.lessonPageView;
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LessonPageBloc, LessonPageState>(
-        bloc: bloc,
-        builder: (_, state) {
-          return state.when(
-              loading: _buildLoading,
-              content: _buildContent,
-              failed: (s, _) => _buildContent(s));
-        });
+    return Scaffold(
+      body: BlocConsumer<LessonPageBloc, LessonPageState>(
+          bloc: bloc,
+          listener: (context, state) {
+            final error = state.maybeWhen(
+                failed: (_, error) => error, orElse: () => null);
+            if (error != null && error.isShownViaSnackBar) {
+              showSnackbar(error.message, context: context);
+              if (error.isVideoNotFound) pop();
+            }
+          },
+          builder: (_, state) {
+            return state.when(
+                loading: _buildLoading,
+                content: _buildContent,
+                failed: _buildFailed);
+          }),
+    );
   }
 
   Widget _buildLoading(LessonPageSupplements supp, String? message) {
     return Scaffold(body: Center(child: AppLoadingIndicator(message)));
+  }
+
+  Widget _buildFailed(LessonPageSupplements supp, AppError error) {
+    // if (error.isShownViaSnackBar) return _buildContent(supp);
+    return Scaffold(
+        body: FailedStateWidget(error.message, tryAgainCallback: () {
+      bloc.init(widget.lessonId, widget.lessonsIdList);
+    }));
   }
 
   Widget _buildContent(LessonPageSupplements supp) {
@@ -48,12 +72,11 @@ class _LessonPageState extends State<LessonPage> {
       final orientation = ref.watch(orientationModeProvider);
       final isLandscape = orientation == Orientation.landscape;
       return Scaffold(
-        body: ListView(children: [
-          const LessonVideoPlayer(),
-          isLandscape ? Container() : _buildVideoDescription(supp.lesson),
-        ]),
-        bottomNavigationBar: _buildBottomNavBar(supp, ref),
-      );
+          body: ListView(children: [
+            LessonVideoPlayer(supp.videoDetails),
+            isLandscape ? Container() : _buildVideoDescription(supp.lesson),
+          ]),
+          bottomNavigationBar: _buildBottomNavBar(supp, ref));
     });
   }
 
@@ -64,9 +87,11 @@ class _LessonPageState extends State<LessonPage> {
         SizedBox(height: 15.dh),
         _buildTitle(lesson),
         SizedBox(height: 10.dh),
-        _buildText(lesson.description ?? ''),
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.dw),
+            child: AppText(lesson.description ?? '')),
         AppDivider(margin: EdgeInsets.symmetric(vertical: 10.dh)),
-        _buildText(lesson.body ?? '', true)
+        HTMLParser(lesson.body)
       ],
     );
   }
@@ -83,13 +108,6 @@ class _LessonPageState extends State<LessonPage> {
           isCompleted ? const CheckMark() : Container()
         ],
       ),
-    );
-  }
-
-  _buildText(String data, [bool isBody = false]) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.dw),
-      child: AppText(data, opacity: isBody ? .7 : 1),
     );
   }
 

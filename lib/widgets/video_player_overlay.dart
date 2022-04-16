@@ -110,6 +110,7 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
   labelsOverlayEntry() {
     final orientation = ref.watch(orientationModeProvider);
     final isPortrait = orientation == Orientation.portrait;
+    print(isPortrait);
 
     return OverlayEntry(
         builder: (_) => GestureDetector(
