@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../errors/app_error.dart';
-import '../manager/user/user_actions.dart';
+import 'package:silla_studio/manager/onboarding/user_details_providers.dart';
+import '../manager/onboarding/models/user_state.dart';
+import '../manager/onboarding/user_notifier.dart';
+import '../manager/pages.dart';
+import '../manager/user_action.dart';
 import '../source.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -13,63 +15,54 @@ class ProfilePage extends ConsumerStatefulWidget {
 }
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
-  late final ProfilePageBloc bloc;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final currentPage = Pages.profile_page;
 
   @override
   void initState() {
-    final coursesService = Provider.of<CoursesService>(context, listen: false);
-    final userService =
-        Provider.of<OnBoardingPagesBloc>(context, listen: false).service;
-    bloc = ProfilePageBloc(coursesService, userService);
-    bloc.init();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.read(userActionProvider.state).state = UserActivity.profileView;
-    });
+    handleStateOnInit(ref, currentPage);
     super.initState();
+  }
+
+  void handleFailedState(String message) {
+    final action = ref.read(userActionProvider);
+    if (action.haveErrorShownBySnackBar) {
+      showSnackbar(message, key: scaffoldKey);
+    }
+  }
+
+  void handleSuccessState() {
+    final action = ref.read(userActionProvider);
+    if (action == UserAction.logOut) {
+      showSnackbar('You\'re successfully logged out', key: scaffoldKey);
+      pushAndRemoveUntil(const Homepage());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userNotifierProvider);
+
+    ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
+      if (ref.read(pagesProvider) != currentPage) return;
+      next!.maybeWhen(
+          failed: handleFailedState,
+          success: handleSuccessState,
+          orElse: () {});
+    });
+
     return Scaffold(
-      body: BlocConsumer<ProfilePageBloc, ProfilePageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            final isSignedOut =
-                state.maybeWhen(success: (_) => true, orElse: () => false);
-
-            if (isSignedOut) {
-              pushAndRemoveUntil(const LandingPage());
-              showSnackbar("You're successfully logged out", context: context);
-            }
-
-            final error = state.maybeWhen(
-                failed: (_, error) => error, orElse: () => null);
-            if (error != null && error.isShownViaSnackBar) {
-              showSnackbar(error.message, context: context);
-            }
-          },
-          builder: (_, state) {
-            return state.when(
-                loading: _buildLoading,
-                content: _buildContent,
-                failed: _buildFailed,
-                success: _buildContent);
-          }),
-    );
+        body: WillPopScope(
+      onWillPop: () => handleStateOnPop(ref, Pages.courses_page),
+      child: userState.maybeWhen(
+          loading: (message) => AppLoadingIndicator(message),
+          failed: (message) => FailedStateWidget(message),
+          orElse: _buildContent),
+    ));
   }
 
-  Widget _buildLoading(Map<String, dynamic> userData, String? message) {
-    return Scaffold(body: AppLoadingIndicator(message));
-  }
-
-  Widget _buildFailed(Map<String, dynamic> userData, AppError error) {
-    if (error.isShownViaSnackBar) return _buildContent(userData);
-    return Scaffold(
-        body: FailedStateWidget(error.message,
-            tryAgainCallback: () => bloc.init()));
-  }
-
-  Widget _buildContent(Map<String, dynamic> userData) {
+  Widget _buildContent() {
+    final userData = ref.read(signedInUserDataProvider);
     return Scaffold(
         appBar: AppBar(),
         body: Center(
@@ -124,7 +117,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       _buildButton('Terms & Conditions', FontAwesomeIcons.fileContract),
       _buildButton('About Us', FontAwesomeIcons.circleInfo),
       _buildButton('Log Out', FontAwesomeIcons.arrowRightFromBracket,
-          onPressed: bloc.logOut, isLogOut: true),
+          onPressed: () => handleUserAction(ref, UserAction.logOut),
+          isLogOut: true),
     ]);
   }
 

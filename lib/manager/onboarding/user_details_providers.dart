@@ -15,9 +15,9 @@ final confirmationPasswordProvider = StateProvider<String>((ref) => '');
 final userValidationErrorsProvider =
     StateProvider.autoDispose<Map<String, String?>>((ref) => {});
 
-final signedInUserProvider = Provider<Map<String, dynamic>?>((ref) {
+final signedInUserDataProvider = Provider<Map<String, dynamic>>((ref) {
   final jsonUser = _box.get(kUserData) as String?;
-  if (jsonUser == null) return null;
+  if (jsonUser == null) throw 'User-data is not suppossed to be null';
   return json.decode(jsonUser);
 });
 

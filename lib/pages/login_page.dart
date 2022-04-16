@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:silla_studio/manager/onboarding/user_details_providers.dart';
+import '../manager/onboarding/models/user_state.dart';
+import '../manager/onboarding/user_notifier.dart';
 import '../manager/pages.dart';
 import '../manager/user_action.dart';
 import '../source.dart';
@@ -14,59 +17,53 @@ class _LogInPageState extends ConsumerState<LogInPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final currentPage = Pages.login_page;
 
-
   @override
   void initState() {
     handleStateOnInit(ref, currentPage);
     super.initState();
   }
 
+  void handleFailedState(String message) {
+    final action = ref.read(userActionProvider);
+    if (action.haveErrorShownBySnackBar) {
+      showSnackbar(message, key: scaffoldKey);
+    }
+  }
+
+  void handleSuccessState() {
+    final action = ref.read(userActionProvider);
+    if (action == UserAction.logIn) pushAndRemoveUntil(const Homepage());
+    if (action == UserAction.sendPasswordResetLink) {
+      push(const PasswordResetPage());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userNotifierProvider);
+
+    ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
+      if (ref.read(pagesProvider) != currentPage) return;
+      next!.maybeWhen(
+          failed: handleFailedState,
+          success: handleSuccessState,
+          orElse: () {});
+    });
+
     return Scaffold(
-      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-          bloc: bloc,
-          listener: (context, state) {
-            final isSuccessful =
-                state.maybeWhen(success: (_, __) => true, orElse: () => false);
-
-            final password = state.supplements.password;
-            final email = state.supplements.user.email;
-
-            final isSignedIn =
-                isSuccessful && password.isEmpty && email.isEmpty;
-            final isReseting =
-                isSuccessful && password.isEmpty && email.isNotEmpty;
-
-            if (isSignedIn) pushAndRemoveUntil(const Homepage());
-            if (isReseting) push(const PasswordResetPage());
-
-            final error = state.maybeWhen(
-                failed: (_, __, error) => error, orElse: () => null);
-            if (error != null && error.isShownViaSnackBar) {
-              showSnackbar(error.message, context: context);
-            }
-          },
-          listenWhen: (_, current) => current.page == currentPage,
-          buildWhen: (_, current) => current.page == currentPage,
-          builder: (_, state) {
-            log('building in the $currentPage');
-            return state.when(
-                laoding: _buildLoading,
-                content: _buildContent,
-                success: _buildContent,
-                failed: (_, s, __) => _buildContent(_, s));
-          }),
-    );
+        body: WillPopScope(
+      onWillPop: () => handleStateOnPop(ref, Pages.courses_page),
+      child: userState.maybeWhen(
+          loading: (message) => AppLoadingIndicator(message),
+          failed: (message) => FailedStateWidget(message),
+          orElse: _buildContent),
+    ));
   }
 
-  Widget _buildLoading(
-      Pages page, OnBoardingSupplements supp, String? message) {
-    return Scaffold(body: AppLoadingIndicator(message));
-  }
-
-  Widget _buildContent(Pages page, OnBoardingSupplements supp) {
+  Widget _buildContent() {
+    final errors = ref.watch(userValidationErrorsProvider);
+    final user = ref.watch(userDetailsProvider);
+    final password = ref.watch(passwordProvider);
     return Scaffold(
       key: scaffoldKey,
       appBar: const PageAppBar(title: 'Welcome back to Siila !'),
@@ -75,22 +72,21 @@ class _LogInPageState extends ConsumerState<LogInPage> {
         child: Column(
           children: [
             AppTextField(
-              error: supp.errors['email'],
-              text: supp.user.email,
-              onChanged: (_) => bloc.updateAttributes(email: _),
-              hintText: '',
-              keyboardType: TextInputType.emailAddress,
-              label: 'Email Id',
-            ),
+                error: errors['email'],
+                text: user.email,
+                onChanged: (email) => updateUserDetails(ref, email: email),
+                hintText: '',
+                keyboardType: TextInputType.emailAddress,
+                label: 'Email Id'),
             AppTextField(
-              error: supp.errors['password'],
-              text: supp.password,
-              onChanged: (_) => bloc.updateAttributes(password: _),
-              hintText: '',
-              keyboardType: TextInputType.emailAddress,
-              label: 'Password',
-              isLoginPassword: true,
-            ),
+                error: errors['password'],
+                text: password,
+                onChanged: (password) =>
+                    updateUserDetails(ref, password: password),
+                hintText: '',
+                keyboardType: TextInputType.emailAddress,
+                label: 'Password',
+                isLoginPassword: true),
             _buildForgotPassword(),
           ],
         ),
@@ -106,7 +102,8 @@ class _LogInPageState extends ConsumerState<LogInPage> {
         children: [
           const AppText('Forgot Password ?'),
           AppTextButton(
-            onPressed: bloc.sendPasswordResetEmail,
+            onPressed: () =>
+                handleUserAction(ref, UserAction.sendPasswordResetLink),
             text: 'Reset',
             textColor: AppColors.primary,
             margin: EdgeInsets.only(left: 10.dw),
@@ -119,7 +116,7 @@ class _LogInPageState extends ConsumerState<LogInPage> {
   _buildLogInButton() {
     return BottomAppBar(
       child: AppTextButton(
-        onPressed: bloc.logIn,
+        onPressed: () => handleUserAction(ref, UserAction.logIn),
         text: 'LOG IN',
         textColor: AppColors.onPrimary,
         backgroundColor: AppColors.primary,

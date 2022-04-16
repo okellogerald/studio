@@ -4,7 +4,7 @@ import '../manager/onboarding/courses_provider.dart';
 import '../manager/onboarding/models/user_state.dart';
 import '../manager/onboarding/user_details_providers.dart';
 import '../manager/onboarding/user_notifier.dart';
-import '../manager/user_onboarding/pages_provider.dart';
+import '../manager/pages.dart';
 import '../manager/user_action.dart';
 import '../source.dart' hide Provider;
 

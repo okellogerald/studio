@@ -10,3 +10,5 @@ final lessonProvider = FutureProvider.family<Lesson, String>((ref, id) async {
       .timeout(timeLimit)
       .catchError((error) => throw getErrorMessage(error));
 });
+
+final lessonsIdsProvider = StateProvider<List<String>>((ref) => []);

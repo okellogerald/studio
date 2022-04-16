@@ -45,8 +45,8 @@ class CoursesRepositoryImpl {
         topicList: topics.toList());
   }
 
-  Future<Map<String, dynamic>> getTopic(String id) async {
-    final url = root + 'topic/$id';
+  Future<List<Lesson>> getTopicLessons(String topicId) async {
+    final url = root + 'topic/$topicId';
     final headers = await _getHeaders();
 
     final response =
@@ -54,7 +54,6 @@ class CoursesRepositoryImpl {
     final result = json.decode(response.body);
     _handleStatusCodes(result['code']);
 
-    final values = <String, List>{};
     final topicList = <Topic>[];
     final lessonList = <Lesson>[];
 
@@ -64,9 +63,7 @@ class CoursesRepositoryImpl {
         lessonList.add(Lesson.fromJson(lesson));
       }
     }
-    values['topics'] = topicList;
-    values['lessons'] = lessonList;
-    return values;
+    return lessonList;
   }
 
   Future<Lesson> getLesson(String id) async {

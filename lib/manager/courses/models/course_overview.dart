@@ -12,4 +12,9 @@ class CourseOverview {
       {required this.generalInfo,
       required this.currentLesson,
       required this.topicList});
+
+  factory CourseOverview.empty() => CourseOverview(
+      generalInfo: GeneralInfo.empty(),
+      currentLesson: const Lesson(),
+      topicList: []);
 }

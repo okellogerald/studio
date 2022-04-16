@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:silla_studio/manager/pages.dart';
 import '../utils/validation_logic.dart';
 import 'onboarding/user_details_providers.dart';
 import 'onboarding/user_notifier.dart';
-import 'user_onboarding/pages_provider.dart';
 
 enum UserAction {
   logIn,
@@ -39,8 +39,9 @@ final userActionProvider =
 ///e.g when logging in, we need to check if the email is valid before sending
 ///the request.
 void handleUserAction(WidgetRef ref, UserAction userAction) async {
+  ref.read(userActionProvider.state).state = userAction;
+  
   final userNotifier = ref.read(userNotifierProvider.notifier);
-
   final errors = <String, String?>{};
   final user = ref.read(userDetailsProvider);
   final password = ref.read(passwordProvider);

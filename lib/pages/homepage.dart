@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
-import 'package:silla_studio/manager/user/user_actions.dart';
-
-import '../errors/app_error.dart';
+import 'package:silla_studio/manager/onboarding/user_details_providers.dart';
+import '../manager/courses/homepage.dart';
+import '../manager/courses/models/course_overview.dart';
 import '../source.dart';
 
 class Homepage extends ConsumerStatefulWidget {
@@ -17,96 +17,59 @@ class Homepage extends ConsumerStatefulWidget {
 }
 
 class _HomepageState extends ConsumerState<Homepage> {
-  late final HomepageBloc bloc;
   final controller = ScrollController();
 
   @override
-  void initState() {
-    final service = Provider.of<CoursesService>(context, listen: false);
-    final lessonsService = Provider.of<LessonsService>(context, listen: false);
-    final onBoardingBloc =
-        Provider.of<OnBoardingPagesBloc>(context, listen: false);
-    bloc = HomepageBloc(service, onBoardingBloc.service, lessonsService);
-    bloc.init();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.read(userActionProvider.state).state = UserActivity.homepageView;
-    });
-    super.initState();
+  Widget build(BuildContext context) {
+    final homepageNotifier = ref.watch(homepageNotifierProvider);
+
+    return homepageNotifier.when(
+        loading: (message) => AppLoadingIndicator(message),
+        content: _buildContent,
+        failed: (message) => FailedStateWidget(message));
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildContent(CourseOverview overview, bool isUpdating) {
+    final user = ref.watch(signedInUserDataProvider);
     return WillPopScope(
       onWillPop: () => showExitAppDialog(context),
       child: Container(
         color: Colors.white,
         child: SafeArea(
           child: Scaffold(
-            body: BlocConsumer<HomepageBloc, HomepageState>(
-                bloc: bloc,
-                listener: (context, state) {
-                  final error = state.maybeWhen(
-                      failed: (_, error) => error, orElse: () => null);
-                  if (error != null && error.isShownViaSnackBar) {
-                    showSnackbar(error.message, context: context);
-                  }
-                },
-                builder: (_, state) {
-                  return state.when(
-                      loading: _buildLoading,
-                      content: _buildContent,
-                      failed: _buildFailed);
-                }),
-          ),
+              body: RefreshIndicator(
+                  onRefresh:
+                      ref.read(homepageNotifierProvider.notifier).refresh,
+                  child: Column(children: [
+                    _buildHeader(),
+                    Expanded(
+                        child: ListView(
+                            shrinkWrap: true,
+                            controller: controller,
+                            padding:
+                                EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
+                            children: [
+                          _buildGeneralInfo(overview.generalInfo),
+                          _buildContinueLesson(overview.currentLesson),
+                          _buildTopics(user['grade'], overview.topicList),
+                        ]))
+                  ]))),
         ),
       ),
     );
   }
 
-  Widget _buildLoading(
-      HomepageSupplements supp, String? message, bool isUpdatingContent) {
-    if (isUpdatingContent) {
-      return Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [_buildContent(supp), const LinearProgressIndicator()]);
-    }
-    return AppLoadingIndicator(message);
-  }
-
-  Widget _buildFailed(HomepageSupplements supp, AppError error) {
-    if (error.isShownViaSnackBar) return _buildContent(supp);
-    return FailedStateWidget(error.message,
-        tryAgainCallback: () => bloc.init());
-  }
-
-  Widget _buildContent(HomepageSupplements supp) {
-    return RefreshIndicator(
-        onRefresh: bloc.refresh,
-        child: Column(children: [
-          _buildHeader(supp.userData),
-          Expanded(
-              child: ListView(
-                  shrinkWrap: true,
-                  controller: controller,
-                  padding: EdgeInsets.fromLTRB(15.dw, 0, 15.dw, 10.dh),
-                  children: [
-                _buildGeneralInfo(supp.generalInfo),
-                _buildContinueLesson(supp.lesson),
-                _buildTopics(supp.userData['grade'], supp.topicList),
-              ]))
-        ]));
-  }
-
-  _buildHeader(Map userData) {
-    final grade = userData['grade'];
-    final course = userData['course'];
+  _buildHeader() {
+    final user = ref.watch(signedInUserDataProvider);
+    final grade = user['grade'];
+    final course = user['course'];
 
     return HomepageHeader(controller,
-        title: 'Hello ' + userData['name'].trim() + ',',
+        title: 'Hello ' + user['name'].trim() + ',',
         subtitle: '$grade - $course',
         trailing: GestureDetector(
-            onTap: _navigateToProfilePage,
-            child: ProfileAvatar(userData['name'])));
+            onTap: () => push(const ProfilePage()),
+            child: ProfileAvatar(user['name'])));
   }
 
   _buildGeneralInfo(GeneralInfo info) {
@@ -146,14 +109,11 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   _buildContinueLesson(Lesson lesson) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppText('Continue Class', weight: FontWeight.bold, size: 20.dw),
-        SizedBox(height: 15.dh),
-        LessonTile(lesson, [lesson.id]),
-      ],
-    );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      AppText('Continue Class', weight: FontWeight.bold, size: 20.dw),
+      SizedBox(height: 15.dh),
+      LessonTile(lesson)
+    ]);
   }
 
   _buildTopics(String grade, List<Topic> topicList) {
@@ -175,10 +135,5 @@ class _HomepageState extends ConsumerState<Homepage> {
         ],
       ),
     );
-  }
-
-  _navigateToProfilePage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => const ProfilePage()));
   }
 }

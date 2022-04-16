@@ -9,6 +9,7 @@ enum Pages {
   welcome_page,
   courses_page,
   password_reset_page,
+  levels_page,
   profile_page
 }
 

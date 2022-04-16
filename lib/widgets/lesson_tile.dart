@@ -5,11 +5,9 @@ import 'package:silla_studio/widgets/app_image.dart';
 import '../source.dart';
 
 class LessonTile extends ConsumerWidget {
-  const LessonTile(this.lesson, this.lessonsIdList, {Key? key})
-      : super(key: key);
+  const LessonTile(this.lesson, {Key? key}) : super(key: key);
 
   final Lesson lesson;
-  final List<String> lessonsIdList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,8 +19,9 @@ class LessonTile extends ConsumerWidget {
       onPressed: lesson.isPaid
           ? () {}
           : () async {
-              await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => LessonPage(lesson.id, lessonsIdList)));
+              //todo handle the markAsComplete vs Incomplete
+              await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => LessonPage(lesson.id, [])));
               handleVideoControllerOnPop(ref);
             },
       backgroundColor: AppColors.surface,

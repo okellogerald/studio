@@ -1,28 +1,24 @@
-import '../source.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../manager/courses/topic_page.dart';
+import '../source.dart' hide Consumer;
 
-class TopicPageAppBar extends StatefulWidget {
-  const TopicPageAppBar(
-      {Key? key,
-      required this.title,
-      required this.subtitle,
-      required this.tabController,
-      required this.scrollController,
-      required this.currentFilterType,
-      required this.onPressed})
-      : super(key: key);
+class TopicPageAppBar extends ConsumerStatefulWidget {
+  const TopicPageAppBar({
+    Key? key,
+    required this.topic,
+    required this.tabController,
+    required this.scrollController,
+  }) : super(key: key);
 
-  final String title;
-  final String subtitle;
+  final Topic topic;
   final TabController tabController;
-  final ValueChanged<int> onPressed;
-  final FilterType currentFilterType;
   final ScrollController scrollController;
 
   @override
-  State<TopicPageAppBar> createState() => _TopicPageAppBarState();
+  ConsumerState<TopicPageAppBar> createState() => _TopicPageAppBarState();
 }
 
-class _TopicPageAppBarState extends State<TopicPageAppBar> {
+class _TopicPageAppBarState extends ConsumerState<TopicPageAppBar> {
   final scrollValueNotifier = ValueNotifier<double>(0.0);
 
   @override
@@ -78,7 +74,7 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
   }
 
   Widget _buildTitle() {
-    return AppText(widget.title,
+    return AppText(widget.topic.title,
         style: Theme.of(context).appBarTheme.titleTextStyle!.copyWith(
             color: AppColors.secondary,
             fontSize: 24.dw,
@@ -86,42 +82,45 @@ class _TopicPageAppBarState extends State<TopicPageAppBar> {
   }
 
   _buildSubtitle() {
+    final completedCount = ref.read(topicCompletedCountProvider);
+    final subtitle =
+        '$completedCount / ${widget.topic.totalLessons} videos completed';
     return Padding(
       padding: EdgeInsets.only(top: 5.dh, left: 15.dw),
-      child: AppText(widget.subtitle, opacity: .7),
+      child: AppText(subtitle, opacity: .7),
     );
   }
 
   _buildTabBar(double value) {
     return Container(
-      padding: EdgeInsets.only(top: 5.dh),
-      margin: EdgeInsets.only(top: 5.dh),
-      width: ScreenSizeConfig.getFullWidth,
-      decoration: BoxDecoration(
-          color: AppColors.surface.withOpacity(.5),
-          border: value == 0
-              ? Border.all(color: Colors.transparent, width: 0)
-              : const Border(
-                  bottom: BorderSide(width: 1.5, color: AppColors.divider))),
-      child: TabBar(
-          controller: widget.tabController,
-          padding: const EdgeInsets.only(left: 19),
-          isScrollable: true,
-          onTap: widget.onPressed,
-          indicatorColor: AppColors.accent,
-          indicatorWeight: 4.dw,
-          tabs: [
-            _buildTabItem('All', FilterType.all),
-            _buildTabItem('Learn', FilterType.learn),
-            _buildTabItem('Practice', FilterType.practice),
-            _buildTabItem('Free', FilterType.free),
-            _buildTabItem('Paid', FilterType.paid),
-          ]),
-    );
+        padding: EdgeInsets.only(top: 5.dh),
+        margin: EdgeInsets.only(top: 5.dh),
+        width: ScreenSizeConfig.getFullWidth,
+        decoration: BoxDecoration(
+            color: AppColors.surface.withOpacity(.5),
+            border: value == 0
+                ? Border.all(color: Colors.transparent, width: 0)
+                : const Border(
+                    bottom: BorderSide(width: 1.5, color: AppColors.divider))),
+        child: TabBar(
+            controller: widget.tabController,
+            padding: const EdgeInsets.only(left: 19),
+            isScrollable: true,
+            onTap: (index) => handleSelectedFilter(ref, index),
+            indicatorColor: AppColors.accent,
+            indicatorWeight: 4.dw,
+            tabs: [
+              _buildTabItem('All', LessonsFilter.all),
+              _buildTabItem('Learn', LessonsFilter.learn),
+              _buildTabItem('Practice', LessonsFilter.practice),
+              _buildTabItem('Free', LessonsFilter.free),
+              _buildTabItem('Paid', LessonsFilter.paid)
+            ]));
   }
 
-  _buildTabItem(String value, FilterType filterStyle) {
-    final isSelected = widget.currentFilterType == filterStyle;
+  _buildTabItem(String value, LessonsFilter filterStyle) {
+    final currentFilter = ref.watch(currentFilterProvider);
+    final isSelected = currentFilter == filterStyle;
     return AppText(value,
         opacity: isSelected ? 1 : .7,
         weight: isSelected ? FontWeight.bold : FontWeight.normal);

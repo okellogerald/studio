@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:silla_studio/manager/video/providers.dart';
-
-import '../errors/app_error.dart';
-import '../manager/user/user_actions.dart';
+import '../manager/courses/lesson_page.dart';
 import '../manager/video/providers.dart';
 import '../source.dart' hide Consumer;
 import '../widgets/html_parser.dart';
@@ -20,63 +18,28 @@ class LessonPage extends ConsumerStatefulWidget {
 }
 
 class _LessonPageState extends ConsumerState<LessonPage> {
-  late final LessonPageBloc bloc;
-
-  @override
-  void initState() {
-    final service = Provider.of<LessonsService>(context, listen: false);
-    bloc = LessonPageBloc(service);
-    bloc.init(widget.lessonId, widget.lessonsIdList);
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.read(userActionProvider.state).state = UserActivity.lessonPageView;
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final lesson = ref.watch(lessonProvider(widget.lessonId));
+
     return Scaffold(
-      body: BlocConsumer<LessonPageBloc, LessonPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            final error = state.maybeWhen(
-                failed: (_, error) => error, orElse: () => null);
-            if (error != null && error.isShownViaSnackBar) {
-              showSnackbar(error.message, context: context);
-              if (error.isVideoNotFound) pop();
-            }
-          },
-          builder: (_, state) {
-            return state.when(
-                loading: _buildLoading,
-                content: _buildContent,
-                failed: _buildFailed);
-          }),
+      body: lesson.when(
+          data: _buildContent,
+          error: (message, _) => FailedStateWidget(message.toString()),
+          loading: () => const AppLoadingIndicator('Getting lesson data')),
     );
   }
 
-  Widget _buildLoading(LessonPageSupplements supp, String? message) {
-    return Scaffold(body: Center(child: AppLoadingIndicator(message)));
-  }
-
-  Widget _buildFailed(LessonPageSupplements supp, AppError error) {
-    // if (error.isShownViaSnackBar) return _buildContent(supp);
-    return Scaffold(
-        body: FailedStateWidget(error.message, tryAgainCallback: () {
-      bloc.init(widget.lessonId, widget.lessonsIdList);
-    }));
-  }
-
-  Widget _buildContent(LessonPageSupplements supp) {
+  Widget _buildContent(Lesson lesson) {
     return Consumer(builder: (context, ref, child) {
       final orientation = ref.watch(orientationModeProvider);
       final isLandscape = orientation == Orientation.landscape;
       return Scaffold(
           body: ListView(children: [
-            LessonVideoPlayer(supp.videoDetails),
-            isLandscape ? Container() : _buildVideoDescription(supp.lesson),
+            LessonVideoPlayer(lesson.videoDetails),
+            isLandscape ? Container() : _buildVideoDescription(lesson),
           ]),
-          bottomNavigationBar: _buildBottomNavBar(supp, ref));
+          bottomNavigationBar: _buildBottomNavBar());
     });
   }
 
@@ -89,7 +52,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
         SizedBox(height: 10.dh),
         Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.dw),
-            child: AppText(lesson.description ?? '')),
+            child: AppText(lesson.description)),
         AppDivider(margin: EdgeInsets.symmetric(vertical: 10.dh)),
         HTMLParser(lesson.body)
       ],
@@ -111,7 +74,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
     );
   }
 
-  _buildBottomNavBar(LessonPageSupplements supp, WidgetRef ref) {
+  _buildBottomNavBar() {
     final orientation = ref.watch(orientationModeProvider);
     return orientation == Orientation.landscape
         ? Container(height: .0001)
@@ -122,15 +85,15 @@ class _LessonPageState extends ConsumerState<LessonPage> {
               padding: EdgeInsets.symmetric(horizontal: 19.dw),
               child: Row(
                 children: [
-                  _buildPrevButton(supp.isFirst),
-                  _buildMarkStatusButton(supp.lesson),
-                  _buildNextButton(supp.isLast),
+                  //  _buildPrevButton(supp.isFirst),
+                  //   _buildMarkStatusButton(supp.lesson),
+                  // _buildNextButton(supp.isLast),
                 ],
               ),
             ),
           );
   }
-
+/* 
   _buildMarkStatusButton(Lesson lesson) {
     final isIncomplete = lesson.completionStatus == 'incomplete';
     return Expanded(
@@ -171,5 +134,5 @@ class _LessonPageState extends ConsumerState<LessonPage> {
       iconThemeData: Theme.of(context).iconTheme.copyWith(
           color: isFirst ? AppColors.disabled : AppColors.onBackground),
     );
-  }
+  } */
 }

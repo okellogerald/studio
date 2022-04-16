@@ -1,7 +1,13 @@
-import '../manager/user/user_actions.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../manager/onboarding/models/user_state.dart';
+import '../manager/onboarding/user_details_providers.dart';
+import '../manager/onboarding/user_notifier.dart';
+import '../manager/pages.dart';
+import '../manager/user_action.dart';
 import '../source.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
   static navigateTo(BuildContext context) {
@@ -10,55 +16,54 @@ class SignUpPage extends StatefulWidget {
   }
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  ConsumerState<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  late final OnBoardingPagesBloc bloc;
-  final currentPage = Pages.signUpPage;
+class _SignUpPageState extends ConsumerState<SignUpPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final currentPage = Pages.signup_page;
 
   @override
   void initState() {
-    bloc = Provider.of<OnBoardingPagesBloc>(context, listen: false);
-    bloc.init(currentPage);
+    handleStateOnInit(ref, currentPage);
     super.initState();
+  }
+
+  void handleFailedState(String message) {
+    final action = ref.read(userActionProvider);
+    if (action.haveErrorShownBySnackBar) {
+      showSnackbar(message, key: scaffoldKey);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final userState = ref.watch(userNotifierProvider);
+
+    ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
+      if (ref.read(pagesProvider) != currentPage) return;
+      next!.maybeWhen(
+          failed: handleFailedState,
+          success: () => pushAndRemoveUntil(const Homepage()),
+          orElse: () {});
+    });
+
     return Scaffold(
-      body: BlocConsumer<OnBoardingPagesBloc, OnBoardingPagesState>(
-          bloc: bloc,
-          listener: (context, state) {
-            final isSuccess =
-                state.maybeWhen(success: (_, __) => true, orElse: () => false);
-            if (isSuccess) pushAndRemoveUntil(const Homepage());
-
-            final error = state.maybeWhen(
-                failed: (_, __, error) => error, orElse: () => null);
-            if (error != null && error.isShownViaSnackBar) {
-              showSnackbar(error.message, context: context);
-            }
-          },
-          listenWhen: (_, current) => current.page == currentPage,
-          buildWhen: (_, current) => current.page == currentPage,
-          builder: (_, state) {
-             log('building in the $currentPage');
-            return state.when(
-                laoding: _buildLoading,
-                content: _buildContent,
-                success: _buildContent,
-                failed: (_, s, __) => _buildContent(_, s));
-          }),
-    );
+        body: WillPopScope(
+      onWillPop: () => handleStateOnPop(ref, Pages.courses_page),
+      child: userState.maybeWhen(
+          loading: (message) => AppLoadingIndicator(message),
+          failed: (message) => FailedStateWidget(message),
+          orElse: _buildContent),
+    ));
   }
 
-  Widget _buildLoading(
-      Pages page, OnBoardingSupplements supp, String? message) {
-    return Scaffold(body: AppLoadingIndicator(message));
-  }
-
-  Widget _buildContent(Pages page, OnBoardingSupplements supp) {
+  Widget _buildContent() {
+    final errors = ref.watch(userValidationErrorsProvider);
+    final user = ref.watch(userDetailsProvider);
+    final password = ref.watch(passwordProvider);
+    final confirmationPassword = ref.watch(confirmationPasswordProvider);
     return Scaffold(
       appBar: const PageAppBar(
           title: 'One Last Thing !',
@@ -67,29 +72,30 @@ class _SignUpPageState extends State<SignUpPage> {
         padding: EdgeInsets.only(top: 40.dh),
         children: [
           AppTextField(
-            error: supp.errors['email'],
-            text: supp.user.email,
-            onChanged: (_) => bloc.updateAttributes(email: _),
+            error: errors['email'],
+            text: user.email,
+            onChanged: (email) => updateUserDetails(ref, email: email),
             hintText: '',
             keyboardType: TextInputType.emailAddress,
             label: 'Email Id',
           ),
           AppTextField(
-            error: supp.errors['password'],
-            text: supp.password,
-            onChanged: (_) => bloc.updateAttributes(password: _),
+            error: errors['password'],
+            text: password,
+            onChanged: (password) => updateUserDetails(ref, password: password),
             hintText: '',
             keyboardType: TextInputType.emailAddress,
             label: 'Password',
             isPassword: true,
           ),
           AppTextField(
-            error: supp.errors['confirm_password'],
-            text: supp.confirmationPassword,
-            onChanged: (_) => bloc.updateAttributes(confirmationPassword: _),
+            error: errors['confirm_password'],
+            text: confirmationPassword,
+            onChanged: (password) =>
+                updateUserDetails(ref, confirmationPassword: password),
             hintText: '',
             keyboardType: TextInputType.emailAddress,
-            label: 'Confirm Passowrd',
+            label: 'confirmationPassowrd',
             isPassword: true,
             isLoginPassword: true,
           ),
@@ -102,7 +108,7 @@ class _SignUpPageState extends State<SignUpPage> {
   _buildGetStartedButton() {
     return BottomAppBar(
       child: AppTextButton(
-        onPressed: bloc.signUp,
+        onPressed:() => handleUserAction(ref, UserAction.signUp),
         text: 'GET STARTED',
         textColor: AppColors.onPrimary,
         backgroundColor: AppColors.primary,

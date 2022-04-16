@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
-
-import '../errors/app_error.dart';
-import '../manager/user/user_actions.dart';
+import 'package:silla_studio/manager/courses/topic_page.dart';
 import '../source.dart';
 
 class TopicPage extends ConsumerStatefulWidget {
@@ -15,75 +13,37 @@ class TopicPage extends ConsumerStatefulWidget {
 
 class _TopicPageState extends ConsumerState<TopicPage>
     with SingleTickerProviderStateMixin {
-  late final TopicPageBloc bloc;
   late final TabController tabController;
   final scrollController = ScrollController();
 
   @override
-  void initState() {
-    tabController = TabController(length: 5, vsync: this, initialIndex: 0);
-    final coursesService = Provider.of<CoursesService>(context, listen: false);
-    final lessonsService = Provider.of<LessonsService>(context, listen: false);
-    bloc = TopicPageBloc(coursesService, lessonsService);
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.read(userActionProvider.state).state = UserActivity.topicLessonsView;
-    });
-    bloc.init(widget.topic);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final lessonsProvider = ref.read(topicLessonsProvider(widget.topic.id));
+
     return Container(
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
-          body: BlocConsumer<TopicPageBloc, TopicPageState>(
-              bloc: bloc,
-              listener: (context, state) {
-                final error = state.maybeWhen(
-                    failed: (_, error) => error, orElse: () => null);
-                if (error != null && error.isShownViaSnackBar) {
-                  showSnackbar(error.message);
-                }
-              },
-              builder: (_, state) {
-                return state.when(
-                    loading: _buildLoading,
-                    content: _buildContent,
-                    failed: _buildFailed);
-              }),
-        ),
+            body: lessonsProvider.when(
+                data: _buildContent,
+                error: (message, _) => FailedStateWidget(message.toString()),
+                loading: () =>
+                    const AppLoadingIndicator('Getting lessons...'))),
       ),
     );
   }
 
   _buildHeader() {
-    return BlocBuilder<TopicPageBloc, TopicPageState>(
-        bloc: bloc,
-        builder: (_, state) {
-          final completedCount = state.supplements.completedCount;
-          final subtitle =
-              '$completedCount / ${widget.topic.totalLessons} videos completed';
-
-          return TopicPageAppBar(
-              title: widget.topic.title,
-              subtitle: subtitle,
-              tabController: tabController,
-              scrollController: scrollController,
-              currentFilterType: state.supplements.filterType,
-              onPressed: bloc.updateFilterType);
-        });
+    return TopicPageAppBar(
+        topic: widget.topic,
+        tabController: tabController,
+        scrollController: scrollController);
   }
 
-  Widget _buildLoading(TopicPageSupplements supp, String? message) {
-    return Scaffold(body: AppLoadingIndicator(message));
-  }
-
-  Widget _buildContent(TopicPageSupplements supp) {
-    final idList = supp.getTopicsIdList;
-    final lessonList = _getLessons(supp.lessons, supp.filterType);
-    if (lessonList.isEmpty) return _buildEmptyState();
+  Widget _buildContent(List<Lesson> lessons) {
+    final idList = ref.read(subTopicsIdsProvider(lessons));
+    final filteredLessons = ref.watch(filteredLessonsProvider(lessons));
+    if (filteredLessons.isEmpty) return _buildEmptyState();
     return Column(
       children: [
         _buildHeader(),
@@ -93,9 +53,9 @@ class _TopicPageState extends ConsumerState<TopicPage>
             itemBuilder: (context, i) {
               final topicId = idList[i];
               final lessons =
-                  lessonList.where((e) => e.topicId == topicId).toList();
+                  filteredLessons.where((e) => e.topicId == topicId).toList();
               if (lessons.isEmpty) return Container();
-              return _buildLessons(lessons, supp);
+              return _buildLessons(filteredLessons);
             },
             itemCount: idList.length,
             shrinkWrap: true,
@@ -106,7 +66,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
     );
   }
 
-  _buildLessons(List<Lesson> lessons, TopicPageSupplements supp) {
+  _buildLessons(List<Lesson> lessons) {
     final subTopicName = lessons.first.topicName;
 
     return Padding(
@@ -120,7 +80,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),
             itemCount: lessons.length,
             itemBuilder: (context, index) =>
-                LessonTile(lessons[index], supp.getLessonsIdList),
+                LessonTile(lessons[index]),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
@@ -130,31 +90,9 @@ class _TopicPageState extends ConsumerState<TopicPage>
     );
   }
 
-  List<Lesson> _getLessons(List<Lesson> lessons, FilterType filterType) {
-    switch (filterType) {
-      case FilterType.learn:
-        return lessons.where((e) => e.type == LessonType.learn).toList();
-      case FilterType.practice:
-        return lessons.where((e) => e.type == LessonType.practice).toList();
-      case FilterType.free:
-        return lessons.where((e) => !e.isPaid).toList();
-      case FilterType.paid:
-        return lessons.where((e) => e.isPaid).toList();
-      default:
-        return lessons;
-    }
-  }
-
   _buildEmptyState() {
     return const Center(
       child: AppText('No lesson matches the filters.'),
     );
-  }
-
-  Widget _buildFailed(TopicPageSupplements supp, AppError error) {
-    if (error.isShownViaSnackBar) return _buildContent(supp);
-    return Scaffold(
-        body: FailedStateWidget(error.message,
-            tryAgainCallback: () => bloc.init(widget.topic)));
   }
 }
