@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/video_controls_actions_handler.dart';
 import 'package:silla_studio/widgets/app_image.dart';
+
 import '../source.dart';
 
 class LessonTile extends ConsumerWidget {
@@ -20,8 +21,8 @@ class LessonTile extends ConsumerWidget {
           ? () {}
           : () async {
               //todo handle the markAsComplete vs Incomplete
-              await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => LessonPage(lesson.id, [])));
+              await Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => LessonPage(lesson)));
               handleVideoControllerOnPop(ref);
             },
       backgroundColor: AppColors.surface,
@@ -59,7 +60,7 @@ class LessonTile extends ConsumerWidget {
           status.isComplete
               ? const CheckMark()
               : status.isPending
-                  ? const Icon(Icons.pause_circle, color: AppColors.primary)
+                  ? const Icon(Icons.pause_circle, color: AppColors.onPrimary)
                   : Container()
         ],
       ),

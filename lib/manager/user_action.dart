@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/courses/homepage.dart';
+import 'package:silla_studio/manager/courses/topic_page/state_notifier.dart';
 import 'package:silla_studio/manager/pages.dart';
 import '../utils/validation_logic.dart';
+import 'courses/lesson_page/notifier.dart';
 import 'onboarding/user_details_providers.dart';
 import 'onboarding/user_notifier.dart';
 
@@ -16,6 +20,7 @@ enum UserAction {
   viewTopic,
   viewCourses,
   viewLesson,
+  markLessonCompletionStatus,
   logOut
 }
 
@@ -27,10 +32,10 @@ extension UserActionExtension on UserAction {
   bool get isSavingWelcomePageData => this == UserAction.saveWelcomePageData;
 
   bool get haveErrorShownBySnackBar =>
-      this == UserAction.viewHomepage ||
-      this == UserAction.viewProfile ||
-      this == UserAction.viewTopic ||
-      this == UserAction.viewLesson;
+      this != UserAction.viewHomepage &&
+      this != UserAction.viewProfile &&
+      this != UserAction.viewTopic &&
+      this != UserAction.viewLesson;
 }
 
 final userActionProvider =
@@ -41,9 +46,12 @@ final userActionProvider =
 ///the request.
 void handleUserAction(WidgetRef ref, UserAction userAction) async {
   ref.read(userActionProvider.state).state = userAction;
+  log('user action is $userAction');
 
   final userNotifier = ref.read(userNotifierProvider.notifier);
   final homepageNotifier = ref.read(homepageNotifierProvider.notifier);
+  final topicPageNotifier = ref.read(topicPageNotifierProvider.notifier);
+  final lessonPageNotifier = ref.read(lessonPageNotifierProvider.notifier);
 
   final errors = <String, String?>{};
   final user = ref.read(userDetailsProvider);
@@ -73,6 +81,7 @@ void handleUserAction(WidgetRef ref, UserAction userAction) async {
     case UserAction.viewLesson:
     case UserAction.logOut:
     case UserAction.viewCourses:
+    case UserAction.markLessonCompletionStatus:
       break;
   }
 
@@ -86,6 +95,11 @@ void handleUserAction(WidgetRef ref, UserAction userAction) async {
       await userNotifier.sendPasswordResetEmail();
     }
     if (userAction == UserAction.viewHomepage) await homepageNotifier.init();
+    if (userAction == UserAction.viewTopic) await topicPageNotifier.init();
+    if (userAction == UserAction.viewLesson) await lessonPageNotifier.init();
+    if (userAction == UserAction.markLessonCompletionStatus) {
+      await lessonPageNotifier.markLessonAs();
+    }
   }
   return;
 }

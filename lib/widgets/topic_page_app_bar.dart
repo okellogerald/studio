@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../manager/courses/topic_page.dart';
+import '../manager/courses/topic_page/providers.dart';
+import '../manager/courses/topic_page/user_actions.dart';
 import '../source.dart' hide Consumer;
 
 class TopicPageAppBar extends ConsumerStatefulWidget {
@@ -124,12 +125,6 @@ class _TopicPageAppBarState extends ConsumerState<TopicPageAppBar> {
     return AppText(value,
         opacity: isSelected ? 1 : .7,
         weight: isSelected ? FontWeight.bold : FontWeight.normal);
-  }
-
-  @override
-  void dispose() {
-    widget.scrollController.dispose();
-    super.dispose();
   }
 
   _handleScrollUpdates() {

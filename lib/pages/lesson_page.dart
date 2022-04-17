@@ -1,46 +1,77 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
+import 'package:silla_studio/manager/courses/lesson_page/providers.dart';
+import 'package:silla_studio/manager/courses/models/lesson_page_state.dart';
+import 'package:silla_studio/manager/courses/topic_page/state_notifier.dart';
+import 'package:silla_studio/manager/user_action.dart';
 import 'package:silla_studio/manager/video/providers.dart';
-import '../manager/courses/lesson_page.dart';
+import '../manager/courses/lesson_page/notifier.dart';
 import '../manager/video/providers.dart';
 import '../source.dart' hide Consumer;
 import '../widgets/html_parser.dart';
 import '../widgets/lesson_video_player.dart';
 
 class LessonPage extends ConsumerStatefulWidget {
-  const LessonPage(this.lessonId, this.lessonsIdList, {Key? key})
-      : super(key: key);
+  const LessonPage(this.lesson, {Key? key}) : super(key: key);
 
-  final String lessonId;
-  final List<String> lessonsIdList;
+  final Lesson lesson;
 
   @override
   ConsumerState<LessonPage> createState() => _LessonPageState();
 }
 
 class _LessonPageState extends ConsumerState<LessonPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(currentLessonProvider.state).state = widget.lesson;
+      handleUserAction(ref, UserAction.viewLesson);
+    });
+    super.initState();
+  }
+
+  handleFailedState(String message) {
+    final action = ref.read(userActionProvider);
+    if (action.haveErrorShownBySnackBar) {
+      showSnackbar(message, key: scaffoldKey);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final lesson = ref.watch(lessonProvider(widget.lessonId));
+    final lessonNotifier = ref.watch(lessonPageNotifierProvider);
+
+    ref.listen<LessonPageState>(lessonPageNotifierProvider, (_, next) {
+      next.maybeWhen(failed: handleFailedState, orElse: () {});
+    });
 
     return Scaffold(
-      body: lesson.when(
-          data: _buildContent,
-          error: (message, _) => FailedStateWidget(message.toString()),
-          loading: () => const AppLoadingIndicator('Getting lesson data')),
-    );
+        key: scaffoldKey,
+        body: lessonNotifier.when(
+            loading: (message) => AppLoadingIndicator(message),
+            content: _buildContent,
+            failed: _buildFailed));
+  }
+
+  Widget _buildFailed(String message) {
+    final action = ref.watch(userActionProvider);
+    final lesson = ref.watch(currentLessonProvider);
+    if (!action.haveErrorShownBySnackBar) {
+      return FailedStateWidget(message);
+    }
+    return _buildContent(lesson);
   }
 
   Widget _buildContent(Lesson lesson) {
-    return Consumer(builder: (context, ref, child) {
-      final orientation = ref.watch(orientationModeProvider);
-      final isLandscape = orientation == Orientation.landscape;
-      return Scaffold(
-          body: ListView(children: [
-            LessonVideoPlayer(lesson.videoDetails),
-            isLandscape ? Container() : _buildVideoDescription(lesson),
-          ]),
-          bottomNavigationBar: _buildBottomNavBar());
-    });
+    final orientation = ref.watch(orientationModeProvider);
+    final isLandscape = orientation == Orientation.landscape;
+    return Scaffold(
+        body: ListView(children: [
+          LessonVideoPlayer(lesson.videoDetails),
+          isLandscape ? Container() : _buildVideoDescription(lesson),
+        ]),
+        bottomNavigationBar: _buildBottomNavBar(lesson));
   }
 
   _buildVideoDescription(Lesson lesson) {
@@ -54,7 +85,10 @@ class _LessonPageState extends ConsumerState<LessonPage> {
             padding: EdgeInsets.symmetric(horizontal: 15.dw),
             child: AppText(lesson.description)),
         AppDivider(margin: EdgeInsets.symmetric(vertical: 10.dh)),
-        HTMLParser(lesson.body)
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 7.dw),
+          child: HTMLParser(lesson.body),
+        )
       ],
     );
   }
@@ -74,7 +108,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
     );
   }
 
-  _buildBottomNavBar() {
+  _buildBottomNavBar(Lesson lesson) {
     final orientation = ref.watch(orientationModeProvider);
     return orientation == Orientation.landscape
         ? Container(height: .0001)
@@ -85,22 +119,21 @@ class _LessonPageState extends ConsumerState<LessonPage> {
               padding: EdgeInsets.symmetric(horizontal: 19.dw),
               child: Row(
                 children: [
-                  //  _buildPrevButton(supp.isFirst),
-                  //   _buildMarkStatusButton(supp.lesson),
+                  // _buildPrevButton(supp.isFirst),
+                  _buildMarkStatusButton(lesson),
                   // _buildNextButton(supp.isLast),
                 ],
               ),
             ),
           );
   }
-/* 
+
   _buildMarkStatusButton(Lesson lesson) {
-    final isIncomplete = lesson.completionStatus == 'incomplete';
+    final isIncomplete = lesson.completionStatus.isIncomplete;
     return Expanded(
         child: GestureDetector(
-            onTap: isIncomplete
-                ? () => bloc.markLessonAs(Status.completed, lesson: lesson)
-                : () => bloc.markLessonAs(Status.incomplete, lesson: lesson),
+            onTap: () =>
+                handleUserAction(ref, UserAction.markLessonCompletionStatus),
             child: Container(
               height: 50.dh,
               alignment: Alignment.center,
@@ -117,7 +150,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
               margin: EdgeInsets.symmetric(horizontal: 30.dw),
             )));
   }
-
+/*
   _buildNextButton(bool isLast) {
     return AppIconButton(
       onPressed: isLast ? () {} : bloc.goToNext,

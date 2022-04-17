@@ -3,7 +3,7 @@ import '../source.dart';
 
 part 'lesson.freezed.dart';
 
-enum LessonType { practice, learn }
+enum LessonType { practice, learn, audio }
 
 enum Status { completed, pending, incomplete }
 
@@ -55,14 +55,16 @@ class Lesson with _$Lesson {
         topicName: json['topic']['title'],
         type: json['lessonType'] == 'learn'
             ? LessonType.learn
-            : LessonType.practice,
+            : json['lessonType'] == 'audio'
+                ? LessonType.audio
+                : LessonType.practice,
         isPaid: json['isPaid'] ?? false,
         isPublished: json['publishedStatus'] == 'published',
         videoDetails: videoDetails ?? const VideoDetails(),
         description: json['description'] ?? '',
         completionStatus: status == Status.completed.value
             ? Status.completed
-            : status == Status.incomplete
+            : status == Status.incomplete.value
                 ? Status.incomplete
                 : Status.pending,
         body: json['body'] ?? '');

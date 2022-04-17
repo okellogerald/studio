@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:silla_studio/manager/token.dart';
 import 'package:silla_studio/manager/video/models/video_details.dart';
 import 'package:silla_studio/secret.dart';
+
 import '../manager/courses/models/course_overview.dart';
-import '../manager/courses/models/topic_data.dart';
+import '../manager/courses/models/sub_topic.dart';
 import '../source.dart' hide Provider;
-import 'package:http/http.dart' as http;
 
 const timeLimit = Duration(seconds: 20);
 
@@ -32,11 +33,7 @@ class CoursesRepositoryImpl {
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-    log(result.toString());
-
     _handleStatusCodes(result['code']);
-
-    log(result.toString());
 
     final topics = List.from(result['data']).map((e) => Topic.fromJson(e));
     final currentLesson = Lesson.fromJson(result['info']['continueLesson']);
@@ -50,7 +47,7 @@ class CoursesRepositoryImpl {
         topicList: topics.toList());
   }
 
-  Future<TopicData> getTopicLessons(String topicId) async {
+  Future<List<SubTopic>> getSubTopics(String topicId) async {
     final url = root + 'topic/$topicId';
     final headers = await _getHeaders();
 
@@ -59,18 +56,15 @@ class CoursesRepositoryImpl {
     final result = json.decode(response.body);
     _handleStatusCodes(result['code']);
 
-    final topicList = <Topic>[];
-    final lessonList = <Lesson>[];
-
-    log(result.toString());
+    final subTopics = <SubTopic>[];
 
     for (var topic in result['data']) {
-      topicList.add(Topic.fromJson(topic));
-      for (var lesson in topic['lessons']) {
-        lessonList.add(Lesson.fromJson(lesson));
-      }
+      subTopics.add(SubTopic(
+          topic: Topic.fromJson(topic),
+          lessons: List<Lesson>.from(
+              topic['lessons'].map((e) => Lesson.fromJson(e)))));
     }
-    return TopicData(subtopics: topicList, lessons: lessonList);
+    return subTopics;
   }
 
   Future<Lesson> getLesson(String id) async {
@@ -80,9 +74,14 @@ class CoursesRepositoryImpl {
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
     _handleStatusCodes(result['code']);
-    final videoDetails =
-        await _getVideoDetails(result['mediaID']).timeout(timeLimit);
-    return Lesson.fromJson(result['data'], videoDetails);
+
+    final mediaId = result['data']['mediaID'];
+    if (mediaId != null) {
+      final videoDetails = await _getVideoDetails(mediaId).timeout(timeLimit);
+      return Lesson.fromJson(result['data'], videoDetails);
+    } else {
+      throw 'Video Not Found';
+    }
   }
 
   Future<VideoDetails> _getVideoDetails(String mediaId) async {
@@ -94,7 +93,7 @@ class CoursesRepositoryImpl {
     return VideoDetails.fromJson(result['playlist'][0]);
   }
 
-  Future<String> updateLessonStatus(String newStatus, String lessonId) async {
+  Future<Lesson> updateLessonStatus(String newStatus, String lessonId) async {
     final url = Uri.parse(root + 'lesson/$lessonId/status');
     final data = json.encode({'completionStatus': newStatus});
     log(data.toString());
@@ -104,7 +103,7 @@ class CoursesRepositoryImpl {
     final result = json.decode(response.body);
     log(result.toString());
     _handleStatusCodes(result['code']);
-    return result['data']['completionStatus'];
+    return Lesson.fromJson(result['data']);
   }
 
   Future<GeneralInfo> getGeneralInfo() async {

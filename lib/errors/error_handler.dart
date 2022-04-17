@@ -6,6 +6,7 @@ import '../manager/user_action.dart';
 import '../source.dart';
 
 String getErrorMessage(var error) {
+  if (error is String) return error;
   if (error is ApiError) return error.message;
   if (error is FirebaseAuthException) error.message;
   if (error is SocketException) return ApiError.internet().message;

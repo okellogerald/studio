@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
-import 'package:silla_studio/manager/courses/topic_page.dart';
-import '../manager/courses/models/topic_data.dart';
+import '../manager/courses/models/sub_topic.dart';
+import '../manager/courses/topic_page/providers.dart';
+import '../manager/courses/topic_page/state_notifier.dart';
 import '../manager/user_action.dart';
 import '../source.dart';
 
@@ -22,6 +23,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
   void initState() {
     tabController = TabController(length: 5, vsync: this, initialIndex: 0);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(currentTopicIdProvider.state).state = widget.topic.id;
       handleUserAction(ref, UserAction.viewTopic);
     });
     super.initState();
@@ -29,18 +31,16 @@ class _TopicPageState extends ConsumerState<TopicPage>
 
   @override
   Widget build(BuildContext context) {
-    final lessonsProvider = ref.watch(topicLessonsProvider(widget.topic.id));
+    final topicPageNotifier = ref.watch(topicPageNotifierProvider);
 
     return Container(
       color: Colors.white,
       child: SafeArea(
-        child: Scaffold(
-            body: lessonsProvider.when(
-                data: _buildContent,
-                error: (message, _) => FailedStateWidget(message.toString()),
-                loading: () =>
-                    const AppLoadingIndicator('Getting lessons...'))),
-      ),
+          child: Scaffold(
+              body: topicPageNotifier.when(
+                  loading: (message) => AppLoadingIndicator(message),
+                  content: _buildContent,
+                  failed: (message) => FailedStateWidget(message)))),
     );
   }
 
@@ -51,11 +51,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
         scrollController: scrollController);
   }
 
-  Widget _buildContent(TopicData data) {
-    final idList = ref.watch(subTopicsIdsProvider(data.lessons));
-  //  log(idList.toString());
-    final filteredLessons = ref.watch(filteredLessonsProvider(data.lessons));
-    if (filteredLessons.isEmpty) return _buildEmptyState();
+  Widget _buildContent(List<SubTopic> subtopics) {
     return Column(
       children: [
         _buildHeader(),
@@ -63,13 +59,11 @@ class _TopicPageState extends ConsumerState<TopicPage>
           child: ListView.builder(
             padding: EdgeInsets.only(top: 20.dh),
             itemBuilder: (context, i) {
-              final topicId = idList[i];
-              final lessons =
-                  filteredLessons.where((e) => e.topicId == topicId).toList();
-              if (lessons.isEmpty) return Container();
-              return _buildLessons(filteredLessons);
+              final subtopic = subtopics[i];
+              if (subtopic.lessons.isEmpty) return Container();
+              return _buildLessons(subtopic);
             },
-            itemCount: idList.length,
+            itemCount: subtopics.length,
             shrinkWrap: true,
             controller: scrollController,
           ),
@@ -78,20 +72,19 @@ class _TopicPageState extends ConsumerState<TopicPage>
     );
   }
 
-  _buildLessons(List<Lesson> lessons) {
-    final subTopicName = lessons.first.topicName;
-
+  _buildLessons(SubTopic subtopic) {
     return Padding(
       padding: EdgeInsets.only(left: 15.dw, right: 15.dw, bottom: 20.dh),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(subTopicName, weight: FontWeight.w500, size: 18.dw),
+          AppText(subtopic.topic.title, weight: FontWeight.w500, size: 18.dw),
           SizedBox(height: 15.dh),
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),
-            itemCount: lessons.length,
-            itemBuilder: (context, index) => LessonTile(lessons[index]),
+            itemCount: subtopic.lessons.length,
+            itemBuilder: (context, index) =>
+                LessonTile(subtopic.lessons[index]),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
