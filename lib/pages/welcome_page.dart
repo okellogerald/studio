@@ -1,3 +1,5 @@
+import 'package:silla_studio/pages/courses_page.dart';
+
 import '../manager/onboarding/providers/user_details.dart';
 import '../manager/user_action.dart';
 import '../widgets/app_text_field.dart';
@@ -5,6 +7,7 @@ import '../widgets/date_selector.dart';
 import '../widgets/gender_selector.dart';
 import '../widgets/page_app_bar.dart';
 import 'source.dart';
+
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -56,7 +59,12 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   _buildNextButton() {
     return BottomAppBar(
       child: AppTextButton(
-        onPressed: () => handleUserAction(ref, UserAction.saveWelcomePageData),
+        onPressed: () {
+          handleUserAction(ref, UserAction.saveWelcomePageData);
+          if (ref.read(userValidationErrorsProvider).isEmpty) {
+            push(const CoursesPage());
+          }
+        },
         text: 'NEXT',
         height: 50.dh,
         margin: EdgeInsets.only(bottom: 30.dh, right: 15.dw, left: 15.dw),

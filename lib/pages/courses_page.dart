@@ -117,13 +117,13 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
                       opacity: .85,
                       color: isSelected
                           ? AppColors.onPrimary
-                          : AppColors.primaryVariant,
+                          : AppColors.onBackground,
                     ),
                     !course.isPublished
                         ? Padding(
                             padding: EdgeInsets.only(top: 8.dh),
                             child: AppText('COMING SOON',
-                                opacity: .7, size: 14.dw))
+                                opacity: .5, size: 14.dw))
                         : Container()
                   ],
                 )));

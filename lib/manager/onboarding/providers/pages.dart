@@ -8,7 +8,6 @@ enum Pages {
   signup_page,
   welcome_page,
   password_reset_page,
-  levels_page,
   profile_page
 }
 

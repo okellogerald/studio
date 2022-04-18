@@ -1,5 +1,4 @@
 import 'package:silla_studio/pages/profile_page.dart';
-
 import '../manager/homepage/models/general_info.dart';
 import '../manager/homepage/providers.dart';
 import '../manager/homepage/models/course_overview.dart';
@@ -14,13 +13,9 @@ import '../widgets/lesson_tile.dart';
 import '../widgets/profile_avatar.dart';
 import '../widgets/topic_tile.dart';
 import 'source.dart';
+
 class Homepage extends ConsumerStatefulWidget {
   const Homepage({Key? key}) : super(key: key);
-
-  static navigateTo(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => const Homepage()));
-  }
 
   @override
   ConsumerState<Homepage> createState() => _HomepageState();

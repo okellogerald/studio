@@ -25,12 +25,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final currentPage = Pages.signup_page;
 
-  @override
-  void initState() {
-    handleStateOnInit(ref, currentPage);
-    super.initState();
-  }
-
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
     if (action.haveErrorShownBySnackBar) {
@@ -87,13 +81,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             isPassword: true,
           ),
           AppTextField(
-            error: errors['confirm_password'],
+            error: errors['confirmingPassword'],
             text: confirmationPassword,
             onChanged: (password) =>
                 updateUserDetails(ref, confirmationPassword: password),
             hintText: '',
             keyboardType: TextInputType.emailAddress,
-            label: 'confirmationPassowrd',
+            label: 'Confirm Password',
             isPassword: true,
             isLoginPassword: true,
           ),
@@ -106,7 +100,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   _buildGetStartedButton() {
     return BottomAppBar(
       child: AppTextButton(
-        onPressed:() => handleUserAction(ref, UserAction.signUp),
+        onPressed: () => handleUserAction(ref, UserAction.signUp),
         text: 'GET STARTED',
         textColor: AppColors.onPrimary,
         backgroundColor: AppColors.primary,

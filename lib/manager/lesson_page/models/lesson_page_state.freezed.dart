@@ -24,10 +24,8 @@ class _$LessonPageStateTearOff {
     );
   }
 
-  _Content content(Lesson lesson) {
-    return _Content(
-      lesson,
-    );
+  _Content content() {
+    return const _Content();
   }
 
   _Failed failed(String message) {
@@ -45,21 +43,21 @@ mixin _$LessonPageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? message) loading,
-    required TResult Function(Lesson lesson) content,
+    required TResult Function() content,
     required TResult Function(String message) failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
     required TResult orElse(),
   }) =>
@@ -168,7 +166,7 @@ class _$_Loading implements _Loading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? message) loading,
-    required TResult Function(Lesson lesson) content,
+    required TResult Function() content,
     required TResult Function(String message) failed,
   }) {
     return loading(message);
@@ -178,7 +176,7 @@ class _$_Loading implements _Loading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
   }) {
     return loading?.call(message);
@@ -188,7 +186,7 @@ class _$_Loading implements _Loading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
     required TResult orElse(),
   }) {
@@ -246,9 +244,6 @@ abstract class _Loading implements LessonPageState {
 abstract class _$ContentCopyWith<$Res> {
   factory _$ContentCopyWith(_Content value, $Res Function(_Content) then) =
       __$ContentCopyWithImpl<$Res>;
-  $Res call({Lesson lesson});
-
-  $LessonCopyWith<$Res> get lesson;
 }
 
 /// @nodoc
@@ -259,87 +254,57 @@ class __$ContentCopyWithImpl<$Res> extends _$LessonPageStateCopyWithImpl<$Res>
 
   @override
   _Content get _value => super._value as _Content;
-
-  @override
-  $Res call({
-    Object? lesson = freezed,
-  }) {
-    return _then(_Content(
-      lesson == freezed
-          ? _value.lesson
-          : lesson // ignore: cast_nullable_to_non_nullable
-              as Lesson,
-    ));
-  }
-
-  @override
-  $LessonCopyWith<$Res> get lesson {
-    return $LessonCopyWith<$Res>(_value.lesson, (value) {
-      return _then(_value.copyWith(lesson: value));
-    });
-  }
 }
 
 /// @nodoc
 
 class _$_Content implements _Content {
-  const _$_Content(this.lesson);
-
-  @override
-  final Lesson lesson;
+  const _$_Content();
 
   @override
   String toString() {
-    return 'LessonPageState.content(lesson: $lesson)';
+    return 'LessonPageState.content()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Content &&
-            const DeepCollectionEquality().equals(other.lesson, lesson));
+        (other.runtimeType == runtimeType && other is _Content);
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(lesson));
-
-  @JsonKey(ignore: true)
-  @override
-  _$ContentCopyWith<_Content> get copyWith =>
-      __$ContentCopyWithImpl<_Content>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? message) loading,
-    required TResult Function(Lesson lesson) content,
+    required TResult Function() content,
     required TResult Function(String message) failed,
   }) {
-    return content(lesson);
+    return content();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
   }) {
-    return content?.call(lesson);
+    return content?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
     required TResult orElse(),
   }) {
     if (content != null) {
-      return content(lesson);
+      return content();
     }
     return orElse();
   }
@@ -380,12 +345,7 @@ class _$_Content implements _Content {
 }
 
 abstract class _Content implements LessonPageState {
-  const factory _Content(Lesson lesson) = _$_Content;
-
-  Lesson get lesson;
-  @JsonKey(ignore: true)
-  _$ContentCopyWith<_Content> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory _Content() = _$_Content;
 }
 
 /// @nodoc
@@ -451,7 +411,7 @@ class _$_Failed implements _Failed {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? message) loading,
-    required TResult Function(Lesson lesson) content,
+    required TResult Function() content,
     required TResult Function(String message) failed,
   }) {
     return failed(message);
@@ -461,7 +421,7 @@ class _$_Failed implements _Failed {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
   }) {
     return failed?.call(message);
@@ -471,7 +431,7 @@ class _$_Failed implements _Failed {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? message)? loading,
-    TResult Function(Lesson lesson)? content,
+    TResult Function()? content,
     TResult Function(String message)? failed,
     required TResult orElse(),
   }) {

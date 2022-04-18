@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -22,7 +23,7 @@ class UserNotifier extends StateNotifier<UserState> {
   final _box = Hive.box(kUserDataBox);
 
   Future<void> signUp() async {
-    state = const UserState.loading();
+    state = const UserState.loading('Creating your account...');
 
     final user = ref.read(userDetailsProvider);
     final password = ref.read(passwordProvider);
@@ -33,6 +34,7 @@ class UserNotifier extends StateNotifier<UserState> {
       final result = await userRepository.createUser(user, password);
       final _userData = User.toStorageFormat(result['data']);
       await _box.put(kUserData, json.encode(_userData));
+      _disposeUserDetails();
       state = const UserState.success();
     } catch (e) {
       _handleError(e);
@@ -40,7 +42,7 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 
   Future<void> logIn() async {
-    state = const UserState.loading();
+    state = const UserState.loading('Getting your credentials...');
 
     final user = ref.read(userDetailsProvider);
     final password = ref.read(passwordProvider);
@@ -52,6 +54,7 @@ class UserNotifier extends StateNotifier<UserState> {
       final result = await userRepository.logInUser();
       final _userData = User.toStorageFormat(result['data']);
       await _box.put(kUserData, json.encode(_userData));
+      _disposeUserDetails();
       state = const UserState.success();
     } catch (error) {
       _handleError(error);
@@ -59,7 +62,7 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 
   Future<void> sendPasswordResetEmail() async {
-    state = const UserState.loading();
+    state = const UserState.loading('Sending link...');
     final user = ref.read(userDetailsProvider);
     await _auth
         .sendPasswordResetEmail(email: user.email)
@@ -69,13 +72,19 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 
   Future logOut() async {
-    state = const UserState.loading();
+    state = const UserState.loading('Logging you out...');
     try {
       await _auth.signOut().then((value) => _box.clear());
       state = const UserState.success();
     } catch (error) {
       _handleError(error);
     }
+  }
+
+  _disposeUserDetails() {
+    ref.refresh(userDetailsProvider);
+    ref.refresh(passwordProvider);
+    ref.refresh(passwordProvider);
   }
 
   _handleError(var error) {

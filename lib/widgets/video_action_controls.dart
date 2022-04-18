@@ -8,7 +8,7 @@ import 'app_icon_button.dart';
 import 'app_text_button.dart';
 import 'source.dart';
 import '../utils/utils.dart';
-import 'app_slider.dart';
+import 'video_position_slider.dart';
 
 class VideoActionControls extends ConsumerStatefulWidget {
   const VideoActionControls({Key? key, required this.onLabelButtonTap})

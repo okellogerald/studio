@@ -1,8 +1,9 @@
 import 'package:silla_studio/manager/user_action.dart';
 import 'package:silla_studio/manager/video/providers.dart';
+import 'package:silla_studio/widgets/app_icon_button.dart';
 import '../manager/lesson_page/models/lesson.dart';
 import '../manager/lesson_page/models/lesson_page_state.dart';
-import '../manager/lesson_page/providers/notifier.dart';
+import '../manager/lesson_page/providers/state_notifier.dart';
 import '../manager/lesson_page/providers/providers.dart';
 import '../manager/video/providers.dart';
 import '../widgets/app_divider.dart';
@@ -10,6 +11,7 @@ import '../widgets/check_mark.dart';
 import '../widgets/failed_state_widget.dart';
 import '../widgets/html_parser.dart';
 import '../widgets/lesson_video_player.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'source.dart';
 
 class LessonPage extends ConsumerStatefulWidget {
@@ -58,25 +60,27 @@ class _LessonPageState extends ConsumerState<LessonPage> {
 
   Widget _buildFailed(String message) {
     final action = ref.watch(userActionProvider);
-    final lesson = ref.watch(currentLessonProvider);
     if (!action.haveErrorShownBySnackBar) {
       return FailedStateWidget(message);
     }
-    return _buildContent(lesson);
+    return _buildContent();
   }
 
-  Widget _buildContent(Lesson lesson) {
+  Widget _buildContent() {
+    final lesson = ref.watch(currentLessonProvider);
     final orientation = ref.watch(orientationModeProvider);
     final isLandscape = orientation == Orientation.landscape;
     return Scaffold(
         body: ListView(children: [
           LessonVideoPlayer(lesson.videoDetails),
-          isLandscape ? Container() : _buildVideoDescription(lesson),
+          isLandscape ? Container() : _buildVideoDescription(),
         ]),
-        bottomNavigationBar: _buildBottomNavBar(lesson));
+        bottomNavigationBar: _buildBottomNavBar());
   }
 
-  _buildVideoDescription(Lesson lesson) {
+  _buildVideoDescription() {
+    final lesson = ref.watch(currentLessonProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,7 +114,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
     );
   }
 
-  _buildBottomNavBar(Lesson lesson) {
+  _buildBottomNavBar() {
     final orientation = ref.watch(orientationModeProvider);
     return orientation == Orientation.landscape
         ? Container(height: .0001)
@@ -121,16 +125,17 @@ class _LessonPageState extends ConsumerState<LessonPage> {
               padding: EdgeInsets.symmetric(horizontal: 19.dw),
               child: Row(
                 children: [
-                  // _buildPrevButton(supp.isFirst),
-                  _buildMarkStatusButton(lesson),
-                  // _buildNextButton(supp.isLast),
+                   _buildPrevButton(),
+                  _buildMarkStatusButton(),
+                   _buildNextButton(),
                 ],
               ),
             ),
           );
   }
 
-  _buildMarkStatusButton(Lesson lesson) {
+  _buildMarkStatusButton() {
+    final lesson = ref.watch(currentLessonProvider);
     final isIncomplete = lesson.completionStatus.isIncomplete;
     return Expanded(
         child: GestureDetector(
@@ -146,28 +151,39 @@ class _LessonPageState extends ConsumerState<LessonPage> {
                   color: isIncomplete ? AppColors.primary : Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(30.dw))),
               child: AppText(isIncomplete ? 'Mark Complete' : 'Mark Incomplete',
-                  weight: FontWeight.bold,
                   color:
                       isIncomplete ? AppColors.onPrimary : AppColors.primary),
               margin: EdgeInsets.symmetric(horizontal: 30.dw),
             )));
   }
-/*
-  _buildNextButton(bool isLast) {
+
+  _buildNextButton() {
+    final lesson = ref.watch(currentLessonProvider);
+    final lessonsIdList = ref.watch(lessonsIdsProvider);
+    final isLast = lessonsIdList.indexOf(lesson.id) == lessonsIdList.length - 1;
     return AppIconButton(
-      onPressed: isLast ? () {} : bloc.goToNext,
+      onPressed: () {
+        if (isLast) return;
+        ref.read(lessonPageNotifierProvider.notifier).goToNext();
+      },
       icon: EvaIcons.arrowheadRight,
       iconThemeData: Theme.of(context).iconTheme.copyWith(
           color: isLast ? AppColors.disabled : AppColors.onBackground),
     );
   }
 
-  _buildPrevButton(bool isFirst) {
+  _buildPrevButton() {
+    final lesson = ref.watch(currentLessonProvider);
+    final lessonsIdList = ref.watch(lessonsIdsProvider);
+    final isFirst = lessonsIdList.indexOf(lesson.id) == 0;
     return AppIconButton(
-      onPressed: isFirst ? () {} : bloc.goToPrev,
+      onPressed: () {
+        if (isFirst) return;
+        ref.read(lessonPageNotifierProvider.notifier).goToPrev();
+      },
       icon: EvaIcons.arrowheadLeft,
       iconThemeData: Theme.of(context).iconTheme.copyWith(
           color: isFirst ? AppColors.disabled : AppColors.onBackground),
     );
-  } */
+  }
 }

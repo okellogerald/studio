@@ -18,7 +18,7 @@ class TopicPageNotifier extends StateNotifier<TopicPageState> {
   var _subtopics = <SubTopic>[];
 
   Future<void> init() async {
-    state = const TopicPageState.loading('Getting lessons ...');
+    state = const TopicPageState.loading('Getting topic content ...');
     final coursesRepository = ref.read(coursesRepositoryProvider);
     final topicId = ref.read(currentTopicProvider).id;
     try {
@@ -54,21 +54,21 @@ class TopicPageNotifier extends StateNotifier<TopicPageState> {
     for (var subtopic in _subtopics) {
       final lessons = subtopic.lessons;
       var filteredLessons = <Lesson>[];
-      if (filterType == LessonsFilter.learn) {
-        filteredLessons =
-            lessons.where((e) => e.type == LessonType.learn).toList();
-      }
-      if (filterType == LessonsFilter.practice) {
-        filteredLessons =
-            lessons.where((e) => e.type == LessonType.practice).toList();
-      }
-      if (filterType == LessonsFilter.paid) {
+      if (filterType.isLearn) {
+        filteredLessons = lessons.where((e) => e.type.isLearn).toList();
+      } else if (filterType.isPractice) {
+        filteredLessons = lessons.where((e) => e.type.isPractice).toList();
+      } else if (filterType.isPaid) {
         filteredLessons = lessons.where((e) => e.isPaid).toList();
-      }
-      if (filterType == LessonsFilter.free) {
+      } else if (filterType.isFree) {
         filteredLessons = lessons.where((e) => !e.isPaid).toList();
+      } else {
+        filteredLessons = lessons.where((e) => e.type.isAudio).toList();
       }
-      subtopics.add(SubTopic(topic: subtopic.topic, lessons: filteredLessons));
+      if (filteredLessons.isNotEmpty) {
+        subtopics
+            .add(SubTopic(topic: subtopic.topic, lessons: filteredLessons));
+      }
     }
     return subtopics;
   }

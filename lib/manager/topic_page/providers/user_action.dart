@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/topic_page/providers/providers.dart';
 import 'state_notifier.dart';
 
-
 void handleSelectedFilter(WidgetRef ref, int tabIndex) {
   switch (tabIndex) {
     case 0:
@@ -19,6 +18,9 @@ void handleSelectedFilter(WidgetRef ref, int tabIndex) {
       break;
     case 4:
       ref.read(currentFilterProvider.state).state = LessonsFilter.paid;
+      break;
+    case 5:
+      ref.read(currentFilterProvider.state).state = LessonsFilter.audio;
       break;
     default:
   }

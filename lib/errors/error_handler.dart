@@ -13,7 +13,7 @@ String getErrorMessage(var error) {
   if (error is SocketException) return ApiError.internet().message;
   if (error is TimeoutException) return ApiError.timeout().message;
   log(error.toString());
-  return ApiError.unknown().message;
+  return error.toString();
 }
 
 String getUserActionFailureTitle(WidgetRef ref) {
@@ -24,8 +24,6 @@ String getUserActionFailureTitle(WidgetRef ref) {
       return 'We failed to get the lesson data';
     case UserAction.viewCourses:
       return 'Could not fetch the courses';
-    case UserAction.viewProfile:
-      return 'Could not load your profile';
     case UserAction.viewTopic:
       return 'Failed to get the topic lessons data';
     case UserAction.viewHomepage:

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../errors/error_handler.dart';
 import '../models/course.dart';
@@ -9,6 +11,7 @@ final coursesProvider = FutureProvider<List<Course>>((ref) async {
     final message = getErrorMessage(error);
     throw message;
   });
+  courses.sort((a, b) => a.id.compareTo(b.id));
   final courseTypes = _getCourseTypes(courses);
   ref.read(coursesTypesProvider.state).state = courseTypes;
   return courses;
@@ -20,12 +23,6 @@ List<String> _getCourseTypes(List<Course> courses) {
   final types = <String>[];
   for (Course course in courses) {
     if (!types.contains(course.type)) types.add(course.type);
-  }
-  //making dance come first
-  if (types.contains('dance')) {
-    types
-      ..remove('dance')
-      ..insert(0, 'dance');
   }
   return types;
 }

@@ -1,12 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/errors/source.dart';
 import 'package:silla_studio/manager/courses_repository.dart';
 import 'package:silla_studio/manager/lesson_page/models/lesson.dart';
 import 'package:silla_studio/manager/lesson_page/models/lesson_page_state.dart';
 import 'package:silla_studio/manager/lesson_page/providers/providers.dart';
-
 
 final lessonPageNotifierProvider =
     StateNotifierProvider<LessonPageNotifier, LessonPageState>(
@@ -23,14 +21,16 @@ class LessonPageNotifier extends StateNotifier<LessonPageState> {
     try {
       final _lesson =
           await coursesRepository.getLesson(lesson.id).timeout(timeLimit);
-      state = LessonPageState.content(_lesson);
+      ref.read(currentLessonProvider.state).state = _lesson;
+      state = const LessonPageState.content();
     } catch (error) {
+      log('$error');
       final message = getErrorMessage(error);
       state = LessonPageState.failed(message);
     }
   }
 
-  Future<void> markLessonAs() async {
+  Future<void> changeLessonCompletionStatus() async {
     final lesson = ref.read(currentLessonProvider);
     final status = lesson.isComplete ? Status.incomplete : Status.completed;
     state =
@@ -42,10 +42,37 @@ class LessonPageNotifier extends StateNotifier<LessonPageState> {
           .timeout(timeLimit);
       ref.read(currentLessonProvider.state).state = updatedLesson;
       log('reached here');
-      state = LessonPageState.content(updatedLesson);
+      state = const LessonPageState.content();
     } catch (error) {
       final message = getErrorMessage(error);
       state = LessonPageState.failed(message);
     }
   }
+
+  Future<void> _changeLesson(bool isNext) async {
+    state = LessonPageState.loading(
+        'fetching ${isNext ? 'next' : 'previous'} lesson...');
+
+    final lesson = ref.read(currentLessonProvider);
+    final coursesRepository = ref.read(coursesRepositoryProvider);
+
+    final lessonsIdList = ref.read(lessonsIdsProvider);
+    final index = lessonsIdList.indexOf(lesson.id);
+    if (index == -1) throw 'lesson id not found';
+
+    final nextLessonId = lessonsIdList[(isNext ? index + 1 : index - 1)];
+
+    try {
+      final nextLesson =
+          await coursesRepository.getLesson(nextLessonId).timeout(timeLimit);
+      ref.read(currentLessonProvider.state).state = nextLesson;
+      state = const LessonPageState.content();
+    } catch (error) {
+      final message = getErrorMessage(error);
+      state = LessonPageState.failed(message);
+    }
+  }
+
+  Future<void> goToNext() => _changeLesson(true);
+  Future<void> goToPrev() => _changeLesson(false);
 }

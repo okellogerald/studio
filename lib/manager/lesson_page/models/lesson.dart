@@ -1,4 +1,4 @@
-
+import 'dart:developer';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silla_studio/constants.dart';
@@ -8,12 +8,18 @@ part 'lesson.freezed.dart';
 
 enum LessonType { practice, learn, audio }
 
+extension LessonTypeExtension on LessonType {
+  bool get isPractice => this == LessonType.practice;
+  bool get isLearn => this == LessonType.learn;
+  bool get isAudio => this == LessonType.audio;
+}
+
 enum Status { completed, pending, incomplete }
 
 extension StatusExtension on Status {
   bool get isComplete => this == Status.completed;
   bool get isPending => this == Status.pending;
-  bool get isIncomplete => this == Status.incomplete;
+  bool get isIncomplete => this == Status.incomplete || this == Status.pending;
 
   String get value {
     switch (this) {
@@ -50,17 +56,18 @@ class Lesson with _$Lesson {
   factory Lesson.fromJson(Map<String, dynamic> json,
       [VideoDetails? videoDetails]) {
     final status = json['completionStatus'];
+    final type = json['lessonType'];
     return Lesson(
         id: json['id'],
         title: json['title'],
         thumbnailUrl: json['thumbnailUrl'] ?? defaultImage,
         topicId: json['topic']['id'],
         topicName: json['topic']['title'],
-        type: json['lessonType'] == 'learn'
+        type: type == 'learn'
             ? LessonType.learn
-            : json['lessonType'] == 'audio'
-                ? LessonType.audio
-                : LessonType.practice,
+            : type == 'practice'
+                ? LessonType.practice
+                : LessonType.audio,
         isPaid: json['isPaid'] ?? false,
         isPublished: json['publishedStatus'] == 'published',
         videoDetails: videoDetails ?? const VideoDetails(),

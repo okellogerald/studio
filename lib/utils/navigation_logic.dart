@@ -16,21 +16,21 @@ void pushAndRemoveUntil(Widget nextPage) =>
 
 ///uses either the scaffold key or the context to show the snackbar
 void showSnackbar(String message,
-    {BuildContext? context, GlobalKey<ScaffoldState>? key}) {
-  if (context != null) _showSnackBarCallback(context, message);
+    {BuildContext? context, GlobalKey<ScaffoldState>? key, bool isError = true}) {
+  if (context != null) _showSnackBarCallback(context, message, isError);
   if (key != null) {
     if (key.currentState == null) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
-        _showSnackBarCallback(key.currentContext!, message);
+        _showSnackBarCallback(key.currentContext!, message, isError);
       });
     } else {
-      _showSnackBarCallback(key.currentContext!, message);
+      _showSnackBarCallback(key.currentContext!, message, isError);
     }
   }
 }
 
-void _showSnackBarCallback(BuildContext context, String message) =>
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(message));
+void _showSnackBarCallback(BuildContext context, String message, bool isError) =>
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(message, isError));
 
 Future<bool> showExitAppDialog(BuildContext context) async {
   showDialog(

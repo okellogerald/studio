@@ -90,8 +90,7 @@ class AppSliderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final unbufferedPaint = _paintUsing(AppColors.disabled);
-    final bufferedPaint = _paintUsing(Colors.white);
+    final unbufferedPaint = _paintUsing(Colors.white);
     final playedPaint = _paintUsing(AppColors.accent);
 
     final circlePaint = Paint()
@@ -102,12 +101,10 @@ class AppSliderPainter extends CustomPainter {
 
     final startingPoint = Offset(size.width * .008, dy);
     final endingPointUnbuffered = Offset(size.width * .992, dy);
-    final endingPointBuffered = Offset(xBuffered * .992, dy);
     final endingPointPlayed = Offset(xTapped * .992, dy);
     final circleOffset = Offset(xTapped * .992, dy);
 
     canvas.drawLine(startingPoint, endingPointUnbuffered, unbufferedPaint);
-    canvas.drawLine(startingPoint, endingPointBuffered, bufferedPaint);
     canvas.drawLine(startingPoint, endingPointPlayed, playedPaint);
     canvas.drawCircle(circleOffset, 4, circlePaint);
   }

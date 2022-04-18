@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/manager/courses/topic_page/providers/providers.dart';
+import 'package:silla_studio/manager/topic_page/providers/providers.dart';
 import '../manager/topic_page/models/topic.dart';
 import '../manager/topic_page/providers/user_action.dart';
 import 'app_icon_button.dart';
@@ -85,7 +85,7 @@ class _TopicPageAppBarState extends ConsumerState<TopicPageAppBar> {
   }
 
   _buildSubtitle() {
-    final completedCount = ref.read(currentTopicProvider);
+    final completedCount = ref.read(currentTopicProvider).completedLessons;
     final subtitle =
         '$completedCount / ${widget.topic.totalLessons} videos completed';
     return Padding(
@@ -117,7 +117,8 @@ class _TopicPageAppBarState extends ConsumerState<TopicPageAppBar> {
               _buildTabItem('Learn', LessonsFilter.learn),
               _buildTabItem('Practice', LessonsFilter.practice),
               _buildTabItem('Free', LessonsFilter.free),
-              _buildTabItem('Paid', LessonsFilter.paid)
+              _buildTabItem('Paid', LessonsFilter.paid),
+              _buildTabItem('Audio', LessonsFilter.audio)
             ]));
   }
 

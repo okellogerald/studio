@@ -1,5 +1,5 @@
+import 'package:silla_studio/manager/onboarding/providers/pages.dart';
 import '../manager/onboarding/models/user_state.dart';
-import '../manager/onboarding/provider/pages.dart';
 import '../manager/onboarding/providers/user_details.dart';
 import '../manager/onboarding/providers/user_notifier.dart';
 import '../manager/user_action.dart';
@@ -20,12 +20,6 @@ class LogInPage extends ConsumerStatefulWidget {
 class _LogInPageState extends ConsumerState<LogInPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final currentPage = Pages.login_page;
-
-  @override
-  void initState() {
-    handleStateOnInit(ref, currentPage);
-    super.initState();
-  }
 
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
@@ -57,7 +51,7 @@ class _LogInPageState extends ConsumerState<LogInPage> {
     return Scaffold(
         body: userState.maybeWhen(
             loading: (message) => AppLoadingIndicator(message),
-            failed: (message) => FailedStateWidget(message),
+            failed: (_) => _buildContent(),
             orElse: _buildContent));
   }
 
@@ -103,8 +97,7 @@ class _LogInPageState extends ConsumerState<LogInPage> {
         children: [
           const AppText('Forgot Password ?'),
           AppTextButton(
-            onPressed: () =>
-                handleUserAction(ref, UserAction.sendPasswordResetLink),
+            onPressed: () => push(const PasswordResetPage()),
             text: 'Reset',
             textColor: AppColors.primary,
             margin: EdgeInsets.only(left: 10.dw),

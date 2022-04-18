@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/video_controls_actions_handler.dart';
+import 'package:silla_studio/utils/navigation_logic.dart';
 import 'package:silla_studio/widgets/app_image.dart';
 
 import '../constants.dart';
@@ -18,18 +19,26 @@ class LessonTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLearning = lesson.type == LessonType.learn;
-    final subtitle =
-        '${lesson.topicName} - ' + (isLearning ? 'LEARN' : 'PRACTICE');
+    final isPractice = lesson.type == LessonType.practice;
+    final subtitle = '${lesson.topicName} - ' +
+        (isLearning
+            ? 'LEARN'
+            : isPractice
+                ? 'PRACTICE'
+                : 'AUDIO');
 
     return AppMaterialButton(
-      onPressed: lesson.isPaid
-          ? () {}
-          : () async {
-              //todo handle the markAsComplete vs Incomplete
-              await Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => LessonPage(lesson)));
-              handleVideoControllerOnPop(ref);
-            },
+      onPressed: () async {
+        if (lesson.isPaid) {
+          showSnackbar('This lesson is only available for paid users',
+              context: context);
+          return;
+        }
+        //todo handle the markAsComplete vs Incomplete
+        await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => LessonPage(lesson)));
+        handleVideoControllerOnPop(ref);
+      },
       backgroundColor: AppColors.surface,
       child: Container(
         height: 100.dh,

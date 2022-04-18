@@ -1,5 +1,6 @@
+import 'package:silla_studio/manager/onboarding/providers/pages.dart';
+import 'package:silla_studio/widgets/app_text_field.dart';
 import '../manager/onboarding/models/user_state.dart';
-import '../manager/onboarding/provider/pages.dart';
 import '../manager/onboarding/providers/user_details.dart';
 import '../manager/onboarding/providers/user_notifier.dart';
 import '../manager/user_action.dart';
@@ -23,12 +24,6 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   final currentPage = Pages.password_reset_page;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    handleStateOnInit(ref, currentPage);
-    super.initState();
-  }
-
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
     if (action.haveErrorShownBySnackBar) {
@@ -38,7 +33,8 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
 
   void handleSuccessState() {
     final user = ref.read(userDetailsProvider);
-    showSnackbar('Password reset link has been sent to ${user.email}');
+    showSnackbar('Password reset link has been sent to ${user.email}',
+        key: scaffoldKey, isError: false);
   }
 
   @override
@@ -54,56 +50,51 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
     });
 
     return Scaffold(
-        body: WillPopScope(
-      onWillPop: () => handleStateOnPop(ref, Pages.login_page),
-      child: userState.maybeWhen(
-          loading: (message) => AppLoadingIndicator(message),
-          failed: (message) => FailedStateWidget(message),
-          orElse: _buildContent),
-    ));
+        key: scaffoldKey,
+        body: userState.maybeWhen(
+            loading: (message) => AppLoadingIndicator(message),
+            failed: (message) => FailedStateWidget(message),
+            orElse: _buildContent));
   }
 
   Widget _buildContent() {
+    final errors = ref.watch(userValidationErrorsProvider);
+    final user = ref.watch(userDetailsProvider);
     return Scaffold(
       appBar: const PageAppBar(title: 'Password Reset'),
       body: Padding(
-        padding: EdgeInsets.only(top: 10.dh, left: 15.dw, right: 15.dw),
+        padding: EdgeInsets.only(top: 10.dh),
         child: Column(
           children: [
-            const AppText(
-              'We sent a link to your email address. Click on the link to create a new password.',
-              opacity: .7,
+            Padding(
+              padding: EdgeInsets.only(left: 15.dw, right: 15.dw),
+              child: const AppText(
+                'Please provide your email address to which we shall send the password reset link',
+                opacity: .7,
+              ),
             ),
             SizedBox(height: 30.dh),
-            _buildResendCode(),
+            AppTextField(
+                error: errors['email'],
+                text: user.email,
+                onChanged: (email) => updateUserDetails(ref, email: email),
+                hintText: '',
+                keyboardType: TextInputType.emailAddress,
+                label: 'Email Id'),
+
+            AppTextButton(
+                onPressed: () =>
+                    handleUserAction(ref, UserAction.sendPasswordResetLink),
+                text: 'Get link',
+                textColor: AppColors.onPrimary,
+                backgroundColor: AppColors.primary,
+                height: 50.dh,
+                width: double.maxFinite,
+                borderRadius: 30.dw,
+                margin: EdgeInsets.only(top: 50.dh, left: 15.dw, right: 15.dw))
           ],
         ),
       ),
-    );
-  }
-
-  _buildResendCode() {
-    final user = ref.watch(userDetailsProvider);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppText('Email sent to ${user.email}'),
-        SizedBox(height: 10.dh),
-        Row(
-          children: [
-            const AppText('Didn\'t get it ?'),
-            AppTextButton(
-              onPressed: ref
-                  .read(userNotifierProvider.notifier)
-                  .sendPasswordResetEmail,
-              text: 'Resend Code',
-              textColor: AppColors.primary,
-              margin: EdgeInsets.only(left: 20.dw),
-            )
-          ],
-        ),
-      ],
     );
   }
 }

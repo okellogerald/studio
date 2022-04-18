@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:silla_studio/manager/courses/topic_page/models/sub_topic.dart';
+import 'package:silla_studio/manager/topic_page/models/sub_topic.dart';
 
 part 'topic_page_state.freezed.dart';
 

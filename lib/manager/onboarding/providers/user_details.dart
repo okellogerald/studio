@@ -33,6 +33,9 @@ void updateUserDetails(WidgetRef ref,
     String? gender,
     DateTime? dateOfBirth}) {
   final user = ref.read(userDetailsProvider);
+  final _password = ref.read(passwordProvider);
+  final _confirmationPassword = ref.read(confirmationPasswordProvider);
+
   final updatedUser = user.copyWith(
       email: email ?? user.email,
       name: name ?? user.name,
@@ -41,5 +44,8 @@ void updateUserDetails(WidgetRef ref,
       level: level ?? user.level,
       courseId: courseId ?? user.courseId,
       gradeId: gradeId ?? user.gradeId);
+  ref.read(passwordProvider.state).state = password ?? _password;
+  ref.read(confirmationPasswordProvider.state).state =
+      confirmationPassword ?? _confirmationPassword;
   ref.read(userDetailsProvider.state).state = updatedUser;
 }

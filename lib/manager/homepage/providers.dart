@@ -15,11 +15,12 @@ final homepageNotifierProvider =
 
 class HomepageNotifier extends StateNotifier<HomepageState> {
   final StateNotifierProviderRef ref;
-  HomepageNotifier(this.ref) : super(HomepageState.initial());
+  HomepageNotifier(this.ref)
+      : super(const HomepageState.loading('Getting data...'));
 
   var _currentOverview = CourseOverview.empty();
 
-  Future<void> init([bool isUpdating = false]) async {
+  Future<void> init() async {
     state = const HomepageState.loading('Getting data...');
     final courseRepository = ref.read(coursesRepositoryProvider);
     try {

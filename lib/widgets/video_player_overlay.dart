@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/providers.dart';
@@ -113,7 +115,7 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
   labelsOverlayEntry() {
     final orientation = ref.watch(orientationModeProvider);
     final isPortrait = orientation == Orientation.portrait;
-    print(isPortrait);
+    log(isPortrait.toString());
 
     return OverlayEntry(
         builder: (_) => GestureDetector(
@@ -127,10 +129,9 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
                     ValueListenableBuilder<Offset>(
                         valueListenable: tappedPositionNotifier,
                         builder: (context, tappedPosition, snapshot) {
-                          final leftOffset = isPortrait ? 35.dw : 350.dh;
                           return Positioned(
                             top: tappedPosition.dy - 65.dh,
-                            left: leftOffset,
+                            right: 35.dw,
                             child: _buildLabelsListView(),
                           );
                         })

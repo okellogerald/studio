@@ -8,10 +8,10 @@ import 'package:silla_studio/manager/video/models/video_details.dart';
 import 'package:silla_studio/secret.dart';
 import '../errors/api_error.dart';
 import 'homepage/models/course_overview.dart';
-import 'courses/topic_page/models/sub_topic.dart';
 import 'homepage/models/general_info.dart';
 import 'lesson_page/models/lesson.dart';
 import 'onboarding/models/course.dart';
+import 'topic_page/models/sub_topic.dart';
 import 'topic_page/models/topic.dart';
 
 const timeLimit = Duration(seconds: 20);
@@ -136,7 +136,10 @@ class CoursesRepositoryImpl {
     final token = await ref
         .read(tokenProvider.future)
         .timeout(timeLimit)
-        .catchError((error) => throw error);
+        .catchError((error) {
+      log('$error');
+      throw error;
+    });
     return {"Authorization": 'Bearer $token'};
   }
 }

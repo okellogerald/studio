@@ -1,10 +1,11 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/homepage/providers.dart';
+import 'package:silla_studio/manager/video/providers.dart';
 import '../utils/validation_logic.dart';
-import 'lesson_page/providers/notifier.dart';
-import 'onboarding/provider/pages.dart';
+import 'lesson_page/providers/state_notifier.dart';
+import 'onboarding/providers/courses.dart';
+import 'onboarding/providers/pages.dart';
 import 'onboarding/providers/user_details.dart';
 import 'onboarding/providers/user_notifier.dart';
 import 'topic_page/providers/state_notifier.dart';
@@ -15,7 +16,6 @@ enum UserAction {
   saveWelcomePageData,
   sendPasswordResetLink,
   viewHomepage,
-  viewProfile,
   viewTopic,
   viewCourses,
   viewLesson,
@@ -30,11 +30,17 @@ extension UserActionExtension on UserAction {
   bool get isSigningUp => this == UserAction.signUp;
   bool get isSavingWelcomePageData => this == UserAction.saveWelcomePageData;
 
+  bool get needsValidation =>
+      this == UserAction.logIn ||
+      this == UserAction.saveWelcomePageData ||
+      this == UserAction.sendPasswordResetLink ||
+      this == UserAction.signUp;
+
   bool get haveErrorShownBySnackBar =>
       this != UserAction.viewHomepage &&
-      this != UserAction.viewProfile &&
       this != UserAction.viewTopic &&
-      this != UserAction.viewLesson;
+      this != UserAction.viewLesson &&
+      this != UserAction.logOut;
 }
 
 final userActionProvider =
@@ -47,6 +53,7 @@ final userActionProvider =
 ///state widget works.
 void handleUserAction(WidgetRef ref, UserAction userAction) async {
   ref.read(userActionProvider.state).state = userAction;
+  _updateCurrentPage(ref, userAction);
   log('user action is $userAction');
 
   final userNotifier = ref.read(userNotifierProvider.notifier);
@@ -59,62 +66,75 @@ void handleUserAction(WidgetRef ref, UserAction userAction) async {
   final password = ref.read(passwordProvider);
   final password2 = ref.read(confirmationPasswordProvider);
 
-  switch (userAction) {
-    case UserAction.sendPasswordResetLink:
+  if (userAction.needsValidation) {
+    if (userAction == UserAction.sendPasswordResetLink) {
       errors['email'] = validateEmail(user.email);
-      break;
-    case UserAction.signUp:
+    }
+    if (userAction == UserAction.signUp) {
       errors['password'] = validatePassword(password);
-      errors['username'] = validateText(user.name, 'Username');
+      errors['email'] = validateEmail(user.email);
       errors['confirmingPassword'] = validatePasswords(password, password2);
-      break;
-    case UserAction.logIn:
+    }
+    if (userAction == UserAction.logIn) {
       errors['email'] = validateEmail(user.email);
       errors['password'] = validatePassword(password);
-      break;
-    case UserAction.saveWelcomePageData:
+    }
+    if (userAction == UserAction.saveWelcomePageData) {
       errors['name'] = validateText(user.name, 'Name');
       errors['gender'] = validateText(user.gender, 'Gender');
-      break;
-    case UserAction.viewHomepage:
-    case UserAction.viewProfile:
-    case UserAction.viewTopic:
-    case UserAction.viewLesson:
-    case UserAction.logOut:
-    case UserAction.viewCourses:
-    case UserAction.markLessonCompletionStatus:
-      break;
-  }
-
-  ref.read(userValidationErrorsProvider.state).state = errors;
-
-  final hasErrors = checkErrors(errors);
-  if (!hasErrors) {
-    if (userAction.isLoggingIn) await userNotifier.logIn();
-    if (userAction.isSigningUp) await userNotifier.signUp();
-    if (userAction.isSendingPasswordResetLink) {
-      await userNotifier.sendPasswordResetEmail();
     }
+
+    final hasErrors = checkErrors(errors);
+    if (!hasErrors) {
+      ref.read(userValidationErrorsProvider.state).state = {};
+      if (userAction.isLoggingIn) await userNotifier.logIn();
+      if (userAction.isSigningUp) await userNotifier.signUp();
+      if (userAction.isSendingPasswordResetLink) {
+        await userNotifier.sendPasswordResetEmail();
+      }
+      if (userAction == UserAction.saveWelcomePageData) {
+        ref.refresh(coursesProvider);
+      }
+    } else {
+      ref.read(userValidationErrorsProvider.state).state = errors;
+    }
+  } else {
     if (userAction == UserAction.viewHomepage) await homepageNotifier.init();
     if (userAction == UserAction.viewTopic) await topicPageNotifier.init();
     if (userAction == UserAction.viewLesson) await lessonPageNotifier.init();
+    if (userAction == UserAction.logOut) await userNotifier.logOut();
+
     if (userAction == UserAction.markLessonCompletionStatus) {
-      await lessonPageNotifier.markLessonAs();
+      await ref.read(videoControllerProvider).pause();
+      await lessonPageNotifier.changeLessonCompletionStatus();
     }
   }
-  return;
 }
 
-///updating the page so that ref listening works properly i.e does not call
-///other pages for an action done on another page.
-Future<bool> handleStateOnPop(WidgetRef ref, Pages toPage) async {
-  ref.read(pagesProvider.state).state = toPage;
-  return true;
-}
-
-///updates the current page to pages provider
-void handleStateOnInit(WidgetRef ref, Pages currentPage) {
-  WidgetsBinding.instance!.addPostFrameCallback((_) {
-    ref.read(pagesProvider.state).state = currentPage;
-  });
+///using user action to update the page the user is in to avoid re-builds for
+///pages sharing the same state notifier.
+///
+///easier to implement than having on-init and on-pop functions updating the
+///current page
+void _updateCurrentPage(WidgetRef ref, UserAction userAction) {
+  var page = Pages.login_page;
+  switch (userAction) {
+    case UserAction.logIn:
+      page = Pages.login_page;
+      break;
+    case UserAction.sendPasswordResetLink:
+      page = Pages.password_reset_page;
+      break;
+    case UserAction.signUp:
+      page = Pages.signup_page;
+      break;
+    case UserAction.logOut:
+      page = Pages.profile_page;
+      break;
+    case UserAction.saveWelcomePageData:
+      page = Pages.welcome_page;
+      break;
+    default:
+  }
+  ref.read(pagesProvider.state).state = page;
 }

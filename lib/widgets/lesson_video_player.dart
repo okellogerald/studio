@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_state_notifier.dart';
 import 'package:silla_studio/utils/utils.dart';
@@ -6,9 +7,10 @@ import 'package:silla_studio/widgets/app_image.dart';
 import 'package:silla_studio/widgets/video_player_overlay.dart';
 import 'package:video_player/video_player.dart';
 import '../manager/video/models/video_details.dart';
+import 'app_icon_button.dart';
 import 'app_loading_indicator.dart';
-import 'app_text_button.dart';
 import 'source.dart';
+
 class LessonVideoPlayer extends ConsumerStatefulWidget {
   const LessonVideoPlayer(this.videoDetails, {Key? key}) : super(key: key);
 
@@ -44,33 +46,20 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
   }
 
   Widget _buildInitial() {
-    final videoLength = Utils.convertFrom(videoDetails.duration * 1000);
-    return Stack(alignment: Alignment.bottomCenter, children: [
-      AppImage(
-          imageUrl: videoDetails.image,
-          height: 220.dh,
-          width: ScreenSizeConfig.getFullWidth),
-      Container(
-        height: 40.dh,
-        width: ScreenSizeConfig.getFullWidth,
-        padding: EdgeInsets.symmetric(horizontal: 15.dw),
-        color: AppColors.secondary,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            AppText(videoLength, color: AppColors.onSecondary),
-            AppTextButton(
-                text: 'Play',
-                height: 30.dh,
-                padding: EdgeInsets.symmetric(horizontal: 30.dw),
-                onPressed: ref.read(videoStateNotifierProvider.notifier).play,
-                textColor: AppColors.primary,
-                borderRadius: 15.dw,
-                backgroundColor: AppColors.onSecondary),
-          ],
-        ),
-      ),
-    ]);
+    return Container(
+      width: ScreenSizeConfig.getFullWidth,
+      height: 220.dh,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          image: DecorationImage(
+              image: NetworkImage(videoDetails.image), fit: BoxFit.cover)),
+      alignment: Alignment.center,
+      child: AppIconButton(
+          onPressed: ref.read(videoStateNotifierProvider.notifier).play,
+          icon: FontAwesomeIcons.circlePlay,
+          iconThemeData:
+              IconThemeData(size: 60.dw, color: AppColors.primary)),
+    );
   }
 
   Widget _buildLoading(String? message) {
