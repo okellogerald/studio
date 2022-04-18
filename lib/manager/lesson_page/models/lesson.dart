@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silla_studio/constants.dart';
 import 'package:silla_studio/manager/video/models/video_details.dart';

@@ -2,8 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_state_notifier.dart';
-import 'package:silla_studio/utils/utils.dart';
-import 'package:silla_studio/widgets/app_image.dart';
 import 'package:silla_studio/widgets/video_player_overlay.dart';
 import 'package:video_player/video_player.dart';
 import '../manager/video/models/video_details.dart';
