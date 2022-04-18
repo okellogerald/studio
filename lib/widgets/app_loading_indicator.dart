@@ -1,4 +1,4 @@
-import '../source.dart';
+import 'source.dart';
 
 class AppLoadingIndicator extends StatelessWidget {
   final String? message;

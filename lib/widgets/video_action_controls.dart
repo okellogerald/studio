@@ -4,7 +4,9 @@ import 'package:silla_studio/manager/video/models/video.dart';
 
 import '../manager/video/providers.dart';
 import '../manager/video/video_controls_actions_handler.dart';
-import '../source.dart';
+import 'app_icon_button.dart';
+import 'app_text_button.dart';
+import 'source.dart';
 import '../utils/utils.dart';
 import 'app_slider.dart';
 
@@ -70,9 +72,6 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
     final duration = ref.watch(videoControllerProvider).value.duration;
     final position = ref.watch(positionProvider);
     final size = ref.watch(videoSizeConfigsProvider);
-    print(duration);
-    print(position);
-    print(size);
     return AppSlider(
         currentValue: position,
         bufferedValue: 4545,

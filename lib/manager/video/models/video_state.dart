@@ -1,4 +1,4 @@
-import 'package:silla_studio/models/source.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'video_state.freezed.dart';
 

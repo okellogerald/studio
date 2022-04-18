@@ -1,10 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/manager/onboarding/user_details_providers.dart';
 import '../manager/onboarding/models/user_state.dart';
-import '../manager/onboarding/user_notifier.dart';
-import '../manager/pages.dart';
+import '../manager/onboarding/provider/pages.dart';
+import '../manager/onboarding/providers/user_details.dart';
+import '../manager/onboarding/providers/user_notifier.dart';
 import '../manager/user_action.dart';
-import '../source.dart';
+import '../widgets/app_text_field.dart';
+import '../widgets/failed_state_widget.dart';
+import '../widgets/page_app_bar.dart';
+import 'homepage.dart';
+import 'password_reset_page.dart';
+import 'source.dart';
 
 class LogInPage extends ConsumerStatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -51,13 +55,10 @@ class _LogInPageState extends ConsumerState<LogInPage> {
     });
 
     return Scaffold(
-        body: WillPopScope(
-      onWillPop: () => handleStateOnPop(ref, Pages.courses_page),
-      child: userState.maybeWhen(
-          loading: (message) => AppLoadingIndicator(message),
-          failed: (message) => FailedStateWidget(message),
-          orElse: _buildContent),
-    ));
+        body: userState.maybeWhen(
+            loading: (message) => AppLoadingIndicator(message),
+            failed: (message) => FailedStateWidget(message),
+            orElse: _buildContent));
   }
 
   Widget _buildContent() {

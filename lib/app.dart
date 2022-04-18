@@ -1,6 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'source.dart';
+import 'package:silla_studio/constants.dart';
+import 'package:silla_studio/pages/landing_page.dart';
+import 'package:silla_studio/theme/app_theme.dart';
+import 'package:silla_studio/utils/navigation_logic.dart';
+import 'package:silla_studio/widgets/screen_size_init.dart';
+import 'pages/homepage.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

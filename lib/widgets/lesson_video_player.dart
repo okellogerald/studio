@@ -6,8 +6,9 @@ import 'package:silla_studio/widgets/app_image.dart';
 import 'package:silla_studio/widgets/video_player_overlay.dart';
 import 'package:video_player/video_player.dart';
 import '../manager/video/models/video_details.dart';
-import '../source.dart';
-
+import 'app_loading_indicator.dart';
+import 'app_text_button.dart';
+import 'source.dart';
 class LessonVideoPlayer extends ConsumerStatefulWidget {
   const LessonVideoPlayer(this.videoDetails, {Key? key}) : super(key: key);
 

@@ -1,4 +1,4 @@
-import '../source.dart';
+import 'source.dart';
 
 class CheckMark extends StatelessWidget {
   const CheckMark({Key? key}) : super(key: key);

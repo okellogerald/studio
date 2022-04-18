@@ -1,14 +1,13 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/manager/courses/homepage.dart';
-import 'package:silla_studio/manager/courses/topic_page/state_notifier.dart';
-import 'package:silla_studio/manager/pages.dart';
+import 'package:silla_studio/manager/homepage/providers.dart';
 import '../utils/validation_logic.dart';
-import 'courses/lesson_page/notifier.dart';
-import 'onboarding/user_details_providers.dart';
-import 'onboarding/user_notifier.dart';
+import 'lesson_page/providers/notifier.dart';
+import 'onboarding/provider/pages.dart';
+import 'onboarding/providers/user_details.dart';
+import 'onboarding/providers/user_notifier.dart';
+import 'topic_page/providers/state_notifier.dart';
 
 enum UserAction {
   logIn,
@@ -44,6 +43,8 @@ final userActionProvider =
 ///checks if there is a need to validate something before performing the action.
 ///e.g when logging in, we need to check if the email is valid before sending
 ///the request.
+///also gets the user action stored so that tryAgainCallback in the failed
+///state widget works.
 void handleUserAction(WidgetRef ref, UserAction userAction) async {
   ref.read(userActionProvider.state).state = userAction;
   log('user action is $userAction');

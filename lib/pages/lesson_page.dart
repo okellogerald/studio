@@ -1,14 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
-import 'package:silla_studio/manager/courses/lesson_page/providers.dart';
-import 'package:silla_studio/manager/courses/models/lesson_page_state.dart';
-import 'package:silla_studio/manager/courses/topic_page/state_notifier.dart';
 import 'package:silla_studio/manager/user_action.dart';
 import 'package:silla_studio/manager/video/providers.dart';
-import '../manager/courses/lesson_page/notifier.dart';
+import '../manager/lesson_page/models/lesson.dart';
+import '../manager/lesson_page/models/lesson_page_state.dart';
+import '../manager/lesson_page/providers/notifier.dart';
+import '../manager/lesson_page/providers/providers.dart';
 import '../manager/video/providers.dart';
-import '../source.dart' hide Consumer;
+import '../widgets/app_divider.dart';
+import '../widgets/check_mark.dart';
+import '../widgets/failed_state_widget.dart';
 import '../widgets/html_parser.dart';
 import '../widgets/lesson_video_player.dart';
+import 'source.dart';
 
 class LessonPage extends ConsumerStatefulWidget {
   const LessonPage(this.lesson, {Key? key}) : super(key: key);

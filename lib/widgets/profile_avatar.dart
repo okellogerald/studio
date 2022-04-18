@@ -1,5 +1,4 @@
-import '../source.dart';
-
+import 'source.dart';
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar(this.name, {this.size, Key? key}) : super(key: key);
 

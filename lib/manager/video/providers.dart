@@ -1,7 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:silla_studio/source.dart' hide Provider;
+import 'package:silla_studio/utils/screen_size_config.dart';
 import 'package:video_player/video_player.dart';
-
 import 'models/video.dart';
 
 enum PlayerState { playing, paused, end }

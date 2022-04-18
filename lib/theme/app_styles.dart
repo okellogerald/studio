@@ -1,4 +1,7 @@
-import '../source.dart';
+import 'package:flutter/material.dart';
+import 'package:silla_studio/theme/app_colors.dart';
+import 'package:silla_studio/utils/screen_size_config.dart';
+
 
 final emptyBorder = Border.all(color: Colors.transparent, width: 0);
 

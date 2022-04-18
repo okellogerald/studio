@@ -1,11 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:silla_studio/manager/onboarding/user_details_providers.dart';
+
 import '../manager/onboarding/models/user_state.dart';
-import '../manager/onboarding/user_notifier.dart';
-import '../manager/pages.dart';
+import '../manager/onboarding/provider/pages.dart';
+import '../manager/onboarding/providers/user_details.dart';
+import '../manager/onboarding/providers/user_notifier.dart';
 import '../manager/user_action.dart';
-import '../source.dart';
+import '../widgets/app_divider.dart';
+import '../widgets/app_material_button.dart';
+import '../widgets/failed_state_widget.dart';
+import '../widgets/profile_avatar.dart';
+import 'homepage.dart';
+import 'source.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -52,13 +57,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     });
 
     return Scaffold(
-        body: WillPopScope(
-      onWillPop: () => handleStateOnPop(ref, Pages.courses_page),
-      child: userState.maybeWhen(
-          loading: (message) => AppLoadingIndicator(message),
-          failed: (message) => FailedStateWidget(message),
-          orElse: _buildContent),
-    ));
+        body: userState.maybeWhen(
+            loading: (message) => AppLoadingIndicator(message),
+            failed: (message) => FailedStateWidget(message),
+            orElse: _buildContent));
   }
 
   Widget _buildContent() {

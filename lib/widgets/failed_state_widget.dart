@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:silla_studio/manager/user_action.dart';
-import '../source.dart' hide Consumer;
+import '../errors/error_handler.dart';
+import 'app_text_button.dart';
+import 'source.dart';
 
 class FailedStateWidget extends StatelessWidget {
   const FailedStateWidget(this.message, {key}) : super(key: key);

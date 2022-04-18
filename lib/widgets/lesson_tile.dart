@@ -3,7 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/video_controls_actions_handler.dart';
 import 'package:silla_studio/widgets/app_image.dart';
 
-import '../source.dart';
+import '../constants.dart';
+import '../manager/lesson_page/models/lesson.dart';
+import '../pages/lesson_page.dart';
+import 'app_material_button.dart';
+import 'check_mark.dart';
+import 'source.dart';
 
 class LessonTile extends ConsumerWidget {
   const LessonTile(this.lesson, {Key? key}) : super(key: key);

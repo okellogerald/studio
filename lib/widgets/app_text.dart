@@ -1,4 +1,5 @@
-import '../source.dart';
+import '../constants.dart';
+import 'source.dart';
 
 class AppText extends StatelessWidget {
   const AppText(this.data,

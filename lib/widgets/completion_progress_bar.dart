@@ -1,4 +1,4 @@
-import '../source.dart';
+import 'source.dart';
 
 class CompletionProgressBar extends StatelessWidget {
   const CompletionProgressBar(this.value, {Key? key}) : super(key: key);

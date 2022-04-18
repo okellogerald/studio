@@ -1,4 +1,4 @@
-import '../source.dart';
+import 'source.dart';
 
 class AppDivider extends StatelessWidget {
   const AppDivider({Key? key, this.height, this.margin, this.color, this.width})

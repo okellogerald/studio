@@ -1,9 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../manager/onboarding/user_details_providers.dart';
+import '../manager/onboarding/providers/user_details.dart';
 import '../manager/user_action.dart';
+import '../widgets/app_text_field.dart';
+import '../widgets/date_selector.dart';
 import '../widgets/gender_selector.dart';
-import '../source.dart';
-
+import '../widgets/page_app_bar.dart';
+import 'source.dart';
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 

@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../source.dart';
-
+import 'source.dart';
 class ScreenSizeInit extends ConsumerWidget {
   const ScreenSizeInit({required this.child, required this.designSize, key})
       : super(key: key);

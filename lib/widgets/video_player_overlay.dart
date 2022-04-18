@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/providers.dart';
-import 'package:silla_studio/source.dart';
+import 'app_divider.dart';
+import 'app_icon_button.dart';
+import 'app_text_button.dart';
+import 'source.dart';
 import 'package:silla_studio/widgets/video_action_controls.dart';
 
 import '../manager/video/models/video.dart';

@@ -1,4 +1,5 @@
-import '../../../source.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:silla_studio/utils/date_formatter.dart';
 
 part 'user.freezed.dart';
 

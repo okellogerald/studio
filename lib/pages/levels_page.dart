@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../manager/onboarding/user_details_providers.dart';
-import '../manager/pages.dart';
-import '../source.dart' hide Consumer;
+import '../manager/onboarding/providers/user_details.dart';
+import '../widgets/page_app_bar.dart';
+import 'signup_page.dart';
+import 'source.dart';
 
 class LevelsPage extends StatefulWidget {
   const LevelsPage(this.levels, {Key? key}) : super(key: key);
@@ -13,7 +13,6 @@ class LevelsPage extends StatefulWidget {
 }
 
 class _LevelsPageState extends State<LevelsPage> {
-  final currentPage = Pages.levels_page;
 
   @override
   Widget build(BuildContext context) {

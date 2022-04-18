@@ -1,12 +1,13 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/pages/levels_page.dart';
-import '../manager/onboarding/courses_provider.dart';
-import '../manager/onboarding/models/user_state.dart';
-import '../manager/onboarding/user_details_providers.dart';
-import '../manager/onboarding/user_notifier.dart';
-import '../manager/pages.dart';
+import 'package:silla_studio/pages/signup_page.dart';
+import '../manager/onboarding/models/course.dart';
+import '../manager/onboarding/providers/courses.dart';
+import '../manager/onboarding/providers/user_details.dart';
 import '../manager/user_action.dart';
-import '../source.dart' hide Provider;
+import '../widgets/app_material_button.dart';
+import '../widgets/failed_state_widget.dart';
+import '../widgets/page_animated_app_bar.dart';
+import 'source.dart';
 
 class CoursesPage extends ConsumerStatefulWidget {
   const CoursesPage({Key? key}) : super(key: key);
@@ -17,14 +18,7 @@ class CoursesPage extends ConsumerStatefulWidget {
 
 class _CoursesPageState extends ConsumerState<CoursesPage> {
   final scrollController = ScrollController();
-  final currentPage = Pages.courses_page;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    handleStateOnInit(ref, currentPage);
-    super.initState();
-  }
 
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
@@ -35,24 +29,17 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(userNotifierProvider);
-
-    ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
-      if (ref.read(pagesProvider) != currentPage) return;
-      next!.maybeWhen(failed: handleFailedState, orElse: () {});
-    });
+    final courses = ref.watch(coursesProvider);
 
     return Scaffold(
-        body: WillPopScope(
-      onWillPop: () => handleStateOnPop(ref, Pages.courses_page),
-      child: userState.maybeWhen(
-          loading: (message) => AppLoadingIndicator(message),
-          failed: (message) => FailedStateWidget(message),
-          orElse: _buildContent),
-    ));
+      body: courses.when(
+          data: _buildContent,
+          error: (message, _) => FailedStateWidget(message.toString()),
+          loading: () => const AppLoadingIndicator('Getting courses...')),
+    );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(List<Course> courses) {
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -63,7 +50,7 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
                   title: 'Choose Courses',
                   subtitle: 'What would you like to learn ?',
                   scrollController: scrollController),
-              _buildCourses(),
+              _buildCourses(courses),
             ],
           ),
         ),
@@ -71,7 +58,7 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
     );
   }
 
-  Widget _buildCourses() {
+  Widget _buildCourses(List<Course> courses) {
     final courseTypes = ref.read(coursesTypesProvider);
 
     return Expanded(
@@ -89,7 +76,7 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
                     child: AppText(type.toUpperCase(), size: 20.dw),
                   ),
                   SizedBox(height: 10.dh),
-                  _buildClassesGrid(type)
+                  _buildClassesGrid(courses, type)
                 ],
               ),
             );
@@ -97,17 +84,17 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
     );
   }
 
-  _buildClassesGrid(String type) {
+  _buildClassesGrid(List<Course> courses, String type) {
     final user = ref.watch(userDetailsProvider);
-    final courseList = ref.read(coursesProvider);
-    final courses = courseList.where((course) => course.type == type).toList();
+    final filteredCourses =
+        courses.where((course) => course.type == type).toList();
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 10.dw,
       mainAxisSpacing: 10.dh,
-      children: courses.map((course) {
+      children: filteredCourses.map((course) {
         final isSelected = user.courseId == course.id;
 
         return AppMaterialButton(

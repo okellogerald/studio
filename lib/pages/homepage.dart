@@ -1,10 +1,19 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
-import 'package:silla_studio/manager/onboarding/user_details_providers.dart';
-import '../manager/courses/homepage.dart';
-import '../manager/courses/models/course_overview.dart';
-import '../manager/user_action.dart';
-import '../source.dart';
+import 'package:silla_studio/pages/profile_page.dart';
 
+import '../manager/homepage/models/general_info.dart';
+import '../manager/homepage/providers.dart';
+import '../manager/homepage/models/course_overview.dart';
+import '../manager/lesson_page/models/lesson.dart';
+import '../manager/onboarding/providers/user_details.dart';
+import '../manager/topic_page/models/topic.dart';
+import '../manager/user_action.dart';
+import '../widgets/completion_progress_bar.dart';
+import '../widgets/failed_state_widget.dart';
+import '../widgets/homepage_header.dart';
+import '../widgets/lesson_tile.dart';
+import '../widgets/profile_avatar.dart';
+import '../widgets/topic_tile.dart';
+import 'source.dart';
 class Homepage extends ConsumerStatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
@@ -48,7 +57,7 @@ class _HomepageState extends ConsumerState<Homepage> {
     );
   }
 
-  Widget _buildContent(CourseOverview overview, bool isUpdating) {
+  Widget _buildContent(CourseOverview overview) {
     final user = ref.watch(signedInUserDataProvider);
     return RefreshIndicator(
         onRefresh: ref.read(homepageNotifierProvider.notifier).refresh,

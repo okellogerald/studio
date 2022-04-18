@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../manager/video/video_controls_actions_handler.dart';
-import '../source.dart';
 
 class ScreenSizeConfig {
   static Size _designSize = const Size(0, 0);

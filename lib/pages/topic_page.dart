@@ -1,9 +1,13 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
-import '../manager/courses/models/sub_topic.dart';
-import '../manager/courses/topic_page/providers.dart';
-import '../manager/courses/topic_page/state_notifier.dart';
-import '../manager/user_action.dart';
-import '../source.dart';
+import 'package:silla_studio/manager/user_action.dart';
+
+import '../manager/courses/topic_page/models/sub_topic.dart';
+import '../manager/courses/topic_page/providers/providers.dart';
+import '../manager/topic_page/models/topic.dart';
+import '../manager/topic_page/providers/state_notifier.dart';
+import '../widgets/failed_state_widget.dart';
+import '../widgets/lesson_tile.dart';
+import '../widgets/topic_page_app_bar.dart';
+import 'source.dart';
 
 class TopicPage extends ConsumerStatefulWidget {
   const TopicPage({Key? key, required this.topic}) : super(key: key);
@@ -23,7 +27,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
   void initState() {
     tabController = TabController(length: 5, vsync: this, initialIndex: 0);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.read(currentTopicIdProvider.state).state = widget.topic.id;
+      ref.read(currentTopicProvider.state).state = widget.topic;
       handleUserAction(ref, UserAction.viewTopic);
     });
     super.initState();
@@ -60,7 +64,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
             padding: EdgeInsets.only(top: 20.dh),
             itemBuilder: (context, i) {
               final subtopic = subtopics[i];
-              if (subtopic.lessons.isEmpty) return Container();
+              if (subtopic.lessons.isEmpty) return _buildEmptyState();
               return _buildLessons(subtopic);
             },
             itemCount: subtopics.length,

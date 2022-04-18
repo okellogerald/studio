@@ -1,6 +1,10 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../source.dart';
+import 'package:silla_studio/constants.dart';
+import '../manager/topic_page/models/topic.dart';
+import '../pages/topic_page.dart';
+import '../utils/navigation_logic.dart';
+import 'app_material_button.dart';
+import 'source.dart';
 import 'app_image.dart';
 
 class TopicTile extends StatelessWidget {

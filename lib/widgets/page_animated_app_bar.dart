@@ -1,5 +1,5 @@
-import '../source.dart';
-
+import 'app_icon_button.dart';
+import 'source.dart';
 class PageAnimatedAppBar extends StatefulWidget {
   const PageAnimatedAppBar(
       {Key? key,
@@ -94,12 +94,5 @@ class _PageAnimatedAppBarState extends State<PageAnimatedAppBar> {
 
   _handleScrollController() {
     scrollValueNotifier.value = widget.scrollController.position.pixels;
-  }
-
-  @override
-  void dispose() {
-    //todo dispose this after you have handled well your user-states
-    //widget.scrollController.dispose();
-    super.dispose();
   }
 }

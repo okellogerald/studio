@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../source.dart';
+import 'source.dart';
 
 class AppImage extends StatelessWidget {
   final String imageUrl;

@@ -1,4 +1,4 @@
-import '../source.dart';
+import 'source.dart';
 
 class AppSnackBarContent extends StatelessWidget {
   const AppSnackBarContent(this.message, {Key? key}) : super(key: key);

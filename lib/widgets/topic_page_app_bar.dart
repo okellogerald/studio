@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../manager/courses/topic_page/providers.dart';
-import '../manager/courses/topic_page/user_actions.dart';
-import '../source.dart' hide Consumer;
+import 'package:silla_studio/manager/courses/topic_page/providers/providers.dart';
+import '../manager/topic_page/models/topic.dart';
+import '../manager/topic_page/providers/user_action.dart';
+import 'app_icon_button.dart';
+import 'source.dart';
 
 class TopicPageAppBar extends ConsumerStatefulWidget {
   const TopicPageAppBar({
@@ -83,7 +85,7 @@ class _TopicPageAppBarState extends ConsumerState<TopicPageAppBar> {
   }
 
   _buildSubtitle() {
-    final completedCount = ref.read(topicCompletedCountProvider);
+    final completedCount = ref.read(currentTopicProvider);
     final subtitle =
         '$completedCount / ${widget.topic.totalLessons} videos completed';
     return Padding(

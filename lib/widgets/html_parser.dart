@@ -1,6 +1,5 @@
 import 'package:flutter_html/flutter_html.dart';
-import '../source.dart';
-
+import 'source.dart';
 class HTMLParser extends StatelessWidget {
   final String? body;
   const HTMLParser(this.body, {Key? key}) : super(key: key);

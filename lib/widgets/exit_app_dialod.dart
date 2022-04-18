@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../source.dart';
-
+import '../utils/navigation_logic.dart';
+import 'app_text_button.dart';
+import 'source.dart';
 class ExitAppDialog extends AlertDialog {
   const ExitAppDialog({Key? key}) : super(key: key);
 
