@@ -24,9 +24,7 @@ class LessonPageNotifier extends StateNotifier<LessonPageState> {
       ref.read(currentLessonProvider.state).state = _lesson;
       state = const LessonPageState.content();
     } catch (error) {
-      log('$error');
-      final message = getErrorMessage(error);
-      state = LessonPageState.failed(message);
+      _handleError(error);
     }
   }
 
@@ -44,10 +42,12 @@ class LessonPageNotifier extends StateNotifier<LessonPageState> {
       log('reached here');
       state = const LessonPageState.content();
     } catch (error) {
-      final message = getErrorMessage(error);
-      state = LessonPageState.failed(message);
+      _handleError(error);
     }
   }
+
+  Future<void> goToNext() => _changeLesson(true);
+  Future<void> goToPrev() => _changeLesson(false);
 
   Future<void> _changeLesson(bool isNext) async {
     state = LessonPageState.loading(
@@ -68,11 +68,13 @@ class LessonPageNotifier extends StateNotifier<LessonPageState> {
       ref.read(currentLessonProvider.state).state = nextLesson;
       state = const LessonPageState.content();
     } catch (error) {
-      final message = getErrorMessage(error);
-      state = LessonPageState.failed(message);
+      _handleError(error);
     }
   }
 
-  Future<void> goToNext() => _changeLesson(true);
-  Future<void> goToPrev() => _changeLesson(false);
+  _handleError(var error) {
+    log('$error');
+    final message = getErrorMessage(error);
+    state = LessonPageState.failed(message);
+  }
 }

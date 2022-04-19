@@ -125,9 +125,9 @@ class _LessonPageState extends ConsumerState<LessonPage> {
               padding: EdgeInsets.symmetric(horizontal: 19.dw),
               child: Row(
                 children: [
-                   _buildPrevButton(),
+                  _buildPrevButton(),
                   _buildMarkStatusButton(),
-                   _buildNextButton(),
+                  _buildNextButton(),
                 ],
               ),
             ),
@@ -145,11 +145,12 @@ class _LessonPageState extends ConsumerState<LessonPage> {
               height: 50.dh,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  border: !isIncomplete
-                      ? Border.all(color: AppColors.primary, width: 2)
-                      : Border.all(color: Colors.transparent, width: 0),
-                  color: isIncomplete ? AppColors.primary : Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(30.dw))),
+                border: !isIncomplete
+                    ? Border.all(color: AppColors.primary, width: 2)
+                    : Border.all(color: Colors.transparent, width: 0),
+                color: isIncomplete ? AppColors.primary : Colors.white,
+                // borderRadius: BorderRadius.all(Radius.circular(0.dw)),
+              ),
               child: AppText(isIncomplete ? 'Mark Complete' : 'Mark Incomplete',
                   color:
                       isIncomplete ? AppColors.onPrimary : AppColors.primary),

@@ -25,6 +25,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final currentPage = Pages.signup_page;
 
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.refresh(userValidationErrorsProvider);
+    });
+    super.initState();
+  }
+
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
     if (action.haveErrorShownBySnackBar) {

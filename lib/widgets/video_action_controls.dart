@@ -45,7 +45,7 @@ class _VideoActionControlsState extends ConsumerState<VideoActionControls> {
             width: size.width,
             padding: EdgeInsets.symmetric(horizontal: 10.dw),
             alignment: Alignment.center,
-            color: AppColors.secondary,
+            color: AppColors.primary,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

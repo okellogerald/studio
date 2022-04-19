@@ -46,4 +46,4 @@ flutter:
 
     - family: stratos
       fonts:
-        - asset: assets/fonts/regular.ttf
+        - asset: assets/fonts/stratos.ttf

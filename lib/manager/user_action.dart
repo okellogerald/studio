@@ -40,7 +40,7 @@ extension UserActionExtension on UserAction {
       this != UserAction.viewHomepage &&
       this != UserAction.viewTopic &&
       this != UserAction.viewLesson &&
-      this != UserAction.logOut;
+      this != UserAction.viewCourses;
 }
 
 final userActionProvider =

@@ -76,8 +76,8 @@ class _AppTextButtonState extends State<AppTextButton>
               alignment: widget.alignment ?? Alignment.center,
               decoration: BoxDecoration(
                   color: animation.value,
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(widget.borderRadius ?? 0))),
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(/* widget.borderRadius ?? */ 0))),
               child: child),
         );
       },

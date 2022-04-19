@@ -27,6 +27,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
     tabController = TabController(length: 6, vsync: this, initialIndex: 0);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       ref.read(currentTopicProvider.state).state = widget.topic;
+      ref.refresh(currentFilterProvider);
       handleUserAction(ref, UserAction.viewTopic);
     });
     super.initState();
@@ -60,7 +61,7 @@ class _TopicPageState extends ConsumerState<TopicPage>
         _buildHeader(),
         Expanded(
           child: subtopics.isEmpty
-              ? _buildEmptyState()
+              ? const Center(child: AppText('No lesson matches the filter.'))
               : ListView.builder(
                   padding: EdgeInsets.only(top: 20.dh),
                   itemBuilder: (context, i) {
@@ -97,9 +98,5 @@ class _TopicPageState extends ConsumerState<TopicPage>
         ],
       ),
     );
-  }
-
-  _buildEmptyState() {
-    return const Center(child: AppText('No lesson matches the filter.'));
   }
 }

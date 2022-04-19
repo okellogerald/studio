@@ -63,11 +63,12 @@ class UserNotifier extends StateNotifier<UserState> {
   Future<void> sendPasswordResetEmail() async {
     state = const UserState.loading('Sending link...');
     final user = ref.read(userDetailsProvider);
-    await _auth
-        .sendPasswordResetEmail(email: user.email)
-        .timeout(timeLimit)
-        .catchError(_handleError);
-    state = const UserState.success();
+    try {
+      await _auth.sendPasswordResetEmail(email: user.email).timeout(timeLimit);
+      state = const UserState.success();
+    } catch (error) {
+      _handleError(error);
+    }
   }
 
   Future logOut() async {

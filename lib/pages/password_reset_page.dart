@@ -24,6 +24,14 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   final currentPage = Pages.password_reset_page;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.refresh(userValidationErrorsProvider);
+    });
+    super.initState();
+  }
+
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
     if (action.haveErrorShownBySnackBar) {
@@ -53,7 +61,7 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
         key: scaffoldKey,
         body: userState.maybeWhen(
             loading: (message) => AppLoadingIndicator(message),
-            failed: (message) => FailedStateWidget(message),
+            failed: (_) => _buildContent(),
             orElse: _buildContent));
   }
 
@@ -81,7 +89,6 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
                 hintText: '',
                 keyboardType: TextInputType.emailAddress,
                 label: 'Email Id'),
-
             AppTextButton(
                 onPressed: () =>
                     handleUserAction(ref, UserAction.sendPasswordResetLink),

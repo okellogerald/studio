@@ -70,7 +70,7 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
         ? Container(
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 15.dw, vertical: 10.dh),
-            color: AppColors.secondary,
+            color: AppColors.primary,
             child: Row(
               children: [
                 AppIconButton(
@@ -113,10 +113,6 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
   }
 
   labelsOverlayEntry() {
-    final orientation = ref.watch(orientationModeProvider);
-    final isPortrait = orientation == Orientation.portrait;
-    log(isPortrait.toString());
-
     return OverlayEntry(
         builder: (_) => GestureDetector(
               onTap: () {
