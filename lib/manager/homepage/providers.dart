@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/errors/source.dart';
 import 'package:silla_studio/manager/courses_repository.dart';
@@ -6,8 +8,6 @@ import 'package:silla_studio/manager/topic_page/models/topic.dart';
 import 'package:silla_studio/manager/topic_page/providers/providers.dart';
 import 'models/course_overview.dart';
 import 'models/homepage_state.dart';
-
-final gradeCompletedCountProvider = StateProvider<int>((ref) => 0);
 
 final homepageNotifierProvider =
     StateNotifierProvider<HomepageNotifier, HomepageState>(
@@ -26,8 +26,6 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
     try {
       final overview = await courseRepository.getUserCourseOverview();
       _currentOverview = overview;
-      ref.read(gradeCompletedCountProvider.state).state =
-          overview.generalInfo.completedLessons;
       state = HomepageState.content(overview);
     } catch (error) {
       state = HomepageState.failed(getErrorMessage(error));
@@ -41,13 +39,17 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
   ///lesson completion status is changed
   void update() {
     state = const HomepageState.loading('updating content...');
-    //updating general info
-    final completedLessons = ref.read(gradeCompletedCountProvider);
-    final generalInfo = _currentOverview.generalInfo.copyWith(completedLessons);
-    //updating continuing lesson
+    //updated lesson
     final lesson = ref.read(currentLessonProvider);
+    //updating general info
+    final completedLessons = _currentOverview.generalInfo.completedLessons;
+    log('$completedLessons');
+    final generalInfo = _currentOverview.generalInfo.copyWith(
+        lesson.isComplete ? completedLessons + 1 : completedLessons - 1);
+    //updating continuing lesson
+    var currentLesson = _currentOverview.currentLesson;
     if (lesson.id == _currentOverview.currentLesson.id) {
-      _currentOverview.currentLesson
+      currentLesson = _currentOverview.currentLesson
           .copyWith(completionStatus: lesson.completionStatus);
     }
     //updating the topic completed lessons count
@@ -59,7 +61,10 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
         .copyWith(completedLessons: topic.completedLessons);
     topicList[index] = updatedTopic;
     //merging updates
-    state = HomepageState.content(CourseOverview(
-        generalInfo: generalInfo, currentLesson: lesson, topicList: topicList));
+    _currentOverview = CourseOverview(
+        generalInfo: generalInfo,
+        currentLesson: currentLesson,
+        topicList: topicList);
+    state = HomepageState.content(_currentOverview);
   }
 }

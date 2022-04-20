@@ -65,6 +65,7 @@ class CoursesRepositoryImpl {
     final subTopics = <SubTopic>[];
 
     for (var topic in result['data']) {
+     // log('$topic');
       subTopics.add(SubTopic(
           topic: Topic.fromJson(topic),
           lessons: List<Lesson>.from(
@@ -99,17 +100,14 @@ class CoursesRepositoryImpl {
     return VideoDetails.fromJson(result['playlist'][0]);
   }
 
-  Future<Lesson> updateLessonStatus(String newStatus, String lessonId) async {
+  Future<void> updateLessonStatus(String newStatus, String lessonId) async {
     final url = Uri.parse(root + 'lesson/$lessonId/status');
-    final data = json.encode({'completionStatus': newStatus});
-    log(data.toString());
+    final data = {'completionStatus': newStatus};
     final headers = await _getHeaders();
     final response =
         await http.post(url, headers: headers, body: data).timeout(timeLimit);
     final result = json.decode(response.body);
-    log(result.toString());
     _handleStatusCodes(result['code']);
-    return Lesson.fromJson(result['data']);
   }
 
   Future<GeneralInfo> getGeneralInfo() async {

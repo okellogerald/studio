@@ -2,9 +2,11 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/errors/source.dart';
 import 'package:silla_studio/manager/courses_repository.dart';
+import 'package:silla_studio/manager/homepage/providers.dart';
 import 'package:silla_studio/manager/lesson_page/models/lesson.dart';
 import 'package:silla_studio/manager/lesson_page/models/lesson_page_state.dart';
 import 'package:silla_studio/manager/lesson_page/providers/providers.dart';
+import 'package:silla_studio/manager/topic_page/providers/state_notifier.dart';
 
 final lessonPageNotifierProvider =
     StateNotifierProvider<LessonPageNotifier, LessonPageState>(
@@ -35,11 +37,20 @@ class LessonPageNotifier extends StateNotifier<LessonPageState> {
         LessonPageState.loading('Marking ${lesson.title} as ${status.value}');
     final coursesRepository = ref.read(coursesRepositoryProvider);
     try {
-      final updatedLesson = await coursesRepository
+      await coursesRepository
           .updateLessonStatus(status.value, lesson.id)
           .timeout(timeLimit);
-      ref.read(currentLessonProvider.state).state = updatedLesson;
-      log('reached here');
+
+      ///updating lesson completion status
+      ref.read(currentLessonProvider.state).state = lesson.copyWith(
+          completionStatus:
+              lesson.isComplete ? Status.incomplete : Status.completed);
+
+      ///updating topic-page : should start before homepage update
+      ref.read(topicPageNotifierProvider.notifier).update();
+
+      ///updating homepage
+      ref.read(homepageNotifierProvider.notifier).update();
       state = const LessonPageState.content();
     } catch (error) {
       _handleError(error);
@@ -47,6 +58,7 @@ class LessonPageNotifier extends StateNotifier<LessonPageState> {
   }
 
   Future<void> goToNext() => _changeLesson(true);
+
   Future<void> goToPrev() => _changeLesson(false);
 
   Future<void> _changeLesson(bool isNext) async {

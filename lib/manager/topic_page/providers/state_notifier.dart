@@ -46,6 +46,28 @@ class TopicPageNotifier extends StateNotifier<TopicPageState> {
     state = TopicPageState.content(filteredSubTopics);
   }
 
+  void update() {
+    state = const TopicPageState.loading();
+    //lesson after being updated
+    final lesson = ref.read(currentLessonProvider);
+    final topic = ref.read(currentTopicProvider);
+    final updatedTopic = topic.copyWith(
+        completedLessons: lesson.isComplete
+            ? topic.completedLessons + 1
+            : topic.completedLessons - 1);
+    ref.read(currentTopicProvider.state).state = updatedTopic;
+    //updating the lesson in the subtopics
+    final index = _subtopics.indexWhere((e) => e.topic.id == lesson.topicId);
+    final lessons = List<Lesson>.from(_subtopics[index].lessons);
+    final lessonIndex = lessons.indexWhere((e) => e.id == lesson.id);
+    lessons[lessonIndex] = lesson;
+
+    final oldSubtopic = _subtopics[index];
+    _subtopics[index] = SubTopic(topic: oldSubtopic.topic, lessons: lessons);
+    //applying any filters
+    filter();
+  }
+
   List<SubTopic> _getFilteredSubTopics() {
     final filterType = ref.read(currentFilterProvider);
     if (filterType == LessonsFilter.all) return _subtopics;

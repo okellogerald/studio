@@ -54,7 +54,7 @@ final userActionProvider =
 void handleUserAction(WidgetRef ref, UserAction userAction) async {
   ref.read(userActionProvider.state).state = userAction;
   _updateCurrentPage(ref, userAction);
-  log('user action is $userAction');
+ // log('user action is $userAction');
 
   final userNotifier = ref.read(userNotifierProvider.notifier);
   final homepageNotifier = ref.read(homepageNotifierProvider.notifier);
