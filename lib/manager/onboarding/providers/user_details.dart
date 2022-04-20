@@ -12,9 +12,6 @@ final passwordProvider = StateProvider<String>((ref) => '');
 
 final confirmationPasswordProvider = StateProvider<String>((ref) => '');
 
-final userValidationErrorsProvider =
-    StateProvider.autoDispose<Map<String, String?>>((ref) => {});
-
 final signedInUserDataProvider = Provider<Map<String, dynamic>>((ref) {
   final jsonUser = _box.get(kUserData) as String?;
   if (jsonUser == null) throw 'User-data is not supposed to be null';

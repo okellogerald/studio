@@ -23,14 +23,7 @@ class PasswordResetPage extends ConsumerStatefulWidget {
 class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   final currentPage = Pages.password_reset_page;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.refresh(userValidationErrorsProvider);
-    });
-    super.initState();
-  }
+  final formKey = GlobalKey<FormState>();
 
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
@@ -66,8 +59,6 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   }
 
   Widget _buildContent() {
-    final errors = ref.watch(userValidationErrorsProvider);
-    final user = ref.watch(userDetailsProvider);
     return Scaffold(
       appBar: const PageAppBar(title: 'Password Reset'),
       body: Padding(
@@ -82,16 +73,22 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
               ),
             ),
             SizedBox(height: 30.dh),
-            AppTextField(
-                error: errors['email'],
-                text: user.email,
-                onChanged: (email) => updateUserDetails(ref, email: email),
-                hintText: '',
-                keyboardType: TextInputType.emailAddress,
-                label: 'Email Id'),
+            Form(
+              key: formKey,
+              child: AppTextField(
+                text: ref.watch(userDetailsProvider).email,
+                  type: ValueType.email,
+                  onChanged: (email) => updateUserDetails(ref, email: email),
+                  hintText: '',
+                  keyboardType: TextInputType.emailAddress,
+                  label: 'Email Id'),
+            ),
             AppTextButton(
-                onPressed: () =>
-                    handleUserAction(ref, UserAction.sendPasswordResetLink),
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    handleUserAction(ref, UserAction.sendPasswordResetLink);
+                  }
+                },
                 text: 'Get link',
                 textColor: AppColors.onPrimary,
                 backgroundColor: AppColors.primary,

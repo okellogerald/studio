@@ -11,8 +11,8 @@ String? validateText(String? value, String errorId) {
   }
 }
 
-String? validateNumber(String value, String errorId) {
-  if (value.isEmpty) {
+String? validateNumber(String? value, String errorId) {
+  if (value == null || value.isEmpty) {
     return '$errorId cannot be empty.';
   } else if (double.tryParse(value) == null) {
     return 'Invalid value for $errorId!';
@@ -23,8 +23,8 @@ String? validateNumber(String value, String errorId) {
   }
 }
 
-String? validateEmail(String email) {
-  if (email.trim().isEmpty) return 'Email can\'t be empty';
+String? validateEmail(String? email) {
+  if (email == null || email.trim().isEmpty) return 'Email can\'t be empty';
   final regex = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z]+\.[a-zA-Z]+");
   final isValidEmail = regex.hasMatch(email);
@@ -32,15 +32,17 @@ String? validateEmail(String email) {
   return null;
 }
 
-String? validatePassword(String password) {
-  if (password.trim().isEmpty) return 'Password can\'t be empty';
+String? validatePassword(String? password) {
+  if (password == null || password.trim().isEmpty) {
+    return 'Password can\'t be empty';
+  }
   if (password.length < 8) {
     return 'Password should contain at least 8 characters';
   }
   return null;
 }
 
-String? validatePasswords(String password, String confirmationPassword) {
+String? validatePasswords(String? password, String? confirmationPassword) {
   final passwordError = validatePassword(password);
   if (passwordError != null) return null;
   if (password != confirmationPassword) return 'Passwords do not match';

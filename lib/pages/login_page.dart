@@ -18,6 +18,7 @@ class LogInPage extends ConsumerStatefulWidget {
 
 class _LogInPageState extends ConsumerState<LogInPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
   final currentPage = Pages.login_page;
 
   void handleFailedState(String message) {
@@ -55,34 +56,34 @@ class _LogInPageState extends ConsumerState<LogInPage> {
   }
 
   Widget _buildContent() {
-    final errors = ref.watch(userValidationErrorsProvider);
-    final user = ref.watch(userDetailsProvider);
-    final password = ref.watch(passwordProvider);
     return Scaffold(
       key: scaffoldKey,
       appBar: const PageAppBar(title: 'Welcome back to Siila !'),
       body: Padding(
         padding: EdgeInsets.only(top: 40.dh),
-        child: Column(
-          children: [
-            AppTextField(
-                error: errors['email'],
-                text: user.email,
-                onChanged: (email) => updateUserDetails(ref, email: email),
-                hintText: '',
-                keyboardType: TextInputType.emailAddress,
-                label: 'Email Id'),
-            AppTextField(
-                error: errors['password'],
-                text: password,
-                onChanged: (password) =>
-                    updateUserDetails(ref, password: password),
-                hintText: '',
-                keyboardType: TextInputType.emailAddress,
-                label: 'Password',
-                isLoginPassword: true),
-            _buildForgotPassword(),
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              AppTextField(
+                  text: ref.watch(userDetailsProvider).email,
+                  type: ValueType.email,
+                  onChanged: (email) => updateUserDetails(ref, email: email),
+                  hintText: '',
+                  keyboardType: TextInputType.emailAddress,
+                  label: 'Email Id'),
+              AppTextField(
+                  text: ref.watch(passwordProvider),
+                  type: ValueType.password,
+                  onChanged: (password) =>
+                      updateUserDetails(ref, password: password),
+                  hintText: '',
+                  keyboardType: TextInputType.emailAddress,
+                  label: 'Password',
+                  isLoginPassword: true),
+              _buildForgotPassword(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: _buildLogInButton(),
@@ -109,7 +110,11 @@ class _LogInPageState extends ConsumerState<LogInPage> {
   _buildLogInButton() {
     return BottomAppBar(
       child: AppTextButton(
-        onPressed: () => handleUserAction(ref, UserAction.logIn),
+        onPressed: () {
+          if (formKey.currentState!.validate()) {
+            handleUserAction(ref, UserAction.logIn);
+          }
+        },
         text: 'LOG IN',
         textColor: AppColors.onPrimary,
         backgroundColor: AppColors.primary,

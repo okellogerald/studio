@@ -23,15 +23,8 @@ class SignUpPage extends ConsumerStatefulWidget {
 
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
   final currentPage = Pages.signup_page;
-
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.refresh(userValidationErrorsProvider);
-    });
-    super.initState();
-  }
 
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
@@ -53,53 +46,56 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     });
 
     return Scaffold(
+        key: scaffoldKey,
         body: userState.maybeWhen(
             loading: (message) => AppLoadingIndicator(message),
-            failed: (message) => FailedStateWidget(message),
+            failed: (_) => _buildContent(),
             orElse: _buildContent));
   }
 
   Widget _buildContent() {
-    final errors = ref.watch(userValidationErrorsProvider);
     final user = ref.watch(userDetailsProvider);
-    final password = ref.watch(passwordProvider);
-    final confirmationPassword = ref.watch(confirmationPasswordProvider);
     return Scaffold(
       appBar: const PageAppBar(
           title: 'One Last Thing !',
           subtitle: 'Let\'s create an account for you.'),
-      body: ListView(
-        padding: EdgeInsets.only(top: 40.dh),
-        children: [
-          AppTextField(
-            error: errors['email'],
-            text: user.email,
-            onChanged: (email) => updateUserDetails(ref, email: email),
-            hintText: '',
-            keyboardType: TextInputType.emailAddress,
-            label: 'Email Id',
-          ),
-          AppTextField(
-            error: errors['password'],
-            text: password,
-            onChanged: (password) => updateUserDetails(ref, password: password),
-            hintText: '',
-            keyboardType: TextInputType.emailAddress,
-            label: 'Password',
-            isPassword: true,
-          ),
-          AppTextField(
-            error: errors['confirmingPassword'],
-            text: confirmationPassword,
-            onChanged: (password) =>
-                updateUserDetails(ref, confirmationPassword: password),
-            hintText: '',
-            keyboardType: TextInputType.emailAddress,
-            label: 'Confirm Password',
-            isPassword: true,
-            isLoginPassword: true,
-          ),
-        ],
+      body: Form(
+        key: formKey,
+        child: ListView(
+          padding: EdgeInsets.only(top: 40.dh),
+          children: [
+            AppTextField(
+              text: user.email,
+              type: ValueType.email,
+              onChanged: (email) => updateUserDetails(ref, email: email),
+              hintText: '',
+              keyboardType: TextInputType.emailAddress,
+              label: 'Email Id',
+            ),
+            AppTextField(
+              text: ref.watch(passwordProvider),
+              type: ValueType.password,
+              onChanged: (password) =>
+                  updateUserDetails(ref, password: password),
+              hintText: '',
+              keyboardType: TextInputType.emailAddress,
+              label: 'Password',
+              isPassword: true,
+            ),
+            AppTextField(
+              text: ref.watch(confirmationPasswordProvider),
+              type: ValueType.confirmationPassword,
+              onChanged: (password) =>
+                  updateUserDetails(ref, confirmationPassword: password),
+              hintText: '',
+              keyboardType: TextInputType.emailAddress,
+              label: 'Confirm Password',
+              password: ref.watch(passwordProvider),
+              isPassword: true,
+              isLoginPassword: true,
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: _buildGetStartedButton(),
     );
@@ -108,7 +104,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   _buildGetStartedButton() {
     return BottomAppBar(
       child: AppTextButton(
-        onPressed: () => handleUserAction(ref, UserAction.signUp),
+        onPressed: () {
+          if (formKey.currentState!.validate()) {
+            handleUserAction(ref, UserAction.signUp);
+          }
+        },
         text: 'GET STARTED',
         textColor: AppColors.onPrimary,
         backgroundColor: AppColors.primary,

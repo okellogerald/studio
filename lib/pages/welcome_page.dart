@@ -16,9 +16,10 @@ class WelcomePage extends ConsumerStatefulWidget {
 }
 
 class _WelcomePageState extends ConsumerState<WelcomePage> {
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    final errors = ref.watch(userValidationErrorsProvider);
     final user = ref.watch(userDetailsProvider);
     return Scaffold(
         appBar: const PageAppBar(
@@ -26,31 +27,34 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             subtitle: 'We would like to know about you.'),
         body: Padding(
           padding: EdgeInsets.only(top: 40.dh),
-          child: Column(
-            children: [
-              AppTextField(
-                error: errors['name'],
-                text: user.name,
-                onChanged: (name) => updateUserDetails(ref, name: name),
-                hintText: '',
-                keyboardType: TextInputType.name,
-                textCapitalization: TextCapitalization.words,
-                label: 'Your Name',
-              ),
-              DateSelector(
-                title: 'Your Date of Birth',
-                date: user.dateOfBirth,
-                onDateSelected: (dateOfBirth) =>
-                    updateUserDetails(ref, dateOfBirth: dateOfBirth),
-              ),
-              SizedBox(height: 20.dh),
-              GenderSelector(
-                  title: 'Your Gender',
-                  onGenderSelected: (gender) =>
-                      updateUserDetails(ref, gender: gender),
-                  selectedGender: user.gender,
-                  error: errors['gender']),
-            ],
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                AppTextField(
+                  text: ref.watch(userDetailsProvider).name,
+                  type: ValueType.name,
+                  onChanged: (name) => updateUserDetails(ref, name: name),
+                  hintText: '',
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
+                  label: 'Your Name',
+                ),
+                DateSelector(
+                  title: 'Your Date of Birth',
+                  date: user.dateOfBirth,
+                  onDateSelected: (dateOfBirth) =>
+                      updateUserDetails(ref, dateOfBirth: dateOfBirth),
+                ),
+                SizedBox(height: 20.dh),
+                GenderSelector(
+                    title: 'Your Gender',
+                    onGenderSelected: (gender) =>
+                        updateUserDetails(ref, gender: gender),
+                    selectedGender: user.gender,
+                    error: ''),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: _buildNextButton());
@@ -60,8 +64,8 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     return BottomAppBar(
       child: AppTextButton(
         onPressed: () {
-          handleUserAction(ref, UserAction.saveWelcomePageData);
-          if (ref.read(userValidationErrorsProvider).isEmpty) {
+          if (formKey.currentState!.validate()) {
+            handleUserAction(ref, UserAction.saveWelcomePageData);
             push(const CoursesPage());
           }
         },
