@@ -34,7 +34,6 @@ class LessonTile extends ConsumerWidget {
               context: context);
           return;
         }
-        //todo handle the markAsComplete vs Incomplete
         await Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => LessonPage(lesson)));
         handleVideoControllerOnPop(ref);

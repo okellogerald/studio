@@ -2,12 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_state_notifier.dart';
+import 'package:silla_studio/pages/source.dart';
 import 'package:silla_studio/widgets/video_player_overlay.dart';
 import 'package:video_player/video_player.dart';
 import '../manager/video/models/video_details.dart';
 import 'app_icon_button.dart';
-import 'app_loading_indicator.dart';
-import 'source.dart';
 
 class LessonVideoPlayer extends ConsumerStatefulWidget {
   const LessonVideoPlayer(this.videoDetails, {Key? key}) : super(key: key);
@@ -55,8 +54,7 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
       child: AppIconButton(
           onPressed: ref.read(videoStateNotifierProvider.notifier).play,
           icon: FontAwesomeIcons.circlePlay,
-          iconThemeData:
-              IconThemeData(size: 60.dw, color: AppColors.primary)),
+          iconThemeData: IconThemeData(size: 60.dw, color: AppColors.primary)),
     );
   }
 
@@ -85,15 +83,29 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
     final size = ref.watch(videoSizeConfigsProvider);
 
     return Center(
-      child: SizedBox(
+      child: Container(
+        color: Colors.white,
         height: size.height,
         width: size.width,
-        child: Container(
-            color: Colors.white,
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(horizontal: 15.dw),
-            child: AppText(message,
-                color: AppColors.error, alignment: TextAlign.center)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 15.dw),
+                child: AppText(message,
+                    color: AppColors.error, alignment: TextAlign.center)),
+            SizedBox(height: 20.dh),
+            AppTextButton(
+              text: 'Try Again',
+              onPressed: ref.read(videoStateNotifierProvider.notifier).play,
+              height: 40.dh,
+              margin: EdgeInsets.symmetric(horizontal: 15.dw),
+              textColor: AppColors.onPrimary,
+              backgroundColor: AppColors.primary,
+            )
+          ],
+        ),
       ),
     );
   }

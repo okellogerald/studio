@@ -73,7 +73,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
     return Scaffold(
         body: ListView(children: [
           LessonVideoPlayer(lesson.videoDetails),
-          isLandscape ? Container() : _buildVideoDescription(),
+          isLandscape ? Container() : _buildVideoDescription()
         ]),
         bottomNavigationBar: _buildBottomNavBar());
   }

@@ -4,7 +4,7 @@ import 'package:silla_studio/utils/screen_size_config.dart';
 import 'package:video_player/video_player.dart';
 import 'models/video.dart';
 
-enum PlayerState { playing, paused, end }
+enum PlayerState { initial, playing, paused, end }
 
 extension PlayerStateExtension on PlayerState {
   bool get isPlaying => this == PlayerState.playing;
@@ -24,7 +24,7 @@ final orientationModeProvider =
     StateProvider<Orientation>((ref) => Orientation.portrait);
 
 final playerStateProvider =
-    StateProvider<PlayerState>((ref) => PlayerState.playing);
+    StateProvider<PlayerState>((ref) => PlayerState.initial);
 
 final positionProvider = StateProvider<int>((ref) => 0);
 

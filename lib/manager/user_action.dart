@@ -57,6 +57,7 @@ void handleUserAction(WidgetRef ref, UserAction userAction) async {
   if (userAction == UserAction.logOut) await userNotifier.logOut();
   if (userAction == UserAction.markLessonCompletionStatus) {
     await ref.read(videoControllerProvider).pause();
+    ref.read(playerStateProvider.state).state = PlayerState.paused;
     await lessonPageNotifier.changeLessonCompletionStatus();
   }
 

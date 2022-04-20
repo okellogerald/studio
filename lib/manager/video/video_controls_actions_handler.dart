@@ -95,8 +95,10 @@ void handleStatusBarVisibility(WidgetRef ref) {
 }
 
 void handleVideoControllerOnPop(WidgetRef ref) async {
+  ref.read(playerStateProvider.state).state = PlayerState.initial;
   final controller = ref.read(videoControllerProvider);
   await controller.dispose();
+  disposeTimer();
   ref.read(videoControllerProvider.state).state =
       VideoPlayerController.network('');
   final orientation = ref.read(orientationModeProvider);

@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_controls_actions_handler.dart';
 import 'package:video_player/video_player.dart';
 
+import '../courses_repository.dart';
 import 'models/video.dart';
 import 'models/video_state.dart';
 
@@ -15,7 +18,12 @@ class VideoStateNotifier extends StateNotifier<VideoState> {
 
   final StateNotifierProviderRef ref;
 
-  void init() => state = const VideoState.initial();
+  void init() {
+    final playerState = ref.read(playerStateProvider);
+    log('$playerState');
+    if (playerState != PlayerState.initial) return;
+    state = const VideoState.initial();
+  }
 
   Future<void> play() async {
     state = const VideoState.loading('Initializing...');
@@ -25,8 +33,8 @@ class VideoStateNotifier extends StateNotifier<VideoState> {
     final video = videos[index];
     final controller = VideoPlayerController.network(video.url);
     try {
-      await controller.initialize();
-      await controller.play();
+      await controller.initialize().timeout(timeLimit);
+      await controller.play().timeout(timeLimit);
       initVideoPositionHandler(ref);
       ref.read(videoControllerProvider.state).state = controller;
       ref.read(playerStateProvider.state).state = PlayerState.playing;
