@@ -22,20 +22,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final currentPage = Pages.profile_page;
 
-  void handleFailedState(String message) {
-    final action = ref.read(userActionProvider);
-    if (action.haveErrorShownBySnackBar) {
-      showSnackbar(message, key: scaffoldKey);
-    }
-  }
-
   void handleSuccessState() {
-    final action = ref.read(userActionProvider);
-    if (action == UserAction.logOut) {
-      showSnackbar('You\'re successfully logged out',
-          key: scaffoldKey, isError: false);
-      pushAndRemoveUntil(const LandingPage());
-    }
+    showSnackbar('You\'re successfully logged out',
+        key: scaffoldKey, isError: false);
+    pushAndRemoveUntil(const LandingPage());
   }
 
   @override
@@ -45,7 +35,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
       if (ref.read(pagesProvider) != currentPage) return;
       next!.maybeWhen(
-          failed: handleFailedState,
+          failed: (message) => showSnackbar(message, key: scaffoldKey),
           success: handleSuccessState,
           orElse: () {});
     });
@@ -54,7 +44,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         key: scaffoldKey,
         body: userState.maybeWhen(
             loading: (message) => AppLoadingIndicator(message),
-            failed: (message) => FailedStateWidget(message),
+            failed: (_) => _buildContent(),
             orElse: _buildContent));
   }
 

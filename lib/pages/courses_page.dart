@@ -20,13 +20,6 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
   final scrollController = ScrollController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void handleFailedState(String message) {
-    final action = ref.read(userActionProvider);
-    if (action.haveErrorShownBySnackBar) {
-      showSnackbar(message, key: scaffoldKey);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final courses = ref.watch(coursesProvider);

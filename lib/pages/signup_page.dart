@@ -26,13 +26,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final formKey = GlobalKey<FormState>();
   final currentPage = Pages.signup_page;
 
-  void handleFailedState(String message) {
-    final action = ref.read(userActionProvider);
-    if (action.haveErrorShownBySnackBar) {
-      showSnackbar(message, key: scaffoldKey);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userNotifierProvider);
@@ -40,7 +33,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
       if (ref.read(pagesProvider) != currentPage) return;
       next!.maybeWhen(
-          failed: handleFailedState,
+          failed: (message) => showSnackbar(message, key: scaffoldKey),
           success: () => pushAndRemoveUntil(const Homepage()),
           orElse: () {});
     });

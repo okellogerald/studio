@@ -1,12 +1,9 @@
-import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/homepage/providers.dart';
 import 'package:silla_studio/manager/video/providers.dart';
-import '../utils/validation_logic.dart';
 import 'lesson_page/providers/state_notifier.dart';
 import 'onboarding/providers/courses.dart';
 import 'onboarding/providers/pages.dart';
-import 'onboarding/providers/user_details.dart';
 import 'onboarding/providers/user_notifier.dart';
 import 'topic_page/providers/state_notifier.dart';
 
@@ -40,15 +37,12 @@ extension UserActionExtension on UserAction {
 final userActionProvider =
     StateProvider<UserAction>((ref) => UserAction.viewHomepage);
 
-///checks if there is a need to validate something before performing the action.
-///e.g when logging in, we need to check if the email is valid before sending
-///the request.
-///also gets the user action stored so that tryAgainCallback in the failed
+///gets the [userAction] stored so that [tryAgainCallback] in the failed
 ///state widget works.
 void handleUserAction(WidgetRef ref, UserAction userAction) async {
   ref.read(userActionProvider.state).state = userAction;
   _updateCurrentPage(ref, userAction);
- // log('user action is $userAction');
+  // log('user action is $userAction');
 
   final userNotifier = ref.read(userNotifierProvider.notifier);
   final homepageNotifier = ref.read(homepageNotifierProvider.notifier);
@@ -60,15 +54,18 @@ void handleUserAction(WidgetRef ref, UserAction userAction) async {
   if (userAction.isSendingPasswordResetLink) {
     await userNotifier.sendPasswordResetEmail();
   }
-  if (userAction.isSavingWelcomePageData) ref.refresh(coursesProvider);
-  if (userAction == UserAction.viewHomepage) await homepageNotifier.init();
-  if (userAction == UserAction.viewTopic) await topicPageNotifier.init();
-  if (userAction == UserAction.viewLesson) await lessonPageNotifier.init();
   if (userAction == UserAction.logOut) await userNotifier.logOut();
   if (userAction == UserAction.markLessonCompletionStatus) {
     await ref.read(videoControllerProvider).pause();
     await lessonPageNotifier.changeLessonCompletionStatus();
   }
+
+  //*[tryAgainCallback] only works for these actions. Other actions can be
+  //*called directly from their respective pages.
+  if (userAction.isSavingWelcomePageData) ref.refresh(coursesProvider);
+  if (userAction == UserAction.viewHomepage) await homepageNotifier.init();
+  if (userAction == UserAction.viewTopic) await topicPageNotifier.init();
+  if (userAction == UserAction.viewLesson) await lessonPageNotifier.init();
 }
 
 ///using user action to update the page the user is in to avoid re-builds for

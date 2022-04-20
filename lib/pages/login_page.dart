@@ -21,21 +21,6 @@ class _LogInPageState extends ConsumerState<LogInPage> {
   final formKey = GlobalKey<FormState>();
   final currentPage = Pages.login_page;
 
-  void handleFailedState(String message) {
-    final action = ref.read(userActionProvider);
-    if (action.haveErrorShownBySnackBar) {
-      showSnackbar(message, key: scaffoldKey);
-    }
-  }
-
-  void handleSuccessState() {
-    final action = ref.read(userActionProvider);
-    if (action == UserAction.logIn) pushAndRemoveUntil(const Homepage());
-    if (action == UserAction.sendPasswordResetLink) {
-      push(const PasswordResetPage());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userNotifierProvider);
@@ -43,8 +28,8 @@ class _LogInPageState extends ConsumerState<LogInPage> {
     ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
       if (ref.read(pagesProvider) != currentPage) return;
       next!.maybeWhen(
-          failed: handleFailedState,
-          success: handleSuccessState,
+          failed: (message) => showSnackbar(message, key: scaffoldKey),
+          success: () => pushAndRemoveUntil(const Homepage()),
           orElse: () {});
     });
 

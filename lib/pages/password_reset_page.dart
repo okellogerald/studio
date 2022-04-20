@@ -25,13 +25,6 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
 
-  void handleFailedState(String message) {
-    final action = ref.read(userActionProvider);
-    if (action.haveErrorShownBySnackBar) {
-      showSnackbar(message, key: scaffoldKey);
-    }
-  }
-
   void handleSuccessState() {
     final user = ref.read(userDetailsProvider);
     showSnackbar('Password reset link has been sent to ${user.email}',
@@ -45,7 +38,7 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
     ref.listen(userNotifierProvider, (UserState? previous, UserState? next) {
       if (ref.read(pagesProvider) != currentPage) return;
       next!.maybeWhen(
-          failed: handleFailedState,
+          failed: (message) => showSnackbar(message, key: scaffoldKey),
           success: handleSuccessState,
           orElse: () {});
     });
@@ -76,7 +69,7 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
             Form(
               key: formKey,
               child: AppTextField(
-                text: ref.watch(userDetailsProvider).email,
+                  text: ref.watch(userDetailsProvider).email,
                   type: ValueType.email,
                   onChanged: (email) => updateUserDetails(ref, email: email),
                   hintText: '',
