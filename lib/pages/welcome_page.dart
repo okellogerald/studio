@@ -20,7 +20,6 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final errors = ref.watch(userValidationErrorsProvider);
     final user = ref.watch(userDetailsProvider);
     return Scaffold(
         appBar: const PageAppBar(
@@ -33,10 +32,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             child: Column(
               children: [
                 AppTextField(
+                  text: ref.watch(userDetailsProvider).name,
                   type: ValueType.name,
-                  onChanged: (name) {
-                    updateUserDetails(ref, name: name);
-                  },
+                  onChanged: (name) => updateUserDetails(ref, name: name),
                   hintText: '',
                   keyboardType: TextInputType.name,
                   textCapitalization: TextCapitalization.words,
@@ -54,7 +52,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                     onGenderSelected: (gender) =>
                         updateUserDetails(ref, gender: gender),
                     selectedGender: user.gender,
-                    error: errors['gender']),
+                    error: ''),
               ],
             ),
           ),

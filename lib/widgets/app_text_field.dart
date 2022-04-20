@@ -2,32 +2,35 @@ import 'package:silla_studio/utils/validation_logic.dart';
 
 import 'source.dart';
 
-enum ValueType { email, name, password }
+enum ValueType { email, name, password, confirmationPassword }
 
 class AppTextField extends StatefulWidget {
   const AppTextField(
       {required this.type,
       required this.onChanged,
+      required this.text,
+      this.password,
       this.maxLines = 1,
       required this.hintText,
       required this.keyboardType,
       this.textCapitalization = TextCapitalization.none,
       required this.label,
-      this.letterSpacing,
       this.isPassword = false,
       this.isLoginPassword = false,
-      this.shouldShowErrorText = true,
       Key? key})
       : super(key: key);
 
   final ValueType type;
   final ValueChanged<String> onChanged;
   final int maxLines;
-  final String hintText, label;
-  final double? letterSpacing;
+  final String hintText, label, text;
   final TextInputType keyboardType;
   final TextCapitalization textCapitalization;
-  final bool isPassword, shouldShowErrorText;
+  final bool isPassword;
+
+  //if password is given, then the text entered is used for comparison with this
+  //password
+  final String? password;
 
   /// does not show the eye suffix icon
   final bool isLoginPassword;
@@ -42,21 +45,19 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   void initState() {
-    /*   final text = widget.text ?? '';
+    final text = widget.text;
     final isEditing = text.trim().isNotEmpty;
     if (isEditing) {
       controller.text = text;
       controller.selection = TextSelection.fromPosition(
           TextPosition(offset: controller.text.length));
-    } */
+    }
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-//    final border = hasError ? errorBorder : inputBorder;
-
     return Padding(
       padding: EdgeInsets.only(left: 15.dw, right: 15.dw, bottom: 20.dh),
       child: Column(
@@ -64,7 +65,6 @@ class _AppTextFieldState extends State<AppTextField> {
         children: [
           AppText(widget.label, opacity: .7, size: 14.dw),
           Container(
-            height: 40.dh,
             margin: EdgeInsets.only(top: 8.dh),
             child: ValueListenableBuilder<bool>(
                 valueListenable: isVisibleNotifier,
@@ -96,26 +96,10 @@ class _AppTextFieldState extends State<AppTextField> {
                           contentPadding: EdgeInsets.only(left: 10.dw)));
                 }),
           ),
-          // _buildError(),
         ],
       ),
     );
   }
-
-/*   _buildError() {
-    final hasError = widget.error != null;
-
-    return hasError && widget.shouldShowErrorText
-        ? Padding(
-            padding: EdgeInsets.only(top: 8.dw),
-            child: AppText(
-              widget.error!,
-              color: AppColors.error,
-              size: 14.dw,
-            ),
-          )
-        : Container();
-  } */
 
   String? _validate(String? value) {
     switch (widget.type) {
@@ -125,6 +109,8 @@ class _AppTextFieldState extends State<AppTextField> {
         return validateText(value, widget.label);
       case ValueType.password:
         return validatePassword(value);
+      case ValueType.confirmationPassword:
+        return validatePasswords(widget.password, value);
       default:
     }
     return null;

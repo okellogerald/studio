@@ -22,7 +22,7 @@ class _$UserTearOff {
       {required DateTime dateOfBirth,
       String email = '',
       String name = '',
-      String? gender,
+      dynamic gender = 'Male',
       int courseId = 0,
       String level = '',
       int gradeId = 0}) {
@@ -46,7 +46,7 @@ mixin _$User {
   DateTime get dateOfBirth => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String? get gender => throw _privateConstructorUsedError;
+  dynamic get gender => throw _privateConstructorUsedError;
   int get courseId => throw _privateConstructorUsedError;
   String get level => throw _privateConstructorUsedError;
   int get gradeId => throw _privateConstructorUsedError;
@@ -63,7 +63,7 @@ abstract class $UserCopyWith<$Res> {
       {DateTime dateOfBirth,
       String email,
       String name,
-      String? gender,
+      dynamic gender,
       int courseId,
       String level,
       int gradeId});
@@ -103,7 +103,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
       gender: gender == freezed
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as dynamic,
       courseId: courseId == freezed
           ? _value.courseId
           : courseId // ignore: cast_nullable_to_non_nullable
@@ -129,7 +129,7 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       {DateTime dateOfBirth,
       String email,
       String name,
-      String? gender,
+      dynamic gender,
       int courseId,
       String level,
       int gradeId});
@@ -167,10 +167,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      gender: gender == freezed
-          ? _value.gender
-          : gender // ignore: cast_nullable_to_non_nullable
-              as String?,
+      gender: gender == freezed ? _value.gender : gender,
       courseId: courseId == freezed
           ? _value.courseId
           : courseId // ignore: cast_nullable_to_non_nullable
@@ -194,7 +191,7 @@ class _$_User extends _User {
       {required this.dateOfBirth,
       this.email = '',
       this.name = '',
-      this.gender,
+      this.gender = 'Male',
       this.courseId = 0,
       this.level = '',
       this.gradeId = 0})
@@ -208,8 +205,9 @@ class _$_User extends _User {
   @JsonKey()
   @override
   final String name;
+  @JsonKey()
   @override
-  final String? gender;
+  final dynamic gender;
   @JsonKey()
   @override
   final int courseId;
@@ -262,7 +260,7 @@ abstract class _User extends User {
       {required DateTime dateOfBirth,
       String email,
       String name,
-      String? gender,
+      dynamic gender,
       int courseId,
       String level,
       int gradeId}) = _$_User;
@@ -275,7 +273,7 @@ abstract class _User extends User {
   @override
   String get name;
   @override
-  String? get gender;
+  dynamic get gender;
   @override
   int get courseId;
   @override

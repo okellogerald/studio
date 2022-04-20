@@ -26,14 +26,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final formKey = GlobalKey<FormState>();
   final currentPage = Pages.signup_page;
 
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.refresh(userValidationErrorsProvider);
-    });
-    super.initState();
-  }
-
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
     if (action.haveErrorShownBySnackBar) {
@@ -54,17 +46,15 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     });
 
     return Scaffold(
+        key: scaffoldKey,
         body: userState.maybeWhen(
             loading: (message) => AppLoadingIndicator(message),
-            failed: (message) => FailedStateWidget(message),
+            failed: (_) => _buildContent(),
             orElse: _buildContent));
   }
 
   Widget _buildContent() {
-    final errors = ref.watch(userValidationErrorsProvider);
     final user = ref.watch(userDetailsProvider);
-    final password = ref.watch(passwordProvider);
-    final confirmationPassword = ref.watch(confirmationPasswordProvider);
     return Scaffold(
       appBar: const PageAppBar(
           title: 'One Last Thing !',
@@ -75,6 +65,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           padding: EdgeInsets.only(top: 40.dh),
           children: [
             AppTextField(
+              text: user.email,
               type: ValueType.email,
               onChanged: (email) => updateUserDetails(ref, email: email),
               hintText: '',
@@ -82,6 +73,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               label: 'Email Id',
             ),
             AppTextField(
+              text: ref.watch(passwordProvider),
               type: ValueType.password,
               onChanged: (password) =>
                   updateUserDetails(ref, password: password),
@@ -91,12 +83,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               isPassword: true,
             ),
             AppTextField(
-              type: ValueType.password,
+              text: ref.watch(confirmationPasswordProvider),
+              type: ValueType.confirmationPassword,
               onChanged: (password) =>
                   updateUserDetails(ref, confirmationPassword: password),
               hintText: '',
               keyboardType: TextInputType.emailAddress,
               label: 'Confirm Password',
+              password: ref.watch(passwordProvider),
               isPassword: true,
               isLoginPassword: true,
             ),

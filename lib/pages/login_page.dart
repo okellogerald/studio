@@ -66,18 +66,17 @@ class _LogInPageState extends ConsumerState<LogInPage> {
           child: Column(
             children: [
               AppTextField(
+                  text: ref.watch(userDetailsProvider).email,
                   type: ValueType.email,
-                  onChanged: (email) {
-                    updateUserDetails(ref, email: email);
-                  },
+                  onChanged: (email) => updateUserDetails(ref, email: email),
                   hintText: '',
                   keyboardType: TextInputType.emailAddress,
                   label: 'Email Id'),
               AppTextField(
-                  type: ValueType.email,
-                  onChanged: (password) {
-                    updateUserDetails(ref, password: password);
-                  },
+                  text: ref.watch(passwordProvider),
+                  type: ValueType.password,
+                  onChanged: (password) =>
+                      updateUserDetails(ref, password: password),
                   hintText: '',
                   keyboardType: TextInputType.emailAddress,
                   label: 'Password',

@@ -42,7 +42,7 @@ String? validatePassword(String? password) {
   return null;
 }
 
-String? validatePasswords(String password, String confirmationPassword) {
+String? validatePasswords(String? password, String? confirmationPassword) {
   final passwordError = validatePassword(password);
   if (passwordError != null) return null;
   if (password != confirmationPassword) return 'Passwords do not match';

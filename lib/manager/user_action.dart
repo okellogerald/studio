@@ -30,12 +30,6 @@ extension UserActionExtension on UserAction {
   bool get isSigningUp => this == UserAction.signUp;
   bool get isSavingWelcomePageData => this == UserAction.saveWelcomePageData;
 
-  bool get needsValidation =>
-      this == UserAction.logIn ||
-      this == UserAction.saveWelcomePageData ||
-      this == UserAction.sendPasswordResetLink ||
-      this == UserAction.signUp;
-
   bool get haveErrorShownBySnackBar =>
       this != UserAction.viewHomepage &&
       this != UserAction.viewTopic &&
@@ -61,53 +55,19 @@ void handleUserAction(WidgetRef ref, UserAction userAction) async {
   final topicPageNotifier = ref.read(topicPageNotifierProvider.notifier);
   final lessonPageNotifier = ref.read(lessonPageNotifierProvider.notifier);
 
-  final errors = <String, String?>{};
-  final user = ref.read(userDetailsProvider);
-  final password = ref.read(passwordProvider);
-  final password2 = ref.read(confirmationPasswordProvider);
-
-  if (userAction.needsValidation) {
-    if (userAction == UserAction.sendPasswordResetLink) {
-      errors['email'] = validateEmail(user.email);
-    }
-    if (userAction == UserAction.signUp) {
-      errors['password'] = validatePassword(password);
-      errors['email'] = validateEmail(user.email);
-      errors['confirmingPassword'] = validatePasswords(password, password2);
-    }
-    if (userAction == UserAction.logIn) {
-      errors['email'] = validateEmail(user.email);
-      errors['password'] = validatePassword(password);
-    }
-    if (userAction == UserAction.saveWelcomePageData) {
-      errors['name'] = validateText(user.name, 'Name');
-      errors['gender'] = validateText(user.gender, 'Gender');
-    }
-
-    final hasErrors = checkErrors(errors);
-    if (!hasErrors) {
-      ref.read(userValidationErrorsProvider.state).state = {};
-      if (userAction.isLoggingIn) await userNotifier.logIn();
-      if (userAction.isSigningUp) await userNotifier.signUp();
-      if (userAction.isSendingPasswordResetLink) {
-        await userNotifier.sendPasswordResetEmail();
-      }
-      if (userAction == UserAction.saveWelcomePageData) {
-        ref.refresh(coursesProvider);
-      }
-    } else {
-      ref.read(userValidationErrorsProvider.state).state = errors;
-    }
-  } else {
-    if (userAction == UserAction.viewHomepage) await homepageNotifier.init();
-    if (userAction == UserAction.viewTopic) await topicPageNotifier.init();
-    if (userAction == UserAction.viewLesson) await lessonPageNotifier.init();
-    if (userAction == UserAction.logOut) await userNotifier.logOut();
-
-    if (userAction == UserAction.markLessonCompletionStatus) {
-      await ref.read(videoControllerProvider).pause();
-      await lessonPageNotifier.changeLessonCompletionStatus();
-    }
+  if (userAction.isLoggingIn) await userNotifier.logIn();
+  if (userAction.isSigningUp) await userNotifier.signUp();
+  if (userAction.isSendingPasswordResetLink) {
+    await userNotifier.sendPasswordResetEmail();
+  }
+  if (userAction.isSavingWelcomePageData) ref.refresh(coursesProvider);
+  if (userAction == UserAction.viewHomepage) await homepageNotifier.init();
+  if (userAction == UserAction.viewTopic) await topicPageNotifier.init();
+  if (userAction == UserAction.viewLesson) await lessonPageNotifier.init();
+  if (userAction == UserAction.logOut) await userNotifier.logOut();
+  if (userAction == UserAction.markLessonCompletionStatus) {
+    await ref.read(videoControllerProvider).pause();
+    await lessonPageNotifier.changeLessonCompletionStatus();
   }
 }
 

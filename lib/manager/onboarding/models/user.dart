@@ -11,7 +11,7 @@ class User with _$User {
       {required DateTime dateOfBirth,
       @Default('') String email,
       @Default('') String name,
-      String? gender,
+      @Default('Male') gender,
       @Default(0) int courseId,
       @Default('') String level,
       @Default(0) int gradeId}) = _User;

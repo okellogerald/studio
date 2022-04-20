@@ -25,14 +25,6 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      ref.refresh(userValidationErrorsProvider);
-    });
-    super.initState();
-  }
-
   void handleFailedState(String message) {
     final action = ref.read(userActionProvider);
     if (action.haveErrorShownBySnackBar) {
@@ -67,8 +59,6 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   }
 
   Widget _buildContent() {
-    final errors = ref.watch(userValidationErrorsProvider);
-    final user = ref.watch(userDetailsProvider);
     return Scaffold(
       appBar: const PageAppBar(title: 'Password Reset'),
       body: Padding(
@@ -86,10 +76,9 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
             Form(
               key: formKey,
               child: AppTextField(
+                text: ref.watch(userDetailsProvider).email,
                   type: ValueType.email,
-                  onChanged: (email) {
-                    updateUserDetails(ref, email: email);
-                  },
+                  onChanged: (email) => updateUserDetails(ref, email: email),
                   hintText: '',
                   keyboardType: TextInputType.emailAddress,
                   label: 'Email Id'),
