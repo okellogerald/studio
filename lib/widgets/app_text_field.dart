@@ -1,9 +1,12 @@
+import 'package:silla_studio/utils/validation_logic.dart';
+
 import 'source.dart';
+
+enum ValueType { email, name, password }
 
 class AppTextField extends StatefulWidget {
   const AppTextField(
-      {required this.error,
-      required this.text,
+      {required this.type,
       required this.onChanged,
       this.maxLines = 1,
       required this.hintText,
@@ -17,8 +20,7 @@ class AppTextField extends StatefulWidget {
       Key? key})
       : super(key: key);
 
-  final String? error;
-  final String? text;
+  final ValueType type;
   final ValueChanged<String> onChanged;
   final int maxLines;
   final String hintText, label;
@@ -40,21 +42,20 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   void initState() {
-    final text = widget.text ?? '';
+    /*   final text = widget.text ?? '';
     final isEditing = text.trim().isNotEmpty;
     if (isEditing) {
       controller.text = text;
       controller.selection = TextSelection.fromPosition(
           TextPosition(offset: controller.text.length));
-    }
+    } */
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final hasError = widget.error != null;
-    final border = hasError ? errorBorder : inputBorder;
+//    final border = hasError ? errorBorder : inputBorder;
 
     return Padding(
       padding: EdgeInsets.only(left: 15.dw, right: 15.dw, bottom: 20.dh),
@@ -68,7 +69,7 @@ class _AppTextFieldState extends State<AppTextField> {
             child: ValueListenableBuilder<bool>(
                 valueListenable: isVisibleNotifier,
                 builder: (context, isVisible, snapshot) {
-                  return TextField(
+                  return TextFormField(
                       controller: controller,
                       onChanged: widget.onChanged,
                       maxLines: widget.maxLines,
@@ -77,6 +78,7 @@ class _AppTextFieldState extends State<AppTextField> {
                       textCapitalization: widget.textCapitalization,
                       style: valueStyle,
                       cursorColor: AppColors.primary,
+                      validator: _validate,
                       obscureText: widget.isLoginPassword
                           ? true
                           : widget.isPassword && !isVisible,
@@ -87,19 +89,20 @@ class _AppTextFieldState extends State<AppTextField> {
                           suffixIcon: _suffixIcon(isVisible),
                           filled: true,
                           isDense: true,
-                          border: border,
-                          focusedBorder: border,
-                          enabledBorder: border,
+                          border: inputBorder,
+                          focusedBorder: inputBorder,
+                          enabledBorder: inputBorder,
+                          errorBorder: errorBorder,
                           contentPadding: EdgeInsets.only(left: 10.dw)));
                 }),
           ),
-          _buildError(),
+          // _buildError(),
         ],
       ),
     );
   }
 
-  _buildError() {
+/*   _buildError() {
     final hasError = widget.error != null;
 
     return hasError && widget.shouldShowErrorText
@@ -112,6 +115,19 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
           )
         : Container();
+  } */
+
+  String? _validate(String? value) {
+    switch (widget.type) {
+      case ValueType.email:
+        return validateEmail(value);
+      case ValueType.name:
+        return validateText(value, widget.label);
+      case ValueType.password:
+        return validatePassword(value);
+      default:
+    }
+    return null;
   }
 
   _suffixIcon(bool isVisible) {

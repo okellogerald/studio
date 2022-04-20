@@ -23,6 +23,7 @@ class PasswordResetPage extends ConsumerStatefulWidget {
 class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
   final currentPage = Pages.password_reset_page;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -82,16 +83,23 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
               ),
             ),
             SizedBox(height: 30.dh),
-            AppTextField(
-                error: errors['email'],
-                text: user.email,
-                onChanged: (email) => updateUserDetails(ref, email: email),
-                hintText: '',
-                keyboardType: TextInputType.emailAddress,
-                label: 'Email Id'),
+            Form(
+              key: formKey,
+              child: AppTextField(
+                  type: ValueType.email,
+                  onChanged: (email) {
+                    updateUserDetails(ref, email: email);
+                  },
+                  hintText: '',
+                  keyboardType: TextInputType.emailAddress,
+                  label: 'Email Id'),
+            ),
             AppTextButton(
-                onPressed: () =>
-                    handleUserAction(ref, UserAction.sendPasswordResetLink),
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    handleUserAction(ref, UserAction.sendPasswordResetLink);
+                  }
+                },
                 text: 'Get link',
                 textColor: AppColors.onPrimary,
                 backgroundColor: AppColors.primary,
