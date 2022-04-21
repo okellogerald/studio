@@ -45,8 +45,7 @@ class CoursesRepositoryImpl {
     final courses = List.from(results).map((e) => Course.fromJson(e));
 
     //saving user prev data
-    final userCourses =
-        result['data']['user']['userCourses'] as List<Map<String, dynamic>>;
+    final userCourses = result['data']['user']['userCourses'] as List;
     for (var item in userCourses) {
       ref.read(prevCourseIdsProvider.state).state.add(item['course']['id']);
     }
@@ -63,7 +62,6 @@ class CoursesRepositoryImpl {
     if (body == null) {
       final response =
           await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
-      log(response.body.toString());
       result = json.decode(response.body);
     } else {
       final response = await http

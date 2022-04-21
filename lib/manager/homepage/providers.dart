@@ -32,12 +32,14 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
       if (prevCourseIds.isNotEmpty) {
         final userData = ref.read(userDetailsProvider);
         if (userData.level.isEmpty) {
-          overview = await courseRepository.getUserCourseOverview(
-              {'course_id': userData.courseId, 'grade_id': userData.gradeId});
+          overview = await courseRepository.getUserCourseOverview({
+            'courseID': '${userData.courseId}',
+            'gradeID': '${userData.gradeId}'
+          });
         } else {
           overview = await courseRepository.getUserCourseOverview({
-            'course_id': userData.courseId,
-            'grade_id': userData.gradeId,
+            'courseID': '${userData.courseId}',
+            'gradeID': '${userData.gradeId}',
             'level': userData.level
           });
         }
