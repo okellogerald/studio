@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silla_studio/utils/date_formatter.dart';
 
@@ -21,6 +23,7 @@ class User with _$User {
   String get getFormattedDateOfBirth => DateFormatter.convertToDMY(dateOfBirth);
 
   static Map<String, dynamic> toStorageFormat(Map json) {
+    log(json.toString());
     return {
       'name': json['name'],
       'email': json['email'],

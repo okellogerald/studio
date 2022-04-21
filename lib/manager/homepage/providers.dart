@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:silla_studio/constants.dart';
 import 'package:silla_studio/errors/source.dart';
 import 'package:silla_studio/manager/courses_repository.dart';
 import 'package:silla_studio/manager/lesson_page/providers/providers.dart';
+import 'package:silla_studio/manager/onboarding/models/user.dart';
 import 'package:silla_studio/manager/onboarding/providers/user_details.dart';
 import 'package:silla_studio/manager/topic_page/models/topic.dart';
 import 'package:silla_studio/manager/topic_page/providers/providers.dart';
@@ -28,27 +32,9 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
     late CourseOverview overview;
     try {
       //if user has changed course / grade
-      final prevCourseIds = ref.read(prevCourseIdsProvider);
-      if (prevCourseIds.isNotEmpty) {
-        final userData = ref.read(userDetailsProvider);
-        if (userData.level.isEmpty) {
-          overview = await courseRepository.getUserCourseOverview({
-            'courseID': '${userData.courseId}',
-            'gradeID': '${userData.gradeId}'
-          });
-        } else {
-          overview = await courseRepository.getUserCourseOverview({
-            'courseID': '${userData.courseId}',
-            'gradeID': '${userData.gradeId}',
-            'level': userData.level
-          });
-        }
-        ref.refresh(prevCourseIdsProvider);
-        _currentOverview = overview;
-      } else {
-        overview = await courseRepository.getUserCourseOverview();
-        _currentOverview = overview;
-      }
+      await _editCourse();
+      overview = await courseRepository.getUserCourseOverview();
+      _currentOverview = overview;
       state = HomepageState.content(overview);
     } catch (error) {
       state = HomepageState.failed(getErrorMessage(error));
@@ -89,5 +75,36 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
         currentLesson: currentLesson,
         topicList: topicList);
     state = HomepageState.content(_currentOverview);
+  }
+
+  Future<void> _editCourse() async {
+    final courseRepository = ref.read(coursesRepositoryProvider);
+    late Map<String, dynamic> user;
+
+    try {
+      final prevCourseIds = ref.read(prevCourseIdsProvider);
+      if (prevCourseIds.isNotEmpty) {
+        final userData = ref.read(userDetailsProvider);
+        if (userData.level.isEmpty) {
+          user = await courseRepository.editCourse({
+            'courseID': '${userData.courseId}',
+            'gradeID': '${userData.gradeId}'
+          });
+        } else {
+          user = await courseRepository.editCourse({
+            'courseID': '${userData.courseId}',
+            'gradeID': '${userData.gradeId}',
+            'level': userData.level
+          });
+        }
+        await Hive.box(kUserDataBox)
+            .put(kUserData, json.encode(User.toStorageFormat(user)));
+        ref.read(signedInUserDataProvider.state).state =
+            User.toStorageFormat(user);
+        ref.refresh(prevCourseIdsProvider);
+      }
+    } catch (error) {
+      state = HomepageState.failed(getErrorMessage(error));
+    }
   }
 }

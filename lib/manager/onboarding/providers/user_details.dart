@@ -12,7 +12,7 @@ final passwordProvider = StateProvider<String>((ref) => '');
 
 final confirmationPasswordProvider = StateProvider<String>((ref) => '');
 
-final signedInUserDataProvider = Provider<Map<String, dynamic>?>((ref) {
+final signedInUserDataProvider = StateProvider<Map<String, dynamic>?>((ref) {
   final jsonUser = _box.get(kUserData) as String?;
   if (jsonUser == null) return null;
   return json.decode(jsonUser);

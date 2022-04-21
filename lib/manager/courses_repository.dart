@@ -39,7 +39,6 @@ class CoursesRepositoryImpl {
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
-    log('$result');
     _handleStatusCodes(result['code']);
     final results = result['data']['courses'];
     final courses = List.from(results).map((e) => Course.fromJson(e));
@@ -52,24 +51,26 @@ class CoursesRepositoryImpl {
     return courses.toList();
   }
 
-  Future<CourseOverview> getUserCourseOverview(
-      [Map<String, dynamic>? body]) async {
-    var url = body == null ? root + 'home' : root + '/profile/course';
+  Future<Map<String, dynamic>> editCourse(Map<String, dynamic>? body) async {
+    const url = root + '/profile/course';
+    final headers = await _getHeaders();
+    final response = await http
+        .put(Uri.parse(url), body: body, headers: headers)
+        .timeout(timeLimit);
+    final result = json.decode(response.body);
+    _handleStatusCodes(result['code']);
+    return result['data'];
+  }
+
+  Future<CourseOverview> getUserCourseOverview() async {
+    const url = root + 'home';
     final headers = await _getHeaders();
 
     late Map<String, dynamic> result;
 
-    if (body == null) {
-      final response =
-          await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
-      result = json.decode(response.body);
-    } else {
-      final response = await http
-          .put(Uri.parse(url), body: body, headers: headers)
-          .timeout(timeLimit);
-      log(response.body.toString());
-      result = json.decode(response.body);
-    }
+    final response =
+        await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
+    result = json.decode(response.body);
 
     _handleStatusCodes(result['code']);
 
