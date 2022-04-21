@@ -38,8 +38,7 @@ class TopicTile extends StatelessWidget {
                 child: Align(
                     alignment: Alignment.centerRight,
                     child: Icon(FontAwesomeIcons.angleRight,
-                        size: 20.dw,
-                        color: AppColors.secondary.withOpacity(.6)))),
+                        size: 20.dw, color: AppColors.onBackground2))),
           ],
         ),
       ),
@@ -51,7 +50,7 @@ class TopicTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(topic.title, color: AppColors.primaryVariant),
+        AppText(topic.title, color: AppColors.primary),
         SizedBox(height: 8.dh),
         AppText(subtitle, opacity: .7, size: 14.dw),
       ],

@@ -4,7 +4,6 @@ import '../manager/onboarding/providers/user_details.dart';
 import '../manager/onboarding/providers/user_notifier.dart';
 import '../manager/user_action.dart';
 import '../widgets/app_text_field.dart';
-import '../widgets/failed_state_widget.dart';
 import '../widgets/page_app_bar.dart';
 import 'homepage.dart';
 import 'source.dart';

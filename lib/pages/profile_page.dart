@@ -1,5 +1,5 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/onboarding/providers/pages.dart';
+import 'package:silla_studio/pages/about_page.dart';
 import 'package:silla_studio/pages/landing_page.dart';
 import '../manager/onboarding/models/user_state.dart';
 import '../manager/onboarding/providers/user_details.dart';
@@ -7,7 +7,6 @@ import '../manager/onboarding/providers/user_notifier.dart';
 import '../manager/user_action.dart';
 import '../widgets/app_divider.dart';
 import '../widgets/app_material_button.dart';
-import '../widgets/failed_state_widget.dart';
 import '../widgets/profile_avatar.dart';
 import 'source.dart';
 
@@ -58,10 +57,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               _buildTitle(userData['name']),
               SizedBox(height: 20.dh),
               _buildAccountDetails(),
-              const AppDivider(
-                  height: 2,
-                  color: AppColors.secondary,
-                  margin: EdgeInsets.zero),
+              SizedBox(height: 20.dh),
               _buildOtherDetails(),
             ],
           ),
@@ -80,49 +76,65 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         ));
   }
 
-  _buildListView(List<Widget> children) {
-    return ListView.separated(
-      padding: EdgeInsets.zero,
-      itemBuilder: (_, index) => children[index],
-      separatorBuilder: (_, __) => AppDivider(
-          margin: EdgeInsets.zero, color: AppColors.divider.shade300),
-      itemCount: children.length,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+  _holdingContainer({required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.dw),
+          color: AppColors.background,
+          border: Border.all(width: 2, color: AppColors.surface)),
+      margin: EdgeInsets.symmetric(horizontal: 15.dw),
+      child: child,
     );
+  }
+
+  _buildListView(List<Widget> children) {
+    return _holdingContainer(
+        child: ListView.separated(
+            padding: EdgeInsets.zero,
+            itemBuilder: (_, index) => children[index],
+            separatorBuilder: (_, __) => AppDivider(
+                margin: EdgeInsets.zero, color: AppColors.divider.shade300),
+            itemCount: children.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics()));
   }
 
   _buildAccountDetails() {
     return _buildListView([
-      _buildButton('Change Courses & Grade', FontAwesomeIcons.video),
-      _buildButton('Subscription', FontAwesomeIcons.bookmark),
+      _buildButton('Change Courses & Grade'),
+      _buildButton('Subscription'),
     ]);
   }
 
   _buildOtherDetails() {
     return _buildListView([
-      _buildButton('Terms & Conditions', FontAwesomeIcons.fileContract),
-      _buildButton('About Us', FontAwesomeIcons.circleInfo),
-      _buildButton('Log Out', FontAwesomeIcons.arrowRightFromBracket,
-          onPressed: () => handleUserAction(ref, UserAction.logOut),
-          isLogOut: true),
+      _buildButton('Terms & Conditions',
+          onPressed: () => push(const AboutPage('https://flutter.dev/',
+              title: 'Terms & Conditions'))),
+      _buildButton('About Us',
+          onPressed: () =>
+              push(const AboutPage('https://dart.dev/', title: 'About Us'))),
+      _buildButton('Log Out',
+          isLogOut: true,
+          onPressed: () => handleUserAction(ref, UserAction.logOut)),
     ]);
   }
 
-  _buildButton(String title, IconData icon,
-      {VoidCallback? onPressed, bool isLogOut = false}) {
+  _buildButton(String title, {VoidCallback? onPressed, bool isLogOut = false}) {
     return AppMaterialButton(
         onPressed: onPressed ?? () {},
         isFilled: false,
-        height: 45.dh,
-        child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 15.dw),
-          leading: Icon(icon, size: 20.dw),
-          title: AppText(title,
-              color: isLogOut ? AppColors.error : AppColors.onBackground,
-              weight: FontWeight.normal),
-          trailing: Icon(FontAwesomeIcons.angleRight,
-              size: 20.dw, color: AppColors.secondary.withOpacity(.6)),
-        ));
+        height: 60.dh,
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.dw),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppText(title,
+                    color: isLogOut ? AppColors.error : AppColors.onBackground),
+                Icon(Icons.chevron_right,
+                    size: 20.dw, color: AppColors.onBackground2)
+              ],
+            )));
   }
 }

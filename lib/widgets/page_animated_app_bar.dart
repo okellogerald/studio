@@ -80,7 +80,7 @@ class _PageAnimatedAppBarState extends State<PageAnimatedAppBar> {
   Widget _buildTitle(bool isScrolled) {
     return AppText(widget.title,
         style: Theme.of(context).appBarTheme.titleTextStyle!.copyWith(
-            color: AppColors.secondary,
+            color: AppColors.primary,
             fontSize: !isScrolled ? 20.dw : 24.dw,
             fontWeight: FontWeight.bold));
   }

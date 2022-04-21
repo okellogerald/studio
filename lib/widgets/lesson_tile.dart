@@ -85,7 +85,7 @@ class LessonTile extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppText(lesson.title, color: AppColors.primaryVariant),
+        AppText(lesson.title, color: AppColors.primary),
         SizedBox(height: 5.dh),
         AppText(subtitle, opacity: .7, size: 14.dw),
       ],
@@ -100,6 +100,6 @@ class LessonTile extends ConsumerWidget {
             child: Icon(
                 isPaid ? FontAwesomeIcons.lock : FontAwesomeIcons.angleRight,
                 size: 20.dw,
-                color: AppColors.secondary.withOpacity(1))));
+                color: AppColors.onBackground2)));
   }
 }

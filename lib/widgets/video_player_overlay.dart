@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/providers.dart';
@@ -8,7 +6,6 @@ import 'app_icon_button.dart';
 import 'app_text_button.dart';
 import 'source.dart';
 import 'package:silla_studio/widgets/video_action_controls.dart';
-
 import '../manager/video/models/video.dart';
 import '../manager/video/video_controls_actions_handler.dart';
 
@@ -71,21 +68,18 @@ class _VideoPlayerOverlayState extends ConsumerState<VideoPlayerOverlay>
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 15.dw, vertical: 10.dh),
             color: AppColors.primary,
-            child: Row(
-              children: [
-                AppIconButton(
-                    onPressed: () {
-                      handleVideoControlsActions(
-                          ref, VideoControlAction.changeOrientation);
-                    },
-                    icon: FontAwesomeIcons.angleLeft,
-                    margin: EdgeInsets.only(right: 15.dw),
-                    iconThemeData: IconThemeData(
-                        size: 25.dw, color: AppColors.onSecondary)),
-                AppText(widget.title,
-                    size: 16.dw, color: AppColors.onSecondary),
-              ],
-            ))
+            child: Row(children: [
+              AppIconButton(
+                  onPressed: () {
+                    handleVideoControlsActions(
+                        ref, VideoControlAction.changeOrientation);
+                  },
+                  icon: FontAwesomeIcons.angleLeft,
+                  margin: EdgeInsets.only(right: 15.dw),
+                  iconThemeData:
+                      IconThemeData(size: 25.dw, color: AppColors.onSecondary)),
+              AppText(widget.title, size: 16.dw, color: AppColors.onSecondary)
+            ]))
         : Container();
   }
 

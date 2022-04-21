@@ -96,7 +96,7 @@ class _AppTextButtonState extends State<AppTextButton>
                     : MainAxisAlignment.center,
                 children: [
                     Icon(widget.icon ?? Icons.share,
-                        color: widget.iconColor ?? AppColors.secondary,
+                        color: widget.iconColor ?? AppColors.primary,
                         size: 22.dw),
                     SizedBox(width: 15.dw),
                     _text(),

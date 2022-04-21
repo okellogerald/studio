@@ -1,13 +1,13 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:silla_studio/manager/user_action.dart';
+import 'package:silla_studio/pages/source.dart';
 import '../errors/error_handler.dart';
-import 'app_text_button.dart';
-import 'source.dart';
 
 class FailedStateWidget extends StatelessWidget {
-  const FailedStateWidget(this.message, {key}) : super(key: key);
+  const FailedStateWidget(this.message, {this.hasCloseButton = false, key})
+      : super(key: key);
   final String? message;
+  final bool hasCloseButton;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,16 @@ class FailedStateWidget extends StatelessWidget {
                   text: 'TRY AGAIN',
                   backgroundColor: AppColors.primary,
                   height: 50.dh,
-                  margin: EdgeInsets.only(top: 25.dw))
+                  margin: EdgeInsets.only(top: 25.dh, bottom: 20.dh)),
+              hasCloseButton
+                  ? AppTextButton(
+                      onPressed: pop,
+                      textColor: AppColors.onBackground,
+                      text: 'Close',
+                      backgroundColor: AppColors.disabled,
+                      height: 50.dh,
+                      margin: EdgeInsets.only(bottom: 10.dh))
+                  : Container()
             ]));
       }),
     );

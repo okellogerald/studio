@@ -79,7 +79,7 @@ class _TopicPageAppBarState extends ConsumerState<TopicPageAppBar> {
   Widget _buildTitle() {
     return AppText(widget.topic.title,
         style: Theme.of(context).appBarTheme.titleTextStyle!.copyWith(
-            color: AppColors.secondary,
+            color: AppColors.primary,
             fontSize: 24.dw,
             fontWeight: FontWeight.w900));
   }

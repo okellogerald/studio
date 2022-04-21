@@ -50,7 +50,7 @@ class LandingPage extends StatelessWidget {
             const AppText(
               'Spreading harmony through art',
               style: TextStyle(
-                  color: AppColors.primaryVariant, fontStyle: FontStyle.italic),
+                  color: AppColors.primary, fontStyle: FontStyle.italic),
             ),
             AppDivider(
                 height: 2,

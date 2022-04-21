@@ -61,7 +61,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
   Widget _buildFailed(String message) {
     final action = ref.watch(userActionProvider);
     if (!action.haveErrorShownBySnackBar) {
-      return FailedStateWidget(message);
+      return FailedStateWidget(message, hasCloseButton: true);
     }
     return _buildContent();
   }
@@ -107,7 +107,7 @@ class _LessonPageState extends ConsumerState<LessonPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AppText(lesson.title, color: AppColors.primaryVariant, size: 22.dw),
+          AppText(lesson.title, color: AppColors.primary, size: 22.dw),
           isCompleted ? const CheckMark() : Container()
         ],
       ),
@@ -145,12 +145,10 @@ class _LessonPageState extends ConsumerState<LessonPage> {
               height: 50.dh,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                border: !isIncomplete
-                    ? Border.all(color: AppColors.primary, width: 2)
-                    : Border.all(color: Colors.transparent, width: 0),
-                color: isIncomplete ? AppColors.primary : Colors.white,
-                // borderRadius: BorderRadius.all(Radius.circular(0.dw)),
-              ),
+                  border: !isIncomplete
+                      ? Border.all(color: AppColors.primary, width: 2)
+                      : Border.all(color: Colors.transparent, width: 0),
+                  color: isIncomplete ? AppColors.primary : Colors.white),
               child: AppText(isIncomplete ? 'Mark Complete' : 'Mark Incomplete',
                   color:
                       isIncomplete ? AppColors.onPrimary : AppColors.primary),

@@ -3,7 +3,6 @@ import 'package:silla_studio/pages/signup_page.dart';
 import '../manager/onboarding/models/course.dart';
 import '../manager/onboarding/providers/courses.dart';
 import '../manager/onboarding/providers/user_details.dart';
-import '../manager/user_action.dart';
 import '../widgets/app_material_button.dart';
 import '../widgets/failed_state_widget.dart';
 import '../widgets/page_animated_app_bar.dart';
@@ -99,7 +98,11 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 10.dw),
                 decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : Colors.transparent,
+                    color: isSelected
+                        ? AppColors.primary
+                        : course.isPublished
+                            ? AppColors.primary.withOpacity(.4)
+                            : Colors.transparent,
                     borderRadius: BorderRadius.all(Radius.circular(10.dw))),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

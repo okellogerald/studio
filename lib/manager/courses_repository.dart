@@ -65,7 +65,7 @@ class CoursesRepositoryImpl {
     final subTopics = <SubTopic>[];
 
     for (var topic in result['data']) {
-     // log('$topic');
+      // log('$topic');
       subTopics.add(SubTopic(
           topic: Topic.fromJson(topic),
           lessons: List<Lesson>.from(

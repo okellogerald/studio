@@ -1,4 +1,5 @@
 import 'source.dart';
+
 class HomepageHeader extends StatefulWidget {
   const HomepageHeader(this.controller,
       {required this.title,
@@ -57,22 +58,16 @@ class _HomepageHeaderState extends State<HomepageHeader> {
   _buildTitles(double value) {
     return Expanded(
       child: Container(
-        alignment: value == 0
-            ? AlignmentDirectional.bottomStart
-            : AlignmentDirectional.centerStart,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppText(widget.title,
-                style: Theme.of(context)
-                    .appBarTheme
-                    .titleTextStyle!
-                    .copyWith(fontSize: 20.dw)),
-            AppText(widget.subtitle, opacity: .85, size: 14.dw),
-          ],
-        ),
-      ),
+          alignment: value == 0
+              ? AlignmentDirectional.bottomStart
+              : AlignmentDirectional.centerStart,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppText(widget.title, size: 18.dw, color: AppColors.primary),
+                AppText(widget.subtitle, opacity: .85, size: 14.dw)
+              ])),
     );
   }
 }

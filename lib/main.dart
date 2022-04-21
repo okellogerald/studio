@@ -5,8 +5,6 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:silla_studio/constants.dart';
 import 'app.dart';
 
-//todo: handling video state when lesson page changes its state
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

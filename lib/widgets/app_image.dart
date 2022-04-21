@@ -13,7 +13,7 @@ class AppImage extends StatelessWidget {
       {Key? key,
       required this.imageUrl,
       this.radius,
-      this.placeholderColor = AppColors.secondary,
+      this.placeholderColor = AppColors.primary,
       this.height = 180,
       this.withBorders = false,
       this.width = 300})

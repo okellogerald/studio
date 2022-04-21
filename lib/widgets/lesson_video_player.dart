@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/video/providers.dart';
 import 'package:silla_studio/manager/video/video_state_notifier.dart';
@@ -119,7 +118,27 @@ class _LessonVideoPlayerState extends ConsumerState<LessonVideoPlayer> {
             width: size.width,
             child: Stack(alignment: Alignment.bottomCenter, children: [
               VideoPlayer(controller),
-              VideoPlayerOverlay(videoDetails.title)
+              VideoPlayerOverlay(videoDetails.title),
+              _buildBackButton()
             ])));
+  }
+
+  Widget _buildBackButton() {
+    final orientation = ref.watch(orientationModeProvider);
+    final isPortrait = orientation == Orientation.portrait;
+    return isPortrait
+        ? Positioned(
+            top: 10.dh,
+            left: 10.dw,
+            child: AppIconButton(
+                onPressed: pop,
+                icon: FontAwesomeIcons.arrowLeft,
+                buttonColor: AppColors.onPrimary,
+                height: 35.dw,
+                width: 35.dw,
+                iconThemeData:
+                    IconThemeData(color: AppColors.onBackground, size: 25.dw)),
+          )
+        : Container();
   }
 }

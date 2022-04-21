@@ -122,7 +122,8 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   _buildContinueLesson(Lesson lesson) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      AppText('Continue Class', weight: FontWeight.bold, size: 20.dw),
+      AppText('Continue Class',
+          weight: FontWeight.bold, size: 20.dw, color: const Color(0xff666666)),
       SizedBox(height: 15.dh),
       LessonTile(lesson)
     ]);
@@ -134,7 +135,10 @@ class _HomepageState extends ConsumerState<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText('$grade - Topics', weight: FontWeight.bold, size: 20.dw),
+          AppText('$grade - Topics',
+              weight: FontWeight.bold,
+              size: 20.dw,
+              color: const Color(0xff666666)),
           SizedBox(height: 15.dh),
           ListView.separated(
             separatorBuilder: (_, __) => SizedBox(height: 10.dh),

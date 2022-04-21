@@ -11,8 +11,7 @@ import 'pages/homepage.dart';
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static final noAccountYet =
-      Hive.box(kUserDataBox).get(kUserData) == null;
+  static final noAccountYet = Hive.box(kUserDataBox).get(kUserData) == null;
 
   @override
   Widget build(BuildContext context) {
