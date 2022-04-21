@@ -53,7 +53,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   Widget _buildContent(CourseOverview overview) {
-    final user = ref.watch(signedInUserDataProvider);
+    final user = ref.watch(signedInUserDataProvider)!;
     return RefreshIndicator(
         onRefresh: ref.read(homepageNotifierProvider.notifier).refresh,
         child: Column(children: [
@@ -72,7 +72,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   _buildHeader() {
-    final user = ref.watch(signedInUserDataProvider);
+    final user = ref.watch(signedInUserDataProvider)!;
     final grade = user['grade'];
     final course = user['course'];
 

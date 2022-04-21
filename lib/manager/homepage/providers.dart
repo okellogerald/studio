@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/errors/source.dart';
 import 'package:silla_studio/manager/courses_repository.dart';
 import 'package:silla_studio/manager/lesson_page/providers/providers.dart';
+import 'package:silla_studio/manager/onboarding/providers/user_details.dart';
 import 'package:silla_studio/manager/topic_page/models/topic.dart';
 import 'package:silla_studio/manager/topic_page/providers/providers.dart';
 import 'models/course_overview.dart';
@@ -23,9 +24,29 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
   Future<void> init() async {
     state = const HomepageState.loading('Getting data...');
     final courseRepository = ref.read(coursesRepositoryProvider);
+
+    late CourseOverview overview;
     try {
-      final overview = await courseRepository.getUserCourseOverview();
-      _currentOverview = overview;
+      //if user has changed course / grade
+      final prevCourseIds = ref.read(prevCourseIdsProvider);
+      if (prevCourseIds.isNotEmpty) {
+        final userData = ref.read(userDetailsProvider);
+        if (userData.level.isEmpty) {
+          overview = await courseRepository.getUserCourseOverview(
+              {'course_id': userData.courseId, 'grade_id': userData.gradeId});
+        } else {
+          overview = await courseRepository.getUserCourseOverview({
+            'course_id': userData.courseId,
+            'grade_id': userData.gradeId,
+            'level': userData.level
+          });
+        }
+        ref.refresh(prevCourseIdsProvider);
+        _currentOverview = overview;
+      } else {
+        overview = await courseRepository.getUserCourseOverview();
+        _currentOverview = overview;
+      }
       state = HomepageState.content(overview);
     } catch (error) {
       state = HomepageState.failed(getErrorMessage(error));

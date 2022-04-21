@@ -6,6 +6,7 @@ import '../manager/onboarding/providers/user_details.dart';
 import '../widgets/app_material_button.dart';
 import '../widgets/failed_state_widget.dart';
 import '../widgets/page_animated_app_bar.dart';
+import 'grades_page.dart';
 import 'source.dart';
 
 class CoursesPage extends ConsumerStatefulWidget {
@@ -26,7 +27,8 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
     return Scaffold(
       body: courses.when(
           data: _buildContent,
-          error: (message, _) => FailedStateWidget(message.toString()),
+          error: (message, _) => FailedStateWidget(message.toString(),
+              tryAgainCallback: () => ref.refresh(coursesProvider)),
           loading: () => const AppLoadingIndicator('Getting courses...')),
     );
   }
@@ -128,6 +130,12 @@ class _CoursesPageState extends ConsumerState<CoursesPage> {
   }
 
   void _onCoursePressed(Course course) {
+    final user = ref.read(signedInUserDataProvider);
+    if (user != null) {
+      updateUserDetails(ref, courseId: course.id);
+      push(GradesPage(course.gradeList, course.levelList));
+      return;
+    }
     updateUserDetails(ref,
         courseId: course.id, gradeId: course.gradeList.first.id);
 

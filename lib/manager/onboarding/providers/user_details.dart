@@ -12,9 +12,9 @@ final passwordProvider = StateProvider<String>((ref) => '');
 
 final confirmationPasswordProvider = StateProvider<String>((ref) => '');
 
-final signedInUserDataProvider = Provider<Map<String, dynamic>>((ref) {
+final signedInUserDataProvider = Provider<Map<String, dynamic>?>((ref) {
   final jsonUser = _box.get(kUserData) as String?;
-  if (jsonUser == null) throw 'User-data is not supposed to be null';
+  if (jsonUser == null) return null;
   return json.decode(jsonUser);
 });
 
@@ -46,3 +46,6 @@ void updateUserDetails(WidgetRef ref,
       confirmationPassword ?? _confirmationPassword;
   ref.read(userDetailsProvider.state).state = updatedUser;
 }
+
+//when the user is changing the course
+final prevCourseIdsProvider = StateProvider<List<int>>((ref) => []);

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:silla_studio/manager/onboarding/providers/user_details.dart';
 import 'package:silla_studio/manager/token.dart';
 import 'package:silla_studio/manager/video/models/video_details.dart';
 import 'package:silla_studio/secret.dart';
@@ -32,13 +33,46 @@ class CoursesRepositoryImpl {
     return courses.toList();
   }
 
-  Future<CourseOverview> getUserCourseOverview() async {
-    const url = root + 'home';
+  Future<List<Course>> getUserCourses() async {
+    const url = root + 'profile/edit';
     final headers = await _getHeaders();
-
     final response =
         await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
     final result = json.decode(response.body);
+    log('$result');
+    _handleStatusCodes(result['code']);
+    final results = result['data']['courses'];
+    final courses = List.from(results).map((e) => Course.fromJson(e));
+
+    //saving user prev data
+    final userCourses =
+        result['data']['user']['userCourses'] as List<Map<String, dynamic>>;
+    for (var item in userCourses) {
+      ref.read(prevCourseIdsProvider.state).state.add(item['course']['id']);
+    }
+    return courses.toList();
+  }
+
+  Future<CourseOverview> getUserCourseOverview(
+      [Map<String, dynamic>? body]) async {
+    var url = body == null ? root + 'home' : root + '/profile/course';
+    final headers = await _getHeaders();
+
+    late Map<String, dynamic> result;
+
+    if (body == null) {
+      final response =
+          await http.get(Uri.parse(url), headers: headers).timeout(timeLimit);
+      log(response.body.toString());
+      result = json.decode(response.body);
+    } else {
+      final response = await http
+          .put(Uri.parse(url), body: body, headers: headers)
+          .timeout(timeLimit);
+      log(response.body.toString());
+      result = json.decode(response.body);
+    }
+
     _handleStatusCodes(result['code']);
 
     final topics = List.from(result['data']).map((e) => Topic.fromJson(e));

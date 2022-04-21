@@ -4,10 +4,12 @@ import 'package:silla_studio/pages/source.dart';
 import '../errors/error_handler.dart';
 
 class FailedStateWidget extends StatelessWidget {
-  const FailedStateWidget(this.message, {this.hasCloseButton = false, key})
+  const FailedStateWidget(this.message,
+      {this.hasCloseButton = false, this.tryAgainCallback, key})
       : super(key: key);
   final String? message;
   final bool hasCloseButton;
+  final VoidCallback? tryAgainCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,10 @@ class FailedStateWidget extends StatelessWidget {
                   : AppText(message!, opacity: .7, size: 14.dw),
               AppTextButton(
                   onPressed: () {
+                    if (tryAgainCallback != null) {
+                      tryAgainCallback!();
+                      return;
+                    }
                     final userAction = ref.read(userActionProvider);
                     handleUserAction(ref, userAction);
                   },

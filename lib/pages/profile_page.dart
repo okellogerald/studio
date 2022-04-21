@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:silla_studio/manager/onboarding/providers/pages.dart';
 import 'package:silla_studio/pages/about_page.dart';
 import 'package:silla_studio/pages/landing_page.dart';
@@ -8,6 +9,7 @@ import '../manager/user_action.dart';
 import '../widgets/app_divider.dart';
 import '../widgets/app_material_button.dart';
 import '../widgets/profile_avatar.dart';
+import 'courses_page.dart';
 import 'source.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -48,43 +50,37 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   Widget _buildContent() {
-    final userData = ref.read(signedInUserDataProvider);
+    final userData = ref.read(signedInUserDataProvider)!;
     return Scaffold(
         appBar: AppBar(),
         body: Center(
-          child: Column(
-            children: [
-              _buildTitle(userData['name']),
-              SizedBox(height: 20.dh),
-              _buildAccountDetails(),
-              SizedBox(height: 20.dh),
-              _buildOtherDetails(),
-            ],
-          ),
-        ));
+            child: Column(children: [
+          _buildTitle(userData['name']),
+          SizedBox(height: 20.dh),
+          _buildAccountDetails(),
+          SizedBox(height: 20.dh),
+          _buildOtherDetails()
+        ])));
   }
 
   _buildTitle(String name) {
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 15.dh),
-        child: Column(
-          children: [
-            ProfileAvatar(name, size: 70.dw),
-            SizedBox(height: 20.dh),
-            AppText(name, size: 22.dw)
-          ],
-        ));
+        child: Column(children: [
+          ProfileAvatar(name, size: 70.dw),
+          SizedBox(height: 20.dh),
+          AppText(name, size: 22.dw)
+        ]));
   }
 
   _holdingContainer({required Widget child}) {
     return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.dw),
-          color: AppColors.background,
-          border: Border.all(width: 2, color: AppColors.surface)),
-      margin: EdgeInsets.symmetric(horizontal: 15.dw),
-      child: child,
-    );
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.dw),
+            color: AppColors.background,
+            border: Border.all(width: 2, color: AppColors.surface)),
+        margin: EdgeInsets.symmetric(horizontal: 15.dw),
+        child: child);
   }
 
   _buildListView(List<Widget> children) {
@@ -101,8 +97,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   _buildAccountDetails() {
     return _buildListView([
-      _buildButton('Change Courses & Grade'),
-      _buildButton('Subscription'),
+      _buildButton('Change Courses & Grade',
+          onPressed: () => push(const CoursesPage())),
+      _buildButton('Subscription')
     ]);
   }
 
@@ -116,7 +113,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               push(const AboutPage('https://dart.dev/', title: 'About Us'))),
       _buildButton('Log Out',
           isLogOut: true,
-          onPressed: () => handleUserAction(ref, UserAction.logOut)),
+          onPressed: () => handleUserAction(ref, UserAction.logOut))
     ]);
   }
 
@@ -132,7 +129,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               children: [
                 AppText(title,
                     color: isLogOut ? AppColors.error : AppColors.onBackground),
-                Icon(Icons.chevron_right,
+                Icon(FontAwesomeIcons.angleRight,
                     size: 20.dw, color: AppColors.onBackground2)
               ],
             )));
