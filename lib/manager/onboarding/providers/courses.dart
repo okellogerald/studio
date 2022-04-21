@@ -11,7 +11,6 @@ final coursesProvider = FutureProvider<List<Course>>((ref) async {
   late List<Course> courses;
   final user = ref.read(signedInUserDataProvider);
   if (user != null) {
-    log('in here');
     courses = await coursesRepository.getUserCourses().catchError((error) {
       final message = getErrorMessage(error);
       throw message;
