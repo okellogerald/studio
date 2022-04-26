@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:silla_studio/manager/onboarding/providers/user_details.dart';
 import '../../../errors/error_handler.dart';
 import '../models/course.dart';
 import '../../courses_repository.dart';
 
-final coursesProvider = FutureProvider<List<Course>>((ref) async {
+final coursesProvider = FutureProvider.autoDispose<List<Course>>((ref) async {
   final coursesRepository = ref.read(coursesRepositoryProvider);
   late List<Course> courses;
   final user = ref.read(signedInUserDataProvider);

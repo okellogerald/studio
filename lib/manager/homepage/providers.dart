@@ -52,7 +52,6 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
     final lesson = ref.read(currentLessonProvider);
     //updating general info
     final completedLessons = _currentOverview.generalInfo.completedLessons;
-    log('$completedLessons');
     final generalInfo = _currentOverview.generalInfo.copyWith(
         lesson.isComplete ? completedLessons + 1 : completedLessons - 1);
     //updating continuing lesson
@@ -85,26 +84,30 @@ class HomepageNotifier extends StateNotifier<HomepageState> {
       final prevCourseIds = ref.read(prevCourseIdsProvider);
       if (prevCourseIds.isNotEmpty) {
         final userData = ref.read(userDetailsProvider);
+        final body = {
+          'courseID': '${userData.courseId}',
+          'gradeID': '${userData.gradeId}'
+        };
         if (userData.level.isEmpty) {
-          user = await courseRepository.editCourse({
-            'courseID': '${userData.courseId}',
-            'gradeID': '${userData.gradeId}'
-          });
+          user = await courseRepository.editCourse(body);
         } else {
-          user = await courseRepository.editCourse({
-            'courseID': '${userData.courseId}',
-            'gradeID': '${userData.gradeId}',
-            'level': userData.level
-          });
+          body['level'] = userData.level;
+          user = await courseRepository.editCourse(body);
         }
         await Hive.box(kUserDataBox)
             .put(kUserData, json.encode(User.toStorageFormat(user)));
         ref.read(signedInUserDataProvider.state).state =
             User.toStorageFormat(user);
-        ref.refresh(prevCourseIdsProvider);
+
+        _disposeProviders();
       }
     } catch (error) {
       state = HomepageState.failed(getErrorMessage(error));
     }
+  }
+
+  _disposeProviders() {
+    ref.refresh(userDetailsProvider);
+    ref.refresh(prevCourseIdsProvider);
   }
 }

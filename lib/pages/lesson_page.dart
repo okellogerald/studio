@@ -71,11 +71,19 @@ class _LessonPageState extends ConsumerState<LessonPage> {
     final orientation = ref.watch(orientationModeProvider);
     final isLandscape = orientation == Orientation.landscape;
     return Scaffold(
+        appBar: _buildAppBar(),
         body: ListView(children: [
           LessonVideoPlayer(lesson.videoDetails),
           isLandscape ? Container() : _buildVideoDescription()
         ]),
         bottomNavigationBar: _buildBottomNavBar());
+  }
+
+  _buildAppBar() {
+    final orientation = ref.watch(orientationModeProvider);
+    final isPortrait = orientation == Orientation.portrait;
+    if (isPortrait) return AppBar();
+    return AppBar(toolbarHeight: .0001);
   }
 
   _buildVideoDescription() {

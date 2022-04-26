@@ -25,11 +25,10 @@ class AppText extends StatelessWidget {
         textAlign: alignment ?? TextAlign.start,
         style: style ??
             TextStyle(
-              fontFamily: kFontFam,
-              fontWeight: weight ?? FontWeight.w500,
-              fontSize: size ?? 15.dw,
-              color:
-                  (color ?? AppColors.onBackground).withOpacity(opacity ?? 1),
-            ));
+                fontFamily: kFontFam,
+                fontWeight: weight ?? FontWeight.w500,
+                fontSize: size ?? 15.dw,
+                color: (color ?? AppColors.onBackground)
+                    .withOpacity(opacity ?? 1)));
   }
 }

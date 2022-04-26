@@ -1,10 +1,5 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
-import '../../../constants.dart';
 import '../models/user.dart';
-
-final _box = Hive.box(kUserDataBox);
 
 final userDetailsProvider = StateProvider<User>((ref) => User.empty());
 
@@ -12,11 +7,8 @@ final passwordProvider = StateProvider<String>((ref) => '');
 
 final confirmationPasswordProvider = StateProvider<String>((ref) => '');
 
-final signedInUserDataProvider = StateProvider<Map<String, dynamic>?>((ref) {
-  final jsonUser = _box.get(kUserData) as String?;
-  if (jsonUser == null) return null;
-  return json.decode(jsonUser);
-});
+final signedInUserDataProvider =
+    StateProvider<Map<String, dynamic>?>((ref) => null);
 
 ///stores user details in the user details provider
 void updateUserDetails(WidgetRef ref,
@@ -47,5 +39,9 @@ void updateUserDetails(WidgetRef ref,
   ref.read(userDetailsProvider.state).state = updatedUser;
 }
 
-//when the user is changing the course
+///when the user is changing the course
+///
+///All course-ids that the user has ever learnt are stored in here, so that
+///when the user changes grade, we don't have to ask about the level again she
+///is at.
 final prevCourseIdsProvider = StateProvider<List<int>>((ref) => []);

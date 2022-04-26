@@ -33,6 +33,7 @@ class UserNotifier extends StateNotifier<UserState> {
       final result = await userRepository.createUser(user, password);
       final _userData = User.toStorageFormat(result['data']);
       await _box.put(kUserData, json.encode(_userData));
+      ref.read(signedInUserDataProvider.state).state = _userData;
       _disposeUserDetails();
       state = const UserState.success();
     } catch (e) {
@@ -53,6 +54,7 @@ class UserNotifier extends StateNotifier<UserState> {
       final result = await userRepository.logInUser();
       final _userData = User.toStorageFormat(result['data']);
       await _box.put(kUserData, json.encode(_userData));
+      ref.read(signedInUserDataProvider.state).state = _userData;
       _disposeUserDetails();
       state = const UserState.success();
     } catch (error) {
@@ -71,10 +73,22 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
+  void autoLogIn() {
+    state = const UserState.loading();
+    final jsonUser = _box.get(kUserData) as String?;
+    if (jsonUser == null) {
+      state = const UserState.failed('No user data found');
+      return;
+    }
+    ref.read(signedInUserDataProvider.state).state = json.decode(jsonUser);
+    state = const UserState.success();
+  }
+
   Future logOut() async {
     state = const UserState.loading('Logging you out...');
     try {
-      await _auth.signOut().then((value) => _box.clear());
+      await _auth.signOut().then((value) => _box.delete(kUserData));
+      ref.read(signedInUserDataProvider.state).state = null;
       state = const UserState.success();
     } catch (error) {
       _handleError(error);
@@ -84,7 +98,7 @@ class UserNotifier extends StateNotifier<UserState> {
   _disposeUserDetails() {
     ref.refresh(userDetailsProvider);
     ref.refresh(passwordProvider);
-    ref.refresh(passwordProvider);
+    ref.refresh(confirmationPasswordProvider);
   }
 
   _handleError(var error) {

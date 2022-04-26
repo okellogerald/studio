@@ -1,4 +1,5 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:silla_studio/manager/onboarding/models/user.dart';
 import 'package:silla_studio/manager/onboarding/providers/pages.dart';
 import 'package:silla_studio/pages/about_page.dart';
 import 'package:silla_studio/pages/landing_page.dart';
@@ -24,9 +25,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   final currentPage = Pages.profile_page;
 
   void handleSuccessState() {
+    pushAndRemoveUntil(const LandingPage());
     showSnackbar('You\'re successfully logged out',
         key: scaffoldKey, isError: false);
-    pushAndRemoveUntil(const LandingPage());
   }
 
   @override
@@ -50,12 +51,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   Widget _buildContent() {
-    final userData = ref.read(signedInUserDataProvider)!;
+    //~ avoiding null-check errors during sign out
+    final user = ref.watch(signedInUserDataProvider) ?? User.defaultUserData();
     return Scaffold(
         appBar: AppBar(),
         body: Center(
             child: Column(children: [
-          _buildTitle(userData['name']),
+          _buildTitle(user['name']),
           SizedBox(height: 20.dh),
           _buildAccountDetails(),
           SizedBox(height: 20.dh),

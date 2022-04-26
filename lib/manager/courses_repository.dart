@@ -45,9 +45,11 @@ class CoursesRepositoryImpl {
 
     //saving user prev data
     final userCourses = result['data']['user']['userCourses'] as List;
+    final userCoursesIds = <int>{};
     for (var item in userCourses) {
-      ref.read(prevCourseIdsProvider.state).state.add(item['course']['id']);
+      userCoursesIds.add(item['course']['id']);
     }
+    ref.read(prevCourseIdsProvider.state).state = userCoursesIds.toList();
     return courses.toList();
   }
 

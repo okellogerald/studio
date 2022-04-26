@@ -94,10 +94,10 @@ class _AppTextFieldState extends State<AppTextField> {
                           enabledBorder: inputBorder,
                           errorBorder: errorBorder,
                           contentPadding: EdgeInsets.only(left: 10.dw)));
-                }),
-          ),
-        ],
-      ),
+                })
+          )
+        ]
+      )
     );
   }
 

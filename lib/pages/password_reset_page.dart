@@ -26,8 +26,11 @@ class _PasswordResetPageState extends ConsumerState<PasswordResetPage> {
 
   void handleSuccessState() {
     final user = ref.read(userDetailsProvider);
-    showSnackbar('Password reset link has been sent to ${user.email}',
-        key: scaffoldKey, isError: false);
+    showSnackbar(
+        'Password reset link has been sent to ${user.email}. Change the password, and try logging again',
+        key: scaffoldKey,
+        isError: false);
+    pop();
   }
 
   @override

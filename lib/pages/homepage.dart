@@ -1,3 +1,4 @@
+import 'package:silla_studio/manager/onboarding/models/user.dart';
 import 'package:silla_studio/pages/profile_page.dart';
 import '../manager/homepage/models/general_info.dart';
 import '../manager/homepage/providers.dart';
@@ -53,7 +54,8 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   Widget _buildContent(CourseOverview overview) {
-    final user = ref.watch(signedInUserDataProvider)!;
+    //~ avoiding null-check errors during sign out
+    final user = ref.watch(signedInUserDataProvider) ?? User.defaultUserData();
     return RefreshIndicator(
         onRefresh: ref.read(homepageNotifierProvider.notifier).refresh,
         child: Column(children: [
@@ -72,7 +74,8 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   _buildHeader() {
-    final user = ref.watch(signedInUserDataProvider)!;
+    //~ avoiding null-check errors during sign out
+    final user = ref.watch(signedInUserDataProvider) ?? User.defaultUserData();
     final grade = user['grade'];
     final course = user['course'];
 
