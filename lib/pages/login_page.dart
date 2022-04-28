@@ -48,7 +48,10 @@ class _LogInPageState extends ConsumerState<LogInPage> {
         padding: EdgeInsets.only(top: 40.dh),
         child: Form(
           key: formKey,
-          child: Column(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               AppTextField(
                   text: ref.watch(userDetailsProvider).email,

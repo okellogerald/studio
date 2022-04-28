@@ -88,6 +88,10 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   _buildGeneralInfo(GeneralInfo info) {
+      //~ avoiding null-check errors during sign out
+    final user = ref.watch(signedInUserDataProvider) ?? User.defaultUserData();
+    final grade = user['grade'];
+    
     return Container(
       height: 100.dh,
       width: double.infinity,
@@ -105,7 +109,7 @@ class _HomepageState extends ConsumerState<Homepage> {
             children: [
               CompletionProgressBar(info.getRemainingClassesRatio),
               SizedBox(height: 10.dh),
-              AppText('${info.remainingClasses} classes to complete Grade 1',
+              AppText('${info.remainingClasses} classes to complete $grade',
                   color: AppColors.onPrimary, size: 14.dw)
             ],
           ),

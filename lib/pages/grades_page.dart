@@ -39,8 +39,7 @@ class GradesPage extends ConsumerWidget {
                           isSelected ? AppColors.primary : Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(5.dw))),
                   alignment: Alignment.center,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.dw, vertical: 15.dw),
+                 
                   child: AppText(e.title,
                       color: isSelected
                           ? AppColors.onPrimary
