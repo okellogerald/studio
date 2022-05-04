@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       child: ScreenSizeInit(
         designSize: const Size(411.4, 866.3),
         child: MaterialApp(
+          
           title: 'Siila',
           navigatorKey: navigatorKey,
           theme: AppTheme.themeData(),
